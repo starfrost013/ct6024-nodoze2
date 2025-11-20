@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using System;
 
 internal class GameManager
 {
@@ -14,14 +16,28 @@ internal class GameManager
     }
 
     private GameState state;
-    private GameMode mode; 
+    private GameMode mode;
 
+    private Scene scene; 
+    
+    public void Start()
+    {
+        state = GameState.Init;
+
+        // this is all one scene
+        scene = SceneManager.GetActiveScene();
+    }
 
     public void SetGameState(GameState newState)
     {
         GameState oldState = state; 
         state = newState;
         OnGameStateChanged(newState);
+    }
+
+    public void OnFrame()
+    {
+        mode.OnFrame();
     }
 
     // I don't like reflection, it cretaes large and ugly programs in C#
@@ -41,6 +57,7 @@ internal class GameManager
     // privates
     private void OnGameStateChanged(GameState newState)
     {
+        Debug.Log("Game state is changing to " + Enum.GetName(typeof(GameState), newState));
         // leave the old mode
         mode.OnLeave();
 
@@ -49,8 +66,4 @@ internal class GameManager
         mode.OnEnter();
     }
 
-    internal void OnFrame()
-    {
-        mode.OnFrame();
-    }
 }
