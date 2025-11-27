@@ -56,11 +56,14 @@ internal class GameAssetConfigFile : TextAsset
         // try to write a fast loop
         foreach (string line in lines)
         {
+
+            trimmedLine = line.Trim();
+            // strip away any comments
+            trimmedLine = trimmedLine.Split(';')[0];
+
             // skip nonsense
             if (string.IsNullOrWhiteSpace(line))
                 continue;
-
-            trimmedLine = line.Trim();
 
             // we guaranteed that there is at least *some* non-whitespace here 
 
@@ -73,14 +76,7 @@ internal class GameAssetConfigFile : TextAsset
                 continue; 
             }
 
-            // any sections we need are created
-
-            // strip away any comments
-            trimmedLine = trimmedLine.Split(';')[0];
-
-            // no equals, don't bother
-            if (!trimmedLine.Contains("="))
-                continue;
+            // any sections we need are created by now
 
             string[] kv = trimmedLine.Split("=");
 
@@ -94,7 +90,6 @@ internal class GameAssetConfigFile : TextAsset
         // add the default section if there are no functions
         if (file.sections.Count == 0)
             file.sections.Add(currentSection);
-
     }
 
     // I hope it's trivial
@@ -107,6 +102,5 @@ internal class GameAssetConfigFile : TextAsset
         }
 
         return null;
-
     }
 }
