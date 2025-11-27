@@ -1,5 +1,4 @@
 ﻿
-using Domino;
 using UnityEngine;
 
 // It's a car :D
@@ -26,7 +25,7 @@ internal class Car : MonoBehaviour
     private void Start()
     {
         spec = (GameAssetConfigFile)AssetManager.LoadAsset<GameAssetConfigFile>("/Data/Cars/CarTest.cfg");
-        spec.ParseCfg();.
+        spec.ParseCfg();
     }
 
     private void Update()
