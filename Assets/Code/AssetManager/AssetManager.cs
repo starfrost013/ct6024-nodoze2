@@ -10,13 +10,13 @@ namespace Domino
         // possibly have a list of assets here. but then unity could internally unload stuff and we'd have no way to tell 
         private static UInt32 numAssetsLoaded;
 
-        internal static GameAsset LoadAsset<T>(string path) where T : GameAsset
+        internal static T LoadAsset<T>(string path) where T : UnityEngine.Object
         {
             // https://stackoverflow.com/questions/552629/c-sharp-print-the-class-name-from-within-a-static-function
             // Reflection is type safe, but 50 times slower!!!!
             Debug.Log("Game Asset Loader: Loading asset of type " + typeof(T).Name + "");
 
-            GameAsset newAsset = Resources.Load<T>(path);
+            T newAsset = Resources.Load<T>(path);
 
             if (!newAsset)
             {
