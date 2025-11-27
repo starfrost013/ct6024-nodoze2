@@ -29,7 +29,7 @@ namespace Domino
             return newAsset; 
         }
 
-        internal static void UnloadAsset<T>(GameAsset asset) where T : GameAsset
+        internal static void UnloadAsset<T>(T asset) where T : UnityEngine.Object
         {
             Resources.UnloadAsset(asset);
 
