@@ -14,6 +14,7 @@ internal static class AssetManager
         // Reflection is type safe, but 50 times slower!!!!
         Debug.Log("Game Asset Loader: Loading asset of type " + typeof(T).Name + "");
 
+        // Accoring to unity this should be using AssetBundles, later.
         T newAsset = Resources.Load<T>(path);
 
         if (!newAsset)
