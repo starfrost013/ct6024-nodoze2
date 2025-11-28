@@ -1101,7 +1101,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 872337256}
+  m_Mesh: {fileID: 74232961}
 --- !u!33 &463732361
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -2090,7 +2090,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1059240267}
+  m_Mesh: {fileID: 1005662190}
 --- !u!33 &1389866284
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -2414,7 +2414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00000011920929
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2455,8 +2455,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1859019686}
   m_SourcePrefab: {fileID: 100100000, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
+--- !u!1 &1859019685 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
+  m_PrefabInstance: {fileID: 1859019684}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1859019686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859019685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c879a7fa42191ac40abf1c8b37f38bf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1909143500
 GameObject:
   m_ObjectHideFlags: 0
@@ -2499,7 +2519,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 74232961}
+  m_Mesh: {fileID: 116223677}
 --- !u!33 &1909143502
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -2544,7 +2564,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
+  m_SelectedEditorRenderState: 2
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2851,7 +2871,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 872337256}
+  m_Mesh: {fileID: 1059240267}
 --- !u!33 &2117153401
 MeshFilter:
   m_ObjectHideFlags: 10
