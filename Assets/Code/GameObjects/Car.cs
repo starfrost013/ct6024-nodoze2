@@ -84,7 +84,12 @@ internal class Car : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // TODO: DELTA TIME!!!!
+        // WHEN THIS BECOMES A RIGIDBODY, USE FixedUpdate
+    }
+
+    private void Update()
+    {
+
         // I don't have time to use ISp
 
         Vector3 rotation = transform.rotation.eulerAngles;
@@ -96,32 +101,29 @@ internal class Car : MonoBehaviour
         {
             moveInput = true;
             velocity += -transform.forward * acceleration * Time.deltaTime;
-
         }
-        
+
         if (Input.GetKey(KeyCode.DownArrow)
             || Input.GetKey(KeyCode.S))
         {
             moveInput = true;
             velocity += transform.forward * acceleration * Time.deltaTime;
-
         }
-        
+
         if (Input.GetKey(KeyCode.LeftArrow)
-        || Input.GetKey(KeyCode.A))
+        || Input.GetKey(KeyCode.A)
+        && (velocity.magnitude > EPSILON_MIN))
         {
-            
             steeringInput = true;
-            velocity += transform.right * steeringIntensity * Time.deltaTime;
-            rotation.y = transform.rotation.eulerAngles.y + steeringIntensity; // normalised?
+            rotation.y = transform.rotation.eulerAngles.y + steeringIntensity * Time.deltaTime; // normalised?
         }
 
         if (Input.GetKey(KeyCode.RightArrow)
-        || Input.GetKey(KeyCode.D))
+        || Input.GetKey(KeyCode.D)
+        && (velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            velocity += -transform.right * steeringIntensity * Time.deltaTime;
-            rotation.y = transform.rotation.eulerAngles.y - steeringIntensity; // normalised?
+            rotation.y = transform.rotation.eulerAngles.y - steeringIntensity * Time.deltaTime; // normalised?
         }
 
         // apply some natural decay
@@ -155,10 +157,6 @@ internal class Car : MonoBehaviour
             Quaternion.Euler(rotation.x, rotation.y, rotation.z));
 
         // apply motion
-    }
-
-    private void Update()
-    {
 
         Camera.main.transform.position = transform.position + (transform.forward * 3.0f);
         Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
