@@ -39,9 +39,11 @@ internal class Car : MonoBehaviour
     float coolness;
 
     //todo: move to "BaseObject" class
-    Vector3 velocity; 
+    Vector3 velocity;
 
-    GameObject parent; 
+    const float EPSILON_MIN = 0.01f;
+
+    GameObject parent;
 
     //
     // METHODS
@@ -74,6 +76,8 @@ internal class Car : MonoBehaviour
         boostAcceleration = float.Parse(ConfigParser.GetValue("Handling", "BoostAcceleration"));
         steeringIntensity = float.Parse(ConfigParser.GetValue("Handling", "SteeringIntensity"));
         steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
+
+        // fix screwed up model shit
     }
 
     // FixedUpdate contains our controls so they feel decent regardless of fraemrate
@@ -84,13 +88,13 @@ internal class Car : MonoBehaviour
         // I don't have time to use ISp
 
         Vector3 rotation = transform.rotation.eulerAngles;
-        bool anyInput = false;
+        bool moveInput = false;
+        bool steeringInput = false;
 
         if (Input.GetKey(KeyCode.UpArrow)
             || Input.GetKey(KeyCode.W))
         {
-            anyInput = true;
-
+            moveInput = true;
             velocity += -transform.forward * acceleration * Time.deltaTime;
 
         }
@@ -98,8 +102,7 @@ internal class Car : MonoBehaviour
         if (Input.GetKey(KeyCode.DownArrow)
             || Input.GetKey(KeyCode.S))
         {
-            anyInput = true;
-
+            moveInput = true;
             velocity += transform.forward * acceleration * Time.deltaTime;
 
         }
@@ -107,7 +110,8 @@ internal class Car : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftArrow)
         || Input.GetKey(KeyCode.A))
         {
-            anyInput = true;
+            
+            steeringInput = true;
             velocity += transform.right * steeringIntensity * Time.deltaTime;
             rotation.y = transform.rotation.eulerAngles.y + steeringIntensity; // normalised?
         }
@@ -115,13 +119,13 @@ internal class Car : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow)
         || Input.GetKey(KeyCode.D))
         {
-            anyInput = true;
+            steeringInput = true;
             velocity += -transform.right * steeringIntensity * Time.deltaTime;
             rotation.y = transform.rotation.eulerAngles.y - steeringIntensity; // normalised?
         }
 
         // apply some natural decay
-        if (!anyInput)
+        if (!moveInput && !steeringInput)
         {
             velocity.Scale(new Vector3(0.85f, 0.85f, 0.85f));
         }
@@ -156,12 +160,13 @@ internal class Car : MonoBehaviour
     private void Update()
     {
 
-        Camera.main.transform.position = transform.position + new Vector3(-3.5f, 1.25f, 0);
+        Camera.main.transform.position = transform.position + (transform.forward * 3.0f);
+        Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
 
         // this is going to need a lot of work
 
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
-        Camera.main.transform.rotation = Quaternion.Euler(carRot.x, carRot.y - 180, carRot.z);
+        Camera.main.transform.rotation = Quaternion.Euler(carRot.x, carRot.y + 180, carRot.z);
     }
 }
