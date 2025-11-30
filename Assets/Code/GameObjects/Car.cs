@@ -1,5 +1,8 @@
 ﻿using System;
+using Unity.Properties;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.Rendering.STP;
 
 // It's a car :D
 internal class Car : MonoBehaviour
@@ -18,12 +21,14 @@ internal class Car : MonoBehaviour
     // FIELDS
     //
 
-    GameAssetConfigFile spec;
+    TextAsset config;
 
     // Characteristics of the car
     float topSpeed;
     float topSpeedBoost;
     float acceleration;
+
+    float steeringIntensity;                            // the intensity of the steering
 
     CarSteeringType steeringType;
 
@@ -32,6 +37,9 @@ internal class Car : MonoBehaviour
 
     // This is transient like it is in real life
     float coolness;
+
+    //todo: move to "BaseObject" class
+    Vector3 velocity; 
 
     GameObject parent; 
 
@@ -42,7 +50,7 @@ internal class Car : MonoBehaviour
     private void Start()
     {
         // get the car
-        parent = transform.parent.gameObject;
+        parent = transform.gameObject;
 
         // find the wheels
 
@@ -55,19 +63,105 @@ internal class Car : MonoBehaviour
 
         // it is possible to use components and create many of these basecars with different gaemassetconfigfile components that have editor-modifiable resource paths
         // BUT IS IT GOOD? Who can know??? We'll have to try it!!
-        spec = (GameAssetConfigFile)AssetManager.LoadAsset<GameAssetConfigFile>("/Cars/CarTest.cfg"); // in the future cars will overload from this
-        spec.ParseCfg();
+        config = AssetManager.LoadAsset<TextAsset>("Cars/CarTest"); // in the future cars will overload from this
 
-        topSpeed = float.Parse(spec.GetValue("Handling", "TopSpeed"));
-        topSpeedBoost = float.Parse(spec.GetValue("Handling", "TopSpeedBoost"));
-        acceleration = float.Parse(spec.GetValue("Handling", "Acceleration"));
-        boostAmount = float.Parse(spec.GetValue("Handling", "BoostAmount"));
-        boostAcceleration = float.Parse(spec.GetValue("Handling", "BoostAcceleration"));
-        steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), spec.GetValue("Handling", "SteeringType"));
+        ConfigParser.ParseCfg(config.text);
+
+        topSpeed = float.Parse(ConfigParser.GetValue("Handling", "TopSpeed"));
+        topSpeedBoost = float.Parse(ConfigParser.GetValue("Handling", "TopSpeedBoost"));
+        acceleration = float.Parse(ConfigParser.GetValue("Handling", "Acceleration"));
+        boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
+        boostAcceleration = float.Parse(ConfigParser.GetValue("Handling", "BoostAcceleration"));
+        steeringIntensity = float.Parse(ConfigParser.GetValue("Handling", "SteeringIntensity"));
+        steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
+    }
+
+    // FixedUpdate contains our controls so they feel decent regardless of fraemrate
+
+    private void FixedUpdate()
+    {
+        // TODO: DELTA TIME!!!!
+        // I don't have time to use ISp
+
+        Vector3 rotation = transform.rotation.eulerAngles;
+        bool anyInput = false;
+
+        if (Input.GetKey(KeyCode.UpArrow)
+            || Input.GetKey(KeyCode.W))
+        {
+            anyInput = true;
+
+            velocity += -transform.forward * acceleration * Time.deltaTime;
+
+        }
+        
+        if (Input.GetKey(KeyCode.DownArrow)
+            || Input.GetKey(KeyCode.S))
+        {
+            anyInput = true;
+
+            velocity += transform.forward * acceleration * Time.deltaTime;
+
+        }
+        
+        if (Input.GetKey(KeyCode.LeftArrow)
+        || Input.GetKey(KeyCode.A))
+        {
+            anyInput = true;
+            velocity += transform.right * steeringIntensity * Time.deltaTime;
+            rotation.y = transform.rotation.eulerAngles.y + steeringIntensity; // normalised?
+        }
+
+        if (Input.GetKey(KeyCode.RightArrow)
+        || Input.GetKey(KeyCode.D))
+        {
+            anyInput = true;
+            velocity += -transform.right * steeringIntensity * Time.deltaTime;
+            rotation.y = transform.rotation.eulerAngles.y - steeringIntensity; // normalised?
+        }
+
+        // apply some natural decay
+        if (!anyInput)
+        {
+            velocity.Scale(new Vector3(0.85f, 0.85f, 0.85f));
+        }
+
+        Debug.Log("Velocity: " + velocity.x + " " + velocity.y + " " + velocity.z);
+
+        // anti-big rigs (apply this one at a time)
+        if (velocity.x > topSpeed)
+            velocity.Set(topSpeed, velocity.y, velocity.z);
+        else if (velocity.x < -topSpeed)
+            velocity.Set(-topSpeed, velocity.y, velocity.z);
+
+        if (velocity.y > topSpeed)
+            velocity.Set(velocity.x, topSpeed, velocity.z);
+        else if (velocity.y < -topSpeed)
+            velocity.Set(velocity.x, -topSpeed, velocity.z);
+
+        if (velocity.z > topSpeed)
+            velocity.Set(velocity.x, velocity.y, topSpeed);
+        else if (velocity.z < -topSpeed)
+            velocity.Set(velocity.x, velocity.y, -topSpeed);
+
+        transform.SetPositionAndRotation(new(transform.position.x + velocity.x,
+            transform.position.y + velocity.y,
+            transform.position.z + velocity.z),
+
+            Quaternion.Euler(rotation.x, rotation.y, rotation.z));
+
+        // apply motion
     }
 
     private void Update()
     {
-        
+
+        Camera.main.transform.position = transform.position + new Vector3(-3.5f, 1.25f, 0);
+
+        // this is going to need a lot of work
+
+        // Fix when model correctly imported
+        Vector3 carRot = transform.rotation.eulerAngles;
+        Camera.main.transform.rotation = Quaternion.Euler(carRot.x, carRot.y - 180, carRot.z);
     }
 }

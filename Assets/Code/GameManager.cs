@@ -26,6 +26,8 @@ internal class GameManager
 
         // this is all one scene
         scene = SceneManager.GetActiveScene();
+
+        // temp
     }
 
     public void SetGameState(GameState newState)

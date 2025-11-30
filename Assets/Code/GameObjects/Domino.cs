@@ -14,10 +14,10 @@ internal class Domino : MonoBehaviour
     // FIELDS
     //
 
-    internal string name;
+    internal string dominoName; // UnityEngine.Object has name
     internal string description;
 
-    private GameAssetConfigFile config;
+    private TextAsset config;
 
     //
     // METHODS
@@ -25,16 +25,21 @@ internal class Domino : MonoBehaviour
 
     internal void Start()
     {
-        config = AssetManager.LoadAsset<GameAssetConfigFile>("/Domino/DominoTest.cfg");
-        config.ParseCfg();
+        // unity can't load custom resource types...we'll have to replace this
+        config = AssetManager.LoadAsset<TextAsset>("Domino/DominoTest");
 
-        config.name = config.GetValue("Info", "Name");
-        config.name = config.GetValue("Info", "Description");
+        // we only ever load values from our cfg's at load time
+        ConfigParser.ParseCfg(config.text);
+
+        dominoName = ConfigParser.GetValue("Info", "Name");
+        description = ConfigParser.GetValue("Info", "Description");
 
     }
 
     internal void Update()
     {
+        // Temporary until our super fancy camera systm is created
+
 
     }
 

@@ -8,18 +8,18 @@ internal static class AssetManager
     // possibly have a list of assets here. but then unity could internally unload stuff and we'd have no way to tell 
     private static UInt32 numAssetsLoaded;
 
-    internal static T LoadAsset<T>(string path) where T : UnityEngine.Object
+    internal static T LoadAsset<T>(string path, Type systemTypeInstance = null) where T : UnityEngine.Object
     {
         // https://stackoverflow.com/questions/552629/c-sharp-print-the-class-name-from-within-a-static-function
         // Reflection is type safe, but 50 times slower!!!!
         Debug.Log("Game Asset Loader: Loading asset of type " + typeof(T).Name + "");
 
-        // Accoring to unity this should be using AssetBundles, later.
         T newAsset = Resources.Load<T>(path);
+
 
         if (!newAsset)
         {
-            Debug.LogError("***** FAILED to load asset ******");
+            Debug.LogError("***** FAILED to load asset: " + path + " ******");
             return null;
         }
 
