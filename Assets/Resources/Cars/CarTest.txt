@@ -1,9 +1,10 @@
 [Handling]
 
-TopSpeed = 10.0			; Top speed
-TopSpeedBoost = 15.0		; Top speed during boost
-Acceleration = 2.0		; Acceleration of car
-BoostAcceleration = 2.5		; Acceleration of car on TOP of regular acceleation
+TopSpeed = 1.0			; Top speed
+TopSpeedBoost = 1.5		; Top speed during boost
+Acceleration = 0.2		; Acceleration of car
+Deceleration = 0.97		; Deceleration (must be below 1) 
+BoostAcceleration = 0.5		; Acceleration of car on TOP of regular acceleation
 BoostAmount = 2300		; Amount of boost
-SteeringIntensity = 0.7     	; steering intensity
+SteeringIntensity = 0.2     	; steering intensity
 SteeringType = Manual 		; 0 = Automatic, 1 = Manual, you can use numbers or the names 

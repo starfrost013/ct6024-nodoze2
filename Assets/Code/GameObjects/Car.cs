@@ -27,6 +27,7 @@ internal class Car : MonoBehaviour
     float topSpeed;
     float topSpeedBoost;
     float acceleration;
+    float deceleration;
 
     float steeringIntensity;                            // the intensity of the steering
 
@@ -72,6 +73,8 @@ internal class Car : MonoBehaviour
         topSpeed = float.Parse(ConfigParser.GetValue("Handling", "TopSpeed"));
         topSpeedBoost = float.Parse(ConfigParser.GetValue("Handling", "TopSpeedBoost"));
         acceleration = float.Parse(ConfigParser.GetValue("Handling", "Acceleration"));
+        deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
+
         boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
         boostAcceleration = float.Parse(ConfigParser.GetValue("Handling", "BoostAcceleration"));
         steeringIntensity = float.Parse(ConfigParser.GetValue("Handling", "SteeringIntensity"));
@@ -115,7 +118,7 @@ internal class Car : MonoBehaviour
         && (velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            rotation.y = transform.rotation.eulerAngles.y + steeringIntensity; // normalised?
+            rotation.y = transform.rotation.eulerAngles.y - steeringIntensity; // normalised?
         }
 
         if (Input.GetKey(KeyCode.RightArrow)
@@ -123,13 +126,13 @@ internal class Car : MonoBehaviour
         && (velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            rotation.y = transform.rotation.eulerAngles.y - steeringIntensity; // normalised?
+            rotation.y = transform.rotation.eulerAngles.y + steeringIntensity; // normalised?
         }
 
         // apply some natural decay
         if (!moveInput && !steeringInput)
         {
-            velocity.Scale(new Vector3(0.85f, 0.85f, 0.85f));
+            velocity.Scale(new Vector3(deceleration, deceleration, deceleration));
         }
 
         Debug.Log("Velocity: " + velocity.x + " " + velocity.y + " " + velocity.z);
