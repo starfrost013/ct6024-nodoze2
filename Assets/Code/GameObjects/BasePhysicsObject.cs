@@ -1,12 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Code.GameObjects
 {
-    internal class BasePhysicsObject
+    //
+    // !Domino
+    // © 2025-2026
+    //
+    internal class BasePhysicsObject : MonoBehaviour
     {
+        //
+        // Unity Rigidbody componetn
+        //
+        Rigidbody rigidbody;
+
+
     }
 }
