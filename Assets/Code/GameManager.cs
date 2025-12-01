@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using System.Runtime.CompilerServices;
 
-internal class GameManager
+internal static class GameManager
 {
     // The game state enum. Tells us what to do
     public enum GameState
@@ -15,12 +16,12 @@ internal class GameManager
         UpgradeMode = 5,
     }
 
-    private GameState state;
-    private GameMode mode;
+    private static GameState state;
+    private static GameMode mode;
 
-    private Scene scene; 
+    private static Scene scene; 
     
-    public void Start()
+    public static void Start()
     {
         state = GameState.Init;
 
@@ -30,20 +31,30 @@ internal class GameManager
         // temp
     }
 
-    public void SetGameState(GameState newState)
+    public static GameState GetGameState()
+    {
+        return state;
+    }
+
+    public static void SetGameState(GameState newState)
     {
         GameState oldState = state; 
         state = newState;
         OnGameStateChanged(newState);
     }
 
-    public void OnFrame()
+    public static void OnFrame()
     {
         mode.OnFrame();
     }
 
+    public static void OnFixedUpdate()
+    {
+        mode.OnFixedUpdate();   
+    }
+
     // I don't like reflection, it cretaes large and ugly programs in C#
-    private GameMode GetModeFromState(GameState state)
+    private static GameMode GetModeFromState(GameState state)
     {
         switch (state)
         {
@@ -57,7 +68,7 @@ internal class GameManager
      }
 
     // privates
-    private void OnGameStateChanged(GameState newState)
+    private static void OnGameStateChanged(GameState newState)
     {
         Debug.Log("Game state is changing to " + Enum.GetName(typeof(GameState), newState));
 
