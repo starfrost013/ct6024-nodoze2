@@ -115,7 +115,7 @@ internal class Car : MonoBehaviour
         && (velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            rotation.y = transform.rotation.eulerAngles.y + steeringIntensity * Time.deltaTime; // normalised?
+            rotation.y = transform.rotation.eulerAngles.y + steeringIntensity; // normalised?
         }
 
         if (Input.GetKey(KeyCode.RightArrow)
@@ -123,7 +123,7 @@ internal class Car : MonoBehaviour
         && (velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            rotation.y = transform.rotation.eulerAngles.y - steeringIntensity * Time.deltaTime; // normalised?
+            rotation.y = transform.rotation.eulerAngles.y - steeringIntensity; // normalised?
         }
 
         // apply some natural decay
@@ -149,6 +149,7 @@ internal class Car : MonoBehaviour
             velocity.Set(velocity.x, velocity.y, topSpeed);
         else if (velocity.z < -topSpeed)
             velocity.Set(velocity.x, velocity.y, -topSpeed);
+
 
         transform.SetPositionAndRotation(new(transform.position.x + velocity.x,
             transform.position.y + velocity.y,
