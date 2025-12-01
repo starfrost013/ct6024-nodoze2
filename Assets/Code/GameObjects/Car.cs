@@ -26,7 +26,8 @@ internal class Car : MonoBehaviour
     // Characteristics of the car
     float topSpeed;
     float topSpeedBoost;
-    float acceleration;
+    float accelerationForward;
+    float accelerationSteering;
     float deceleration;
 
     float steeringIntensity;                            // the intensity of the steering
@@ -72,7 +73,9 @@ internal class Car : MonoBehaviour
 
         topSpeed = float.Parse(ConfigParser.GetValue("Handling", "TopSpeed"));
         topSpeedBoost = float.Parse(ConfigParser.GetValue("Handling", "TopSpeedBoost"));
-        acceleration = float.Parse(ConfigParser.GetValue("Handling", "Acceleration"));
+        accelerationForward = float.Parse(ConfigParser.GetValue("Handling", "AccelerationForward"));
+        accelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteering"));
+
         deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
 
         boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
@@ -103,14 +106,15 @@ internal class Car : MonoBehaviour
             || Input.GetKey(KeyCode.W))
         {
             moveInput = true;
-            velocity += -transform.forward * acceleration * Time.deltaTime;
+            velocity += -transform.forward * accelerationForward * Time.deltaTime;
+        
         }
 
         if (Input.GetKey(KeyCode.DownArrow)
             || Input.GetKey(KeyCode.S))
         {
             moveInput = true;
-            velocity += transform.forward * acceleration * Time.deltaTime;
+            velocity += transform.forward * accelerationForward * Time.deltaTime;
         }
 
         if (Input.GetKey(KeyCode.LeftArrow)
@@ -119,6 +123,7 @@ internal class Car : MonoBehaviour
         {
             steeringInput = true;
             rotation.y = transform.rotation.eulerAngles.y - steeringIntensity; // normalised?
+            velocity += -transform.right * accelerationSteering * Time.deltaTime;
         }
 
         if (Input.GetKey(KeyCode.RightArrow)
@@ -127,6 +132,7 @@ internal class Car : MonoBehaviour
         {
             steeringInput = true;
             rotation.y = transform.rotation.eulerAngles.y + steeringIntensity; // normalised?
+            velocity += transform.right * accelerationSteering * Time.deltaTime;
         }
 
         // apply some natural decay
