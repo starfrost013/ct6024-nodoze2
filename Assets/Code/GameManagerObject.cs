@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class GameManagerObject : MonoBehaviour
 {
-    GameManager manager; 
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,7 +15,7 @@ public class GameManagerObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        manager.OnFrame();        
+        GameManager.OnFrame();        
     }
 
     private void OnGUI()
