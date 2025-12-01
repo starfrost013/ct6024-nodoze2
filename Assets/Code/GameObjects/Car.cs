@@ -20,8 +20,9 @@ internal class Car : BasePhysicsObject
         internal float accelerationForward;
         internal float accelerationSteering;
         internal float deceleration;
+        internal float airDeceleration;                             // deceleration in the air
 
-        internal float steeringIntensity;                            // the intensity of the steering
+        internal float steeringIntensity;                           // the intensity of the steering
 
         internal CarSteeringType steeringType;
 
@@ -32,6 +33,7 @@ internal class Car : BasePhysicsObject
         // maybe needs to become an enum
         internal bool boosting;
         internal bool boostEnding;                        // lets us slowly ramp down
+
 
         internal Vector3 velocity;
     };
@@ -55,7 +57,7 @@ internal class Car : BasePhysicsObject
     //todo: move to "BaseObject" class
 
     // generic epsilon
-    const float EPSILON_MIN = 0.01f;
+    const float EPSILON_MIN = 0.003f;
 
     PhysicsInfo physics;
 
@@ -65,7 +67,7 @@ internal class Car : BasePhysicsObject
     // METHODS
     //
 
-    protected void Start()
+    protected new void Start()
     {
         base.Start();
 
@@ -105,7 +107,6 @@ internal class Car : BasePhysicsObject
         physics.steeringIntensity = float.Parse(ConfigParser.GetValue("Handling", "SteeringIntensity"));
         physics.steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
 
-        
         // fix screwed up model shit
     }
 
@@ -161,7 +162,6 @@ internal class Car : BasePhysicsObject
         {
             moveInput = true;
             physics.velocity += -forwardAccelerationForThisFrame;
-
         }
 
         if (Input.GetKey(KeyCode.DownArrow)
