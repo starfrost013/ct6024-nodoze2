@@ -1,32 +1,29 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets.Code.GameObjects
+//
+// !Domino
+// © 2025-2026
+//
+internal class BasePhysicsObject : MonoBehaviour
 {
     //
-    // !Domino
-    // © 2025-2026
+    // Unity Rigidbody componetn
     //
-    internal class BasePhysicsObject : MonoBehaviour
+    protected Rigidbody thisRigidbody;
+
+    protected void Start()
     {
-        //
-        // Unity Rigidbody componetn
-        //
-        Rigidbody thisRigidbody;
+        thisRigidbody = GetComponent<Rigidbody>();
 
-        private void Start()
+        if (!thisRigidbody)
         {
-            thisRigidbody = GetComponent<Rigidbody>();
-
-            if (!thisRigidbody)
-            {
-                Debug.LogWarning("It's probably a good idea to add the rigidbody component to the BasePhysicsObject " + name + ". Adding automatically...");
-                thisRigidbody = gameObject.AddComponent<Rigidbody>();   
-            }
-
-
+            Debug.LogWarning("It's probably a good idea to add the rigidbody component to the BasePhysicsObject " + name + ". Adding automatically...");
+            thisRigidbody = gameObject.AddComponent<Rigidbody>();
         }
 
 
     }
+
+
 }

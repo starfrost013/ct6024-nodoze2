@@ -6,7 +6,7 @@ using UnityEngine;
 using static UnityEngine.Rendering.STP;
 
 // It's a car :D
-internal class Car : MonoBehaviour
+internal class Car : BasePhysicsObject
 {
     //
     // STRUCTS
@@ -65,8 +65,14 @@ internal class Car : MonoBehaviour
     // METHODS
     //
 
-    private void Start()
+    protected void Start()
     {
+        base.Start();
+
+        // disregard non-custom fores
+
+        //TODO: WHEEL PHYSICS
+
         // get the car
         parent = transform.gameObject;
 
@@ -113,8 +119,8 @@ internal class Car : MonoBehaviour
     private void Update()
     {
         // I don't have time to use ISp
+        Vector3 torque = new();
 
-        Vector3 rotation = transform.rotation.eulerAngles;
         bool moveInput = false;
         bool steeringInput = false;
 
@@ -170,7 +176,7 @@ internal class Car : MonoBehaviour
         && (physics.velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            rotation.y = transform.rotation.eulerAngles.y - physics.steeringIntensity; // normalised?
+            torque.y = -physics.steeringIntensity; // normalised?
             physics.velocity += steeringAccelerationForThisFrame;
         }
 
@@ -179,7 +185,7 @@ internal class Car : MonoBehaviour
         && (physics.velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            rotation.y = transform.rotation.eulerAngles.y + physics.steeringIntensity; // normalised?
+            torque.y = physics.steeringIntensity; // normalised?
             physics.velocity += -steeringAccelerationForThisFrame;
         }
 
@@ -219,12 +225,16 @@ internal class Car : MonoBehaviour
         else if (physics.velocity.z < -topSpeed)
             physics.velocity.Set(physics.velocity.x, physics.velocity.y, -topSpeed);
 
+        //thisRigidbody.AddForce(physics.velocity.x, physics.velocity.y, physics.velocity.z, ForceMode.VelocityChange);
+        //thisRigidbody.AddTorque(torque.x, torque.y, torque.z);
 
         transform.SetPositionAndRotation(new(transform.position.x + physics.velocity.x,
             transform.position.y + physics.velocity.y,
             transform.position.z + physics.velocity.z),
-
-            Quaternion.Euler(rotation.x, rotation.y, rotation.z));
+        
+            Quaternion.Euler(transform.rotation.eulerAngles.x + torque.x,
+            transform.rotation.eulerAngles.y + torque.y,
+            transform.rotation.eulerAngles.z + torque.z));
 
         // apply motion
 
