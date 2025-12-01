@@ -11,7 +11,10 @@ internal class GameModeRaceMode : GameMode
         Finished = 2,
     };
 
-    RaceState raceState; 
+    RaceState raceState;
+
+
+    internal string raceConfigFile;
 
     internal override void OnEnter()
     {
@@ -20,7 +23,17 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFrame()
     {
+        switch (raceState)
+        {
+            case RaceState.Starting:
+                
+                break;
+        }
+    }
 
+    internal override void OnFixedUpdate()
+    {
+        
     }
 
     internal override void OnLeave()
