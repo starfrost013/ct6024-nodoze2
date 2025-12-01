@@ -45,6 +45,9 @@ internal static class GameManager
 
     public static void OnFrame()
     {
+        if (Input.GetKey(KeyCode.R))
+            SceneManager.LoadScene(scene.buildIndex);
+       
         mode.OnFrame();
     }
 

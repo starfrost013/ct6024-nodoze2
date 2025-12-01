@@ -18,6 +18,11 @@ public class GameManagerObject : MonoBehaviour
         GameManager.OnFrame();        
     }
 
+    private void FixedUpdate()
+    {
+        GameManager.OnFixedUpdate();
+    }
+
     private void OnGUI()
     {
         string dateTime = "**** Alpha - Testing ****\n" + Application.version + " (Unity " + Application.unityVersion + ")\n" + DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
