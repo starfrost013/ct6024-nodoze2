@@ -3,9 +3,9 @@
 TopSpeed = 1.0			; Top speed
 TopSpeedBoost = 1.5		; Top speed during boost
 AccelerationForward = 0.2	; Acceleration of car
-AccelerationSteering = 0.05	; Acceleration to apply in laterla direction
+AccelerationSteering = 0.13	; Acceleration to apply in laterla direction
 Deceleration = 0.97		; Deceleration (must be below 1) 
 BoostAcceleration = 0.5		; Acceleration of car on TOP of regular acceleation
 BoostAmount = 2300		; Amount of boost
-SteeringIntensity = 0.2     	; steering intensity
+SteeringIntensity = 0.7     	; steering intensity (needs to slowly ramp up)
 SteeringType = Manual 		; 0 = Automatic, 1 = Manual, you can use numbers or the names 

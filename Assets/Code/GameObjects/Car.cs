@@ -123,7 +123,7 @@ internal class Car : MonoBehaviour
         {
             steeringInput = true;
             rotation.y = transform.rotation.eulerAngles.y - steeringIntensity; // normalised?
-            velocity += -transform.right * accelerationSteering * Time.deltaTime;
+            velocity += transform.right * accelerationSteering * Time.deltaTime;
         }
 
         if (Input.GetKey(KeyCode.RightArrow)
@@ -132,7 +132,7 @@ internal class Car : MonoBehaviour
         {
             steeringInput = true;
             rotation.y = transform.rotation.eulerAngles.y + steeringIntensity; // normalised?
-            velocity += transform.right * accelerationSteering * Time.deltaTime;
+            velocity += -transform.right * accelerationSteering * Time.deltaTime;
         }
 
         // apply some natural decay
