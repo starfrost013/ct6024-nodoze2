@@ -12,7 +12,20 @@ namespace Assets.Code.GameObjects
         //
         // Unity Rigidbody componetn
         //
-        Rigidbody rigidbody;
+        Rigidbody thisRigidbody;
+
+        private void Start()
+        {
+            thisRigidbody = GetComponent<Rigidbody>();
+
+            if (!thisRigidbody)
+            {
+                Debug.LogWarning("It's probably a good idea to add the rigidbody component to the BasePhysicsObject " + name + ". Adding automatically...");
+                thisRigidbody = gameObject.AddComponent<Rigidbody>();   
+            }
+
+
+        }
 
 
     }

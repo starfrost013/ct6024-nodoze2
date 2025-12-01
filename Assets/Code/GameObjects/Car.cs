@@ -1,6 +1,7 @@
 ﻿using System;
 using Unity.Properties;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using static UnityEngine.Rendering.STP;
 
@@ -11,7 +12,32 @@ internal class Car : MonoBehaviour
     // STRUCTS
     // 
 
-    enum CarSteeringType
+    internal struct PhysicsInfo
+    {
+        // Characteristics of the car
+        internal float topSpeed;
+        internal float topSpeedBoost;
+        internal float accelerationForward;
+        internal float accelerationSteering;
+        internal float deceleration;
+
+        internal float steeringIntensity;                            // the intensity of the steering
+
+        internal CarSteeringType steeringType;
+
+        internal float boostAmount;
+        internal float boostAccelerationForward;
+        internal float boostAccelerationSteering;
+
+        // maybe needs to become an enum
+        internal bool boosting;
+        internal bool boostEnding;                        // lets us slowly ramp down
+
+        internal Vector3 velocity;
+    };
+
+
+    internal enum CarSteeringType
     {
         Automatic = 0,
         Manual = 1,
@@ -22,28 +48,16 @@ internal class Car : MonoBehaviour
     //
 
     TextAsset config;
-
-    // Characteristics of the car
-    float topSpeed;
-    float topSpeedBoost;
-    float accelerationForward;
-    float accelerationSteering;
-    float deceleration;
-
-    float steeringIntensity;                            // the intensity of the steering
-
-    CarSteeringType steeringType;
-
-    float boostAmount;
-    float boostAcceleration;
-
+  
     // This is transient like it is in real life
     float coolness;
 
     //todo: move to "BaseObject" class
-    Vector3 velocity;
 
+    // generic epsilon
     const float EPSILON_MIN = 0.01f;
+
+    PhysicsInfo physics;
 
     GameObject parent;
 
@@ -71,18 +85,21 @@ internal class Car : MonoBehaviour
 
         ConfigParser.ParseCfg(config.text);
 
-        topSpeed = float.Parse(ConfigParser.GetValue("Handling", "TopSpeed"));
-        topSpeedBoost = float.Parse(ConfigParser.GetValue("Handling", "TopSpeedBoost"));
-        accelerationForward = float.Parse(ConfigParser.GetValue("Handling", "AccelerationForward"));
-        accelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteering"));
+        physics.topSpeed = float.Parse(ConfigParser.GetValue("Handling", "TopSpeed"));
+        physics.topSpeedBoost = float.Parse(ConfigParser.GetValue("Handling", "TopSpeedBoost"));
+        physics.accelerationForward = float.Parse(ConfigParser.GetValue("Handling", "AccelerationForward"));
+        physics.accelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteering"));
 
-        deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
+        physics.deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
 
-        boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
-        boostAcceleration = float.Parse(ConfigParser.GetValue("Handling", "BoostAcceleration"));
-        steeringIntensity = float.Parse(ConfigParser.GetValue("Handling", "SteeringIntensity"));
-        steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
+        physics.boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
+        physics.boostAccelerationForward = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"));
+        physics.boostAccelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"));
 
+        physics.steeringIntensity = float.Parse(ConfigParser.GetValue("Handling", "SteeringIntensity"));
+        physics.steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
+
+        
         // fix screwed up model shit
     }
 
@@ -95,74 +112,117 @@ internal class Car : MonoBehaviour
 
     private void Update()
     {
-
         // I don't have time to use ISp
 
         Vector3 rotation = transform.rotation.eulerAngles;
         bool moveInput = false;
         bool steeringInput = false;
 
+        // check if we stopped boosting
+        bool boostingTemp = physics.boosting;
+        physics.boosting = Input.GetKey(KeyCode.LeftShift);
+
+        if (boostingTemp && !physics.boosting)
+            physics.boostEnding = true;
+
+        // boost isn't finished until we slow down after boost is done
+        if (physics.boostEnding
+            && (Mathf.Abs(physics.velocity.x) < physics.topSpeed)
+            && (Mathf.Abs(physics.velocity.y) < physics.topSpeed
+            && (Mathf.Abs(physics.velocity.z) < physics.topSpeed)))
+        {
+            physics.boostEnding = false;
+        }
+
+        Vector3 forwardAccelerationForThisFrame = transform.forward * physics.accelerationForward * Time.deltaTime;
+        Vector3 steeringAccelerationForThisFrame = transform.right * physics.accelerationSteering * Time.deltaTime;
+
+        // if we ARE boosting, apply boost accel.
+        // if we RECENTLY STOPPED boosting, apply zero accel.
+        // otherwise, apply 
+        if (physics.boosting)
+        {
+            forwardAccelerationForThisFrame = transform.forward * physics.boostAccelerationForward * Time.deltaTime;
+            steeringAccelerationForThisFrame = transform.right * physics.boostAccelerationSteering * Time.deltaTime;
+        }
+        else if (physics.boostEnding)
+            forwardAccelerationForThisFrame = steeringAccelerationForThisFrame = new Vector3(0.0f, 0.0f, 0.0f); // only apply natural deceleration
+
+        // if the boost is ending - we want to decelerate
+
         if (Input.GetKey(KeyCode.UpArrow)
             || Input.GetKey(KeyCode.W))
         {
             moveInput = true;
-            velocity += -transform.forward * accelerationForward * Time.deltaTime;
-        
+            physics.velocity += -forwardAccelerationForThisFrame;
+
         }
 
         if (Input.GetKey(KeyCode.DownArrow)
             || Input.GetKey(KeyCode.S))
         {
             moveInput = true;
-            velocity += transform.forward * accelerationForward * Time.deltaTime;
+            physics.velocity += forwardAccelerationForThisFrame;
         }
 
         if (Input.GetKey(KeyCode.LeftArrow)
         || Input.GetKey(KeyCode.A)
-        && (velocity.magnitude > EPSILON_MIN))
+        && (physics.velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            rotation.y = transform.rotation.eulerAngles.y - steeringIntensity; // normalised?
-            velocity += transform.right * accelerationSteering * Time.deltaTime;
+            rotation.y = transform.rotation.eulerAngles.y - physics.steeringIntensity; // normalised?
+            physics.velocity += steeringAccelerationForThisFrame;
         }
 
         if (Input.GetKey(KeyCode.RightArrow)
         || Input.GetKey(KeyCode.D)
-        && (velocity.magnitude > EPSILON_MIN))
+        && (physics.velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            rotation.y = transform.rotation.eulerAngles.y + steeringIntensity; // normalised?
-            velocity += -transform.right * accelerationSteering * Time.deltaTime;
+            rotation.y = transform.rotation.eulerAngles.y + physics.steeringIntensity; // normalised?
+            physics.velocity += -steeringAccelerationForThisFrame;
         }
+
+        //
+        // APPLICATION
+        //
 
         // apply some natural decay
-        if (!moveInput && !steeringInput)
+        if ((!moveInput && !steeringInput)
+            || physics.boostEnding) // should we lock this?
         {
-            velocity.Scale(new Vector3(deceleration, deceleration, deceleration));
+            physics.velocity.Scale(new Vector3(physics.deceleration, physics.deceleration, physics.deceleration));
         }
 
-        Debug.Log("Velocity: " + velocity.x + " " + velocity.y + " " + velocity.z);
+        Debug.Log("Velocity: " + physics.velocity.x + " " + physics.velocity.y + " " + physics.velocity.z);
+
+        float topSpeed = physics.topSpeed;
+
+        // test
+        // if the player is boosting we don't want them 
+        if (physics.boosting || physics.boostEnding)
+            topSpeed = physics.topSpeedBoost;
 
         // anti-big rigs (apply this one at a time)
-        if (velocity.x > topSpeed)
-            velocity.Set(topSpeed, velocity.y, velocity.z);
-        else if (velocity.x < -topSpeed)
-            velocity.Set(-topSpeed, velocity.y, velocity.z);
+        if (physics.velocity.x > topSpeed)
+            physics.velocity.Set(topSpeed, physics.velocity.y, physics.velocity.z);
+        else if (physics.velocity.x < -topSpeed)
+            physics.velocity.Set(-topSpeed, physics.velocity.y, physics.velocity.z);
 
-        if (velocity.y > topSpeed)
-            velocity.Set(velocity.x, topSpeed, velocity.z);
-        else if (velocity.y < -topSpeed)
-            velocity.Set(velocity.x, -topSpeed, velocity.z);
+        if (physics.velocity.y > topSpeed)
+            physics.velocity.Set(physics.velocity.x, topSpeed, physics.velocity.z);
+        else if (physics.velocity.y < -topSpeed)
+            physics.velocity.Set(physics.velocity.x, -topSpeed, physics.velocity.z);
 
-        if (velocity.z > topSpeed)
-            velocity.Set(velocity.x, velocity.y, topSpeed);
-        else if (velocity.z < -topSpeed)
-            velocity.Set(velocity.x, velocity.y, -topSpeed);
+        if (physics.velocity.z > topSpeed)
+            physics.velocity.Set(physics.velocity.x, physics.velocity.y, topSpeed);
+        else if (physics.velocity.z < -topSpeed)
+            physics.velocity.Set(physics.velocity.x, physics.velocity.y, -topSpeed);
 
 
-        transform.SetPositionAndRotation(new(transform.position.x + velocity.x,
-            transform.position.y + velocity.y,
-            transform.position.z + velocity.z),
+        transform.SetPositionAndRotation(new(transform.position.x + physics.velocity.x,
+            transform.position.y + physics.velocity.y,
+            transform.position.z + physics.velocity.z),
 
             Quaternion.Euler(rotation.x, rotation.y, rotation.z));
 

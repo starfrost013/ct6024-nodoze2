@@ -60,8 +60,13 @@ internal class GameManager
     private void OnGameStateChanged(GameState newState)
     {
         Debug.Log("Game state is changing to " + Enum.GetName(typeof(GameState), newState));
-        // leave the old mode
-        mode.OnLeave();
+
+        if (mode != null)
+        {
+            // leave the old mode
+            mode.OnLeave();
+
+        }
 
         // get the new mode and enter it
         mode = GetModeFromState(newState);
