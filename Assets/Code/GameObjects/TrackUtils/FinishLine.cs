@@ -4,15 +4,26 @@ using UnityEngine;
 // It lets us knw
 class FinishLine : MonoBehaviour
 {
-    GameModeRaceMode mode; 
+    GameModeRaceMode mode;
 
-    private void Start()
+    //maybe put this in a RaceINfo class
+    Car car;
+
+    void Start()
     {
-        if (GameManager.GetGameState() != GameManager.GameState.RaceMode)
-        {
-            // If it's not race mode, we have no reason to exist
-            Destroy(gameObject);
-        }
-
+        car = FindFirstObjectByType<Car>(); 
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // don't do anything if it isn't racemode
+        if (GameManager.GetGameState() != GameManager.GameState.RaceMode)
+            return; 
+
+        if (other.gameObject.GetType() == typeof(Car))
+        {
+            GameManager.SetGameState(GameManager.GameState.RaceFinished);
+        }
+    }
+
 }

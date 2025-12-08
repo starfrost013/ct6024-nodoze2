@@ -7,7 +7,6 @@ internal abstract class GameMode
 
     internal abstract void OnEnter();
     internal abstract void OnFrame();
-
     internal abstract void OnFixedUpdate();
     internal abstract void OnLeave();
 }

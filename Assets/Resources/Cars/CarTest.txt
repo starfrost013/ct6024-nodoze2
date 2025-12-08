@@ -1,12 +1,18 @@
 [Handling]
 
-TopSpeed = 0.05				; Top speed
-TopSpeedBoost =	0.085		; Top speed during boost
-AccelerationForward = 0.025	; Acceleration of car (needs to ramp up in accordance with a curve)
-AccelerationSteering = 0.02	; Acceleration to apply in laterla direction
-Deceleration = 0.97			; Deceleration (must be below 1) 
-BoostAccelerationForward = 0.30	; Acceleration of car on TOP of regular acceleation 
+TopSpeed = 0.05						; Top speed
+TopSpeedBoost =	0.085				; Top speed during boost
+AccelerationForward = 0.025			; Acceleration of car (needs to ramp up in accordance with a curve)
+AccelerationSteering = 0.02			; Acceleration to apply in lateral direction
+AccelerationForwardAir = 0.0025		; Acceleration to apply in forward direction while in the air
+AccelerationSteeringAir = 0.002		; Acceleration to apply in lateral direction while in the air
+Deceleration = 0.975				; Deceleration (must be below 1) 
+DecelerationAir = 0.999			; Deceleration in the air
+BoostAccelerationForward = 0.30		; Acceleration of car on TOP of regular acceleation 
 BoostAccelerationSteering = 0.20	; Acceleration of car on TOP of regular acceleation steering
+BoostAccelerationForwardAir = 0.03	; Acceleration of car on TOP of regular acceleation 
+BoostAccelerationSteeringAir = 0.02	; Acceleration of car on TOP of regular acceleation steering
+
 BoostAmount = 2300			; Amount of boost
 SteeringIntensity = 0.4     ; steering intensity (needs to slowly ramp up)
 SteeringType = Manual 		; 0 = Automatic, 1 = Manual, you can use numbers or the names 

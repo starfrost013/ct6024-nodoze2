@@ -13,7 +13,7 @@ internal static class GameManager
         Menu = 2,
         BuildMode = 3,
         RaceMode = 4,
-        UpgradeMode = 5,
+        RaceFinished = 5,
     }
 
     private static GameState state;
@@ -41,6 +41,11 @@ internal static class GameManager
         GameState oldState = state; 
         state = newState;
         OnGameStateChanged(newState);
+    }
+
+    public static Scene GetCurrentScene(Scene scene)
+    {
+        return scene; 
     }
 
     public static void OnFrame()

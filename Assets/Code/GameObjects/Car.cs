@@ -19,8 +19,10 @@ internal class Car : BasePhysicsObject
         internal float topSpeedBoost;
         internal float accelerationForward;
         internal float accelerationSteering;
+        internal float accelerationForwardAir;
+        internal float accelerationSteeringAir;
         internal float deceleration;
-        internal float airDeceleration;                             // deceleration in the air
+        internal float decelerationAir;                             // deceleration in the air
 
         internal float steeringIntensity;                           // the intensity of the steering
 
@@ -29,13 +31,18 @@ internal class Car : BasePhysicsObject
         internal float boostAmount;
         internal float boostAccelerationForward;
         internal float boostAccelerationSteering;
+        internal float boostAccelerationForwardAir;
+        internal float boostAccelerationSteeringAir;
 
         // maybe needs to become an enum
         internal bool boosting;
         internal bool boostEnding;                        // lets us slowly ramp down
-
+        internal bool inAir;
 
         internal Vector3 velocity;
+
+        internal UInt32 numCollisions;     
+    
     };
 
 
@@ -93,20 +100,32 @@ internal class Car : BasePhysicsObject
 
         ConfigParser.ParseCfg(config.text);
 
-        physics.topSpeed = float.Parse(ConfigParser.GetValue("Handling", "TopSpeed"));
-        physics.topSpeedBoost = float.Parse(ConfigParser.GetValue("Handling", "TopSpeedBoost"));
-        physics.accelerationForward = float.Parse(ConfigParser.GetValue("Handling", "AccelerationForward"));
-        physics.accelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteering"));
+        try
+        {
+            physics.topSpeed = float.Parse(ConfigParser.GetValue("Handling", "TopSpeed"));
+            physics.topSpeedBoost = float.Parse(ConfigParser.GetValue("Handling", "TopSpeedBoost"));
+            physics.accelerationForward = float.Parse(ConfigParser.GetValue("Handling", "AccelerationForward"));
+            physics.accelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteering"));
+            physics.accelerationForwardAir = float.Parse(ConfigParser.GetValue("Handling", "AccelerationForwardAir"));
+            physics.accelerationSteeringAir = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteeringAir"));
 
-        physics.deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
+            physics.deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
+            physics.decelerationAir = float.Parse(ConfigParser.GetValue("Handling", "DecelerationAir"));
 
-        physics.boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
-        physics.boostAccelerationForward = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"));
-        physics.boostAccelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"));
+            physics.boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
+            physics.boostAccelerationForward = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"));
+            physics.boostAccelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"));
+            physics.boostAccelerationForwardAir = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationForwardAir"));
+            physics.boostAccelerationSteeringAir = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"));
 
-        physics.steeringIntensity = float.Parse(ConfigParser.GetValue("Handling", "SteeringIntensity"));
-        physics.steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
+            physics.steeringIntensity = float.Parse(ConfigParser.GetValue("Handling", "SteeringIntensity"));
+            physics.steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
 
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("FAILED to load car settings!!!: " + e);
+        }
         // fix screwed up model shit
     }
 
@@ -141,19 +160,23 @@ internal class Car : BasePhysicsObject
             physics.boostEnding = false;
         }
 
-        Vector3 forwardAccelerationForThisFrame = transform.forward * physics.accelerationForward * Time.deltaTime;
-        Vector3 steeringAccelerationForThisFrame = transform.right * physics.accelerationSteering * Time.deltaTime;
+        float forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.accelerationForwardAir : physics.accelerationForward;
+        float steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.accelerationSteeringAir : physics.accelerationSteering;
 
         // if we ARE boosting, apply boost accel.
         // if we RECENTLY STOPPED boosting, apply zero accel.
         // otherwise, apply 
         if (physics.boosting)
         {
-            forwardAccelerationForThisFrame = transform.forward * physics.boostAccelerationForward * Time.deltaTime;
-            steeringAccelerationForThisFrame = transform.right * physics.boostAccelerationSteering * Time.deltaTime;
+            forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.boostAccelerationForwardAir : physics.boostAccelerationForward;
+            steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.boostAccelerationSteeringAir : physics.boostAccelerationSteering;
         }
         else if (physics.boostEnding)
-            forwardAccelerationForThisFrame = steeringAccelerationForThisFrame = new Vector3(0.0f, 0.0f, 0.0f); // only apply natural deceleration
+            forwardAccelHandlingForThisFrame = steeringAccelHandlingForThisFrame = 0.0f;  // only apply natural deceleration of boost is ending
+
+        Vector3 forwardAccelerationForThisFrame = transform.forward * forwardAccelHandlingForThisFrame * Time.deltaTime;
+        Vector3 steeringAccelerationForThisFrame = transform.right * steeringAccelHandlingForThisFrame * Time.deltaTime;
+
 
         // if the boost is ending - we want to decelerate
 
@@ -197,10 +220,13 @@ internal class Car : BasePhysicsObject
         if ((!moveInput && !steeringInput)
             || physics.boostEnding) // should we lock this?
         {
-            physics.velocity.Scale(new Vector3(physics.deceleration, physics.deceleration, physics.deceleration));
+            if (physics.inAir)
+                physics.velocity.Scale(new Vector3(physics.decelerationAir, physics.decelerationAir, physics.decelerationAir));
+            else
+                physics.velocity.Scale(new Vector3(physics.deceleration, physics.deceleration, physics.deceleration));
         }
 
-        Debug.Log("Velocity: " + physics.velocity.x + " " + physics.velocity.y + " " + physics.velocity.z);
+       // Debug.Log("Velocity: " + physics.velocity.x + " " + physics.velocity.y + " " + physics.velocity.z);
 
         float topSpeed = physics.topSpeed;
 
@@ -246,5 +272,23 @@ internal class Car : BasePhysicsObject
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
         Camera.main.transform.rotation = Quaternion.Euler(carRot.x, carRot.y + 180, carRot.z);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        physics.numCollisions++;    
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        physics.numCollisions--;
+
+        physics.inAir = (physics.numCollisions == 0);
+
+        if (physics.inAir)
+        {
+            Debug.Log("In Air");
+
+        }
     }
 }
