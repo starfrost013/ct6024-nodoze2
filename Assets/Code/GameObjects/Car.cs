@@ -22,7 +22,8 @@ internal class Car : BasePhysicsObject
         internal float accelerationForwardAir;
         internal float accelerationSteeringAir;
         internal float deceleration;
-        internal float decelerationAir;                             // deceleration in the air
+        internal float decelerationAir;                            // deceleration in the air
+        internal float maxTorque;                                   // deceleration in the air
 
         internal float steeringIntensity;                           // the intensity of the steering
 
@@ -113,6 +114,7 @@ internal class Car : BasePhysicsObject
 
             physics.deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
             physics.decelerationAir = float.Parse(ConfigParser.GetValue("Handling", "DecelerationAir"));
+            physics.maxTorque = float.Parse(ConfigParser.GetValue("Handling", "MaxTorque"));
 
             physics.boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
             physics.boostAccelerationForward = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"));
@@ -194,7 +196,8 @@ internal class Car : BasePhysicsObject
         && (physics.velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            physics.torque.y = -physics.steeringIntensity; // normalised?
+            if (Math.Abs(physics.torque.y) < physics.maxTorque)
+                physics.torque.y -= physics.steeringIntensity; // normalised?
             physics.velocity += steeringAccelerationForThisFrame;
         }
 
@@ -203,8 +206,9 @@ internal class Car : BasePhysicsObject
         && (physics.velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            physics.torque.y = physics.steeringIntensity; // normalised?
-            physics.velocity += -steeringAccelerationForThisFrame;
+            if (Math.Abs(physics.torque.y) < physics.maxTorque)
+                physics.torque.y += physics.steeringIntensity; // normalised?
+            physics.velocity -= steeringAccelerationForThisFrame;
         }
 
         //

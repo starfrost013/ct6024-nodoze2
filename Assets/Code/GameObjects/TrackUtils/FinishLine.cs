@@ -4,8 +4,6 @@ using UnityEngine;
 // It lets us knw
 class FinishLine : MonoBehaviour
 {
-    GameModeRaceMode mode;
-
     //maybe put this in a RaceINfo class
     Car car;
 
