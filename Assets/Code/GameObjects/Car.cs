@@ -87,12 +87,12 @@ internal class Car : BasePhysicsObject
 
         // find the wheels
 
-        GameObject wheel_left_back = parent.transform.Find("wheel_left_back").gameObject;
-        GameObject wheel_left_front = parent.transform.Find("wheel_left_front").gameObject;
-        GameObject wheel_right_back = parent.transform.Find("wheel_right_back").gameObject;
-        GameObject wheel_right_front = parent.transform.Find("wheel_right_front").gameObject;
+        GameObject wheelLeftBack = parent.transform.Find("wheel_left_back").gameObject;
+        GameObject wheelLeftFront = parent.transform.Find("wheel_left_front").gameObject;
+        GameObject wheelRightBack = parent.transform.Find("wheel_right_back").gameObject;
+        GameObject wheelRightFront = parent.transform.Find("wheel_right_front").gameObject;
 
-        Debug.Assert(wheel_left_back && wheel_left_front && wheel_right_back && wheel_right_front, "Can't find car wheels!");
+        Debug.Assert(wheelLeftBack && wheelLeftFront && wheelRightBack && wheelRightFront, "Can't find car wheels!");
 
         // it is possible to use components and create many of these basecars with different gaemassetconfigfile components that have editor-modifiable resource paths
         // BUT IS IT GOOD? Who can know??? We'll have to try it!!
@@ -132,11 +132,6 @@ internal class Car : BasePhysicsObject
     // FixedUpdate contains our controls so they feel decent regardless of fraemrate
 
     private void FixedUpdate()
-    {
-        // WHEN THIS BECOMES A RIGIDBODY, USE FixedUpdate
-    }
-
-    private void Update()
     {
         // I don't have time to use ISp
         Vector3 torque = new();
@@ -226,7 +221,7 @@ internal class Car : BasePhysicsObject
                 physics.velocity.Scale(new Vector3(physics.deceleration, physics.deceleration, physics.deceleration));
         }
 
-       // Debug.Log("Velocity: " + physics.velocity.x + " " + physics.velocity.y + " " + physics.velocity.z);
+        // Debug.Log("Velocity: " + physics.velocity.x + " " + physics.velocity.y + " " + physics.velocity.z);
 
         float topSpeed = physics.topSpeed;
 
@@ -251,16 +246,8 @@ internal class Car : BasePhysicsObject
         else if (physics.velocity.z < -topSpeed)
             physics.velocity.Set(physics.velocity.x, physics.velocity.y, -topSpeed);
 
-        //thisRigidbody.AddForce(physics.velocity.x, physics.velocity.y, physics.velocity.z, ForceMode.VelocityChange);
-        //thisRigidbody.AddTorque(torque.x, torque.y, torque.z);
-
-        transform.SetPositionAndRotation(new(transform.position.x + physics.velocity.x,
-            transform.position.y + physics.velocity.y,
-            transform.position.z + physics.velocity.z),
-        
-            Quaternion.Euler(transform.rotation.eulerAngles.x + torque.x,
-            transform.rotation.eulerAngles.y + torque.y,
-            transform.rotation.eulerAngles.z + torque.z));
+        thisRigidbody.AddForce(physics.velocity.x, physics.velocity.y, physics.velocity.z, ForceMode.VelocityChange);
+        thisRigidbody.AddTorque(torque.x, torque.y, torque.z);
 
         // apply motion
 
@@ -272,6 +259,10 @@ internal class Car : BasePhysicsObject
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
         Camera.main.transform.rotation = Quaternion.Euler(carRot.x, carRot.y + 180, carRot.z);
+    }
+
+    private void Update()
+    {
     }
 
     private void OnCollisionEnter(Collision collision)
