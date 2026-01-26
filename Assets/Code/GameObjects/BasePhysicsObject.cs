@@ -20,7 +20,6 @@ internal class BasePhysicsObject : MonoBehaviour
         {
             Debug.LogWarning("It's probably a good idea to add the rigidbody component to the BasePhysicsObject " + name + ". Adding automatically...");
             thisRigidbody = gameObject.AddComponent<Rigidbody>();
-            thisRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         }
 
 
