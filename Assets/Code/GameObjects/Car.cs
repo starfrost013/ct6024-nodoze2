@@ -40,6 +40,7 @@ internal class Car : BasePhysicsObject
         internal bool inAir;
 
         internal Vector3 velocity;
+        internal Vector3 torque;
 
         internal UInt32 numCollisions;     
     
@@ -77,6 +78,7 @@ internal class Car : BasePhysicsObject
     protected new void Start()
     {
         base.Start();
+        thisRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         // disregard non-custom fores
 
@@ -134,7 +136,6 @@ internal class Car : BasePhysicsObject
     private void FixedUpdate()
     {
         // I don't have time to use ISp
-        Vector3 torque = new();
 
         bool moveInput = false;
         bool steeringInput = false;
@@ -169,9 +170,8 @@ internal class Car : BasePhysicsObject
         else if (physics.boostEnding)
             forwardAccelHandlingForThisFrame = steeringAccelHandlingForThisFrame = 0.0f;  // only apply natural deceleration of boost is ending
 
-        Vector3 forwardAccelerationForThisFrame = transform.forward * forwardAccelHandlingForThisFrame * Time.deltaTime;
-        Vector3 steeringAccelerationForThisFrame = transform.right * steeringAccelHandlingForThisFrame * Time.deltaTime;
-
+        Vector3 forwardAccelerationForThisFrame = transform.forward * forwardAccelHandlingForThisFrame * Time.fixedDeltaTime;
+        Vector3 steeringAccelerationForThisFrame = transform.right * steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
 
         // if the boost is ending - we want to decelerate
 
@@ -194,7 +194,7 @@ internal class Car : BasePhysicsObject
         && (physics.velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            torque.y = -physics.steeringIntensity; // normalised?
+            physics.torque.y = -physics.steeringIntensity; // normalised?
             physics.velocity += steeringAccelerationForThisFrame;
         }
 
@@ -203,7 +203,7 @@ internal class Car : BasePhysicsObject
         && (physics.velocity.magnitude > EPSILON_MIN))
         {
             steeringInput = true;
-            torque.y = physics.steeringIntensity; // normalised?
+            physics.torque.y = physics.steeringIntensity; // normalised?
             physics.velocity += -steeringAccelerationForThisFrame;
         }
 
@@ -247,11 +247,11 @@ internal class Car : BasePhysicsObject
             physics.velocity.Set(physics.velocity.x, physics.velocity.y, -topSpeed);
 
         thisRigidbody.AddForce(physics.velocity.x, physics.velocity.y, physics.velocity.z, ForceMode.VelocityChange);
-        thisRigidbody.AddTorque(torque.x, torque.y, torque.z);
+        thisRigidbody.AddTorque(physics.torque.x, physics.torque.y, physics.torque.z);
 
         // apply motion
 
-        Camera.main.transform.position = transform.position + (transform.forward * 3.0f);
+        Camera.main.transform.position = transform.position + (transform.forward * 5.0f);
         Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
 
         // this is going to need a lot of work
