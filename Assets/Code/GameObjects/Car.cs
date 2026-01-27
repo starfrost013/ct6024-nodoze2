@@ -58,7 +58,7 @@ internal class Car : BasePhysicsObject
     // FIELDS
     //
 
-    TextAsset config;
+    internal TextAsset config;
   
     // This is transient like it is in real life
     float coolness;
@@ -68,40 +68,20 @@ internal class Car : BasePhysicsObject
     // generic epsilon
     const float EPSILON_MIN = 0.003f;
 
+    // physics information
     PhysicsInfo physics;
 
+    // parent object (to prevent endless "parent = transform.gameObject")
     GameObject parent;
 
     //
     // METHODS
     //
 
-    protected new void Start()
+    /* Loads the configuration */
+    internal void LoadConfig()
     {
-        base.Start();
-        thisRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
-        // disregard non-custom fores
-
-        //TODO: WHEEL PHYSICS
-
-        // get the car
-        parent = transform.gameObject;
-
-        // find the wheels
-
-        GameObject wheelLeftBack = parent.transform.Find("wheel_left_back").gameObject;
-        GameObject wheelLeftFront = parent.transform.Find("wheel_left_front").gameObject;
-        GameObject wheelRightBack = parent.transform.Find("wheel_right_back").gameObject;
-        GameObject wheelRightFront = parent.transform.Find("wheel_right_front").gameObject;
-
-        Debug.Assert(wheelLeftBack && wheelLeftFront && wheelRightBack && wheelRightFront, "Can't find car wheels!");
-
-        // it is possible to use components and create many of these basecars with different gaemassetconfigfile components that have editor-modifiable resource paths
-        // BUT IS IT GOOD? Who can know??? We'll have to try it!!
-        config = AssetManager.LoadAsset<TextAsset>("Cars/CarTest"); // in the future cars will overload from this
-
-        ConfigParser.ParseCfg(config.text);
+        ConfigParser.Parse(config.text);
 
         try
         {
@@ -130,7 +110,41 @@ internal class Car : BasePhysicsObject
         {
             Debug.LogError("FAILED to load car settings!!!: " + e);
         }
-        // fix screwed up model shit
+
+        Debug.Assert(config, "You didn't load a configuration for this car!!!");
+       
+    }
+
+    protected new void Start()
+    {
+
+
+        // prevent crash
+        if (!config)
+            return;
+
+        base.Start();
+        thisRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+        // disregard non-custom fores
+
+        //TODO: WHEEL PHYSICS
+
+        // get the car
+        parent = transform.gameObject;
+
+        // find the wheels
+
+        GameObject wheelLeftBack = parent.transform.Find("wheel_left_back").gameObject;
+        GameObject wheelLeftFront = parent.transform.Find("wheel_left_front").gameObject;
+        GameObject wheelRightBack = parent.transform.Find("wheel_right_back").gameObject;
+        GameObject wheelRightFront = parent.transform.Find("wheel_right_front").gameObject;
+
+        Debug.Assert(wheelLeftBack && wheelLeftFront && wheelRightBack && wheelRightFront, "Can't find car wheels!");
+
+        // it is possible to use components and create many of these basecars with different gaemassetconfigfile components that have editor-modifiable resource paths
+        // BUT IS IT GOOD? Who can know??? We'll have to try it!!
+
     }
 
     // FixedUpdate contains our controls so they feel decent regardless of fraemrate

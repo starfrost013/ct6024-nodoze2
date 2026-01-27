@@ -2,7 +2,7 @@
 using UnityEngine;
 
 //
-// Domino base definitio
+// Domino base definitions
 //
 internal class Domino : MonoBehaviour
 {
@@ -17,28 +17,30 @@ internal class Domino : MonoBehaviour
     internal string dominoName; // UnityEngine.Object has name
     internal string description;
 
-    private TextAsset config;
+    internal TextAsset config;
 
     //
     // METHODS
     //
 
-    internal void Start()
+    // Run befor eloading
+    internal void LoadConfig()
     {
-        // unity can't load custom resource types...we'll have to replace this
-        config = AssetManager.LoadAsset<TextAsset>("Domino/DominoTest");
-
         // we only ever load values from our cfg's at load time
-        ConfigParser.ParseCfg(config.text);
+        ConfigParser.Parse(config.text);
 
         dominoName = ConfigParser.GetValue("Info", "Name");
         description = ConfigParser.GetValue("Info", "Description");
+    }
+
+    void Start()
+    {
 
     }
 
-    internal void Update()
+    void Update()
     {
-        // Temporary until our super fancy camera systm is created
+        // Temporary until our super fancy camera system is created
 
 
     }

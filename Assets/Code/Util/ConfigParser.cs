@@ -11,7 +11,7 @@
     // METHODS
     //
 
-    public static void ParseCfg(string text)
+    public static void Parse(string text)
     {
         lines = text.Split('\n');
         file = new();

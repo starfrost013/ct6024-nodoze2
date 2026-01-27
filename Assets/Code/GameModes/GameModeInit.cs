@@ -7,6 +7,8 @@ internal class GameModeInit : GameMode
     internal override void OnEnter()
     {
         Debug.Log("Initialising game");
+        CarManager.Init();
+        DominoManager.Init();
     }
 
     internal override void OnFrame()
