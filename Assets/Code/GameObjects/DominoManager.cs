@@ -14,5 +14,12 @@ internal static class DominoManager
     {
         string[] fileNames = FileUtils.GetAssetPathsForDirectory("Assets/Resources/Domino", DOMINO_FILE_EXTENSION);
 
+        foreach (string fileName in fileNames)
+        {
+            Domino domino = new();
+            domino.config = AssetManager.LoadAsset<TextAsset>(fileName);
+            domino.LoadConfig();
+            dominoes.Add(domino);
+        }
     }
 }
