@@ -16,6 +16,9 @@ internal class Domino
 
     internal string dominoName; // UnityEngine.Object has name
     internal string description;
+    internal float cost;
+    internal float expiryTime;  // 0 =none, for temporary powerups
+
 
     internal TextAsset config;
     internal string configFilePath;
@@ -34,5 +37,8 @@ internal class Domino
 
         dominoName = ConfigParser.GetValue("Info", "Name");
         description = ConfigParser.GetValue("Info", "Description");
+        cost = float.Parse(ConfigParser.GetValue("Info", "Cost"));
+        expiryTime = float.Parse(ConfigParser.GetValue("Info", "ExpiryTime"));
+
     }
 }

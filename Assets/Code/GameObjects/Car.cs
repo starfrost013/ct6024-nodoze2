@@ -298,6 +298,8 @@ internal class Car : BasePhysicsObject
             physics.wheelRightBackCollider.motorTorque += physics.velocity;
             physics.wheelLeftBackCollider.rotationSpeed += physics.torque;
             physics.wheelRightBackCollider.rotationSpeed += physics.torque;
+
+            // TODO: rotate the wheels
         }
 
         if (needRearWheelDrive)
