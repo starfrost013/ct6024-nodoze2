@@ -29,24 +29,35 @@ internal class Car : BasePhysicsObject
 
         internal CarSteeringType steeringType;
 
+        // Boosting characteristics of the car
         internal float boostAmount;
         internal float boostAccelerationForward;
         internal float boostAccelerationSteering;
         internal float boostAccelerationForwardAir;
         internal float boostAccelerationSteeringAir;
 
-        // maybe needs to become an enum
+        // boost state - maybe should become a state enum
         internal bool boosting;
         internal bool boostEnding;                        // lets us slowly ramp down
         internal bool inAir;
 
-        internal Vector3 velocity;
-        internal Vector3 torque;
+        // movement information - now a torque since we use WheelColliders
+        internal float velocity;
+        internal float torque;
 
-        internal UInt32 numCollisions;     
-    
+        internal UInt32 numCollisions;
+
+        internal WheelCollider wheelLeftBackCollider;
+        internal WheelCollider wheelLeftFrontCollider; 
+        internal WheelCollider wheelRightBackCollider;
+        internal WheelCollider wheelRightFrontCollider;
     };
 
+
+
+    //
+    // ENUMS
+    //
 
     internal enum CarSteeringType
     {
@@ -54,9 +65,36 @@ internal class Car : BasePhysicsObject
         Manual = 1,
     }
 
+    internal enum CarDriveType
+    { 
+        RearWheelDrive = 0,
+        FrontWheelDrive = 1,
+        FourWheelDrive = 2,
+    };
+
+
     //
     // FIELDS
     //
+    /* The wheels */
+    [SerializeField]
+    internal GameObject wheelLeftBack;
+
+    [SerializeField]
+    internal GameObject wheelLeftFront;
+
+    [SerializeField]
+    internal GameObject wheelRightBack;
+
+    [SerializeField]
+    internal GameObject wheelRightFront;
+
+    // More configuration data (Serialised fields cannot be located within structs)
+    [SerializeField]
+    CarSteeringType steeringType;
+
+    [SerializeField]
+    CarDriveType driveType;
 
     private TextAsset configText;
 
@@ -123,8 +161,6 @@ internal class Car : BasePhysicsObject
 
     protected new void Start()
     {
-
-
         // prevent crash
         if (!configText)
             return;
@@ -132,48 +168,39 @@ internal class Car : BasePhysicsObject
         base.Start();
         thisRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
-        // disregard non-custom fores
-
-        //TODO: WHEEL PHYSICS
-
         // get the car
         parent = transform.gameObject;
 
         // find the wheels
 
-        GameObject wheelLeftBack = parent.transform.Find("wheel_left_back").gameObject;
-        GameObject wheelLeftFront = parent.transform.Find("wheel_left_front").gameObject;
-        GameObject wheelRightBack = parent.transform.Find("wheel_right_back").gameObject;
-        GameObject wheelRightFront = parent.transform.Find("wheel_right_front").gameObject;
+        Debug.Assert(wheelLeftBack && wheelLeftFront && wheelRightBack && wheelRightFront, "Please set the wheels up in the editor!!");
 
-        Debug.Assert(wheelLeftBack && wheelLeftFront && wheelRightBack && wheelRightFront, "Can't find car wheels!");
+        // check the wheels actually have colliders
+        physics.wheelLeftBackCollider = wheelLeftBack.GetComponent<WheelCollider>();
+        physics.wheelLeftFrontCollider = wheelLeftFront.GetComponent<WheelCollider>();
+        physics.wheelRightBackCollider = wheelRightBack.GetComponent<WheelCollider>();
+        physics.wheelRightFrontCollider = wheelRightFront.GetComponent<WheelCollider>();
 
-        // it is possible to use components and create many of these basecars with different gaemassetconfigfile components that have editor-modifiable resource paths
-        // BUT IS IT GOOD? Who can know??? We'll have to try it!!
-
+        Debug.Assert(physics.wheelLeftBackCollider && physics.wheelLeftFrontCollider && physics.wheelRightBackCollider && physics.wheelRightFrontCollider, "All car wheels must have WheelColliders!");
     }
 
     // FixedUpdate contains our controls so they feel decent regardless of fraemrate
 
     private void FixedUpdate()
     {
-        // I don't have time to use ISp
+
+        // I don't have time to use ISP sorry!
 
         bool moveInput = false;
         bool steeringInput = false;
 
         // check if we stopped boosting
-        bool boostingTemp = physics.boosting;
         physics.boosting = Input.GetKey(KeyCode.LeftShift);
-
-        if (boostingTemp && !physics.boosting)
-            physics.boostEnding = true;
+        physics.boostEnding = Input.GetKeyUp(KeyCode.LeftShift);
 
         // boost isn't finished until we slow down after boost is done
         if (physics.boostEnding
-            && (Mathf.Abs(physics.velocity.x) < physics.topSpeed)
-            && (Mathf.Abs(physics.velocity.y) < physics.topSpeed
-            && (Mathf.Abs(physics.velocity.z) < physics.topSpeed)))
+            && (Mathf.Abs(physics.velocity) < physics.topSpeed))
         {
             physics.boostEnding = false;
         }
@@ -192,8 +219,10 @@ internal class Car : BasePhysicsObject
         else if (physics.boostEnding)
             forwardAccelHandlingForThisFrame = steeringAccelHandlingForThisFrame = 0.0f;  // only apply natural deceleration of boost is ending
 
-        Vector3 forwardAccelerationForThisFrame = transform.forward * forwardAccelHandlingForThisFrame * Time.fixedDeltaTime;
-        Vector3 steeringAccelerationForThisFrame = transform.right * steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
+        // New code does this calculation automatically - Jan 28, 2025 
+
+        float forwardAccelerationForThisFrame = forwardAccelHandlingForThisFrame * Time.fixedDeltaTime;
+        float steeringAccelerationForThisFrame  =steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
 
         // if the boost is ending - we want to decelerate
 
@@ -213,21 +242,21 @@ internal class Car : BasePhysicsObject
 
         if (Input.GetKey(KeyCode.LeftArrow)
         || Input.GetKey(KeyCode.A)
-        && (physics.velocity.magnitude > EPSILON_MIN))
+        && (physics.velocity > EPSILON_MIN))
         {
             steeringInput = true;
-            if (Math.Abs(physics.torque.y) < physics.maxTorque)
-                physics.torque.y -= physics.steeringIntensity; // normalised?
+            if (Math.Abs(physics.torque) < physics.maxTorque)
+                physics.torque -= physics.steeringIntensity; // normalised?
             physics.velocity += steeringAccelerationForThisFrame;
         }
 
         if (Input.GetKey(KeyCode.RightArrow)
         || Input.GetKey(KeyCode.D)
-        && (physics.velocity.magnitude > EPSILON_MIN))
+        && (physics.velocity > EPSILON_MIN))
         {
             steeringInput = true;
-            if (Math.Abs(physics.torque.y) < physics.maxTorque)
-                physics.torque.y += physics.steeringIntensity; // normalised?
+            if (Math.Abs(physics.torque) < physics.maxTorque)
+                physics.torque += physics.steeringIntensity; // normalised?
             physics.velocity -= steeringAccelerationForThisFrame;
         }
 
@@ -240,9 +269,9 @@ internal class Car : BasePhysicsObject
             || physics.boostEnding) // should we lock this?
         {
             if (physics.inAir)
-                physics.velocity.Scale(new Vector3(physics.decelerationAir, physics.decelerationAir, physics.decelerationAir));
+                physics.velocity /= physics.decelerationAir;
             else
-                physics.velocity.Scale(new Vector3(physics.deceleration, physics.deceleration, physics.deceleration));
+                physics.velocity /= physics.deceleration;
         }
 
         // Debug.Log("Velocity: " + physics.velocity.x + " " + physics.velocity.y + " " + physics.velocity.z);
@@ -255,34 +284,41 @@ internal class Car : BasePhysicsObject
             topSpeed = physics.topSpeedBoost;
 
         // anti-big rigs (apply this one at a time)
-        if (physics.velocity.x > topSpeed)
-            physics.velocity.Set(topSpeed, physics.velocity.y, physics.velocity.z);
-        else if (physics.velocity.x < -topSpeed)
-            physics.velocity.Set(-topSpeed, physics.velocity.y, physics.velocity.z);
+        if (physics.velocity > topSpeed)
+            physics.velocity = topSpeed;
+        else if (physics.velocity < -topSpeed)
+            physics.velocity = -topSpeed;
 
-        if (physics.velocity.y > topSpeed)
-            physics.velocity.Set(physics.velocity.x, topSpeed, physics.velocity.z);
-        else if (physics.velocity.y < -topSpeed)
-            physics.velocity.Set(physics.velocity.x, -topSpeed, physics.velocity.z);
+        bool needFrontWheelDrive = (driveType == (CarDriveType.FrontWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
+        bool needRearWheelDrive = (driveType == (CarDriveType.RearWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
 
-        if (physics.velocity.z > topSpeed)
-            physics.velocity.Set(physics.velocity.x, physics.velocity.y, topSpeed);
-        else if (physics.velocity.z < -topSpeed)
-            physics.velocity.Set(physics.velocity.x, physics.velocity.y, -topSpeed);
+        if (needFrontWheelDrive)
+        {
+            physics.wheelLeftBackCollider.motorTorque += physics.velocity;
+            physics.wheelRightBackCollider.motorTorque += physics.velocity;
+            physics.wheelLeftBackCollider.rotationSpeed += physics.torque;
+            physics.wheelRightBackCollider.rotationSpeed += physics.torque;
+        }
 
-        thisRigidbody.AddForce(physics.velocity.x, physics.velocity.y, physics.velocity.z, ForceMode.VelocityChange);
-        thisRigidbody.AddTorque(physics.torque.x, physics.torque.y, physics.torque.z);
+        if (needRearWheelDrive)
+        {
+            physics.wheelLeftFrontCollider.motorTorque += physics.velocity;
+            physics.wheelRightFrontCollider.motorTorque += physics.velocity;
+            physics.wheelLeftFrontCollider.rotationSpeed += physics.torque;
+            physics.wheelRightFrontCollider.rotationSpeed += physics.torque;
+        }
 
         // apply motion
-
+        
         Camera.main.transform.position = transform.position + (transform.forward * 5.0f);
         Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
 
         // this is going to need a lot of work
-
+        
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
         Camera.main.transform.rotation = Quaternion.Euler(carRot.x, carRot.y + 180, carRot.z);
+        
     }
 
     private void Update()

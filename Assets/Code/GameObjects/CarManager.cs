@@ -35,6 +35,7 @@ internal static class CarManager
 
             Car car = MonoBehaviour.Instantiate(carPrefab);
 
+            car.transform.position = new(car.transform.position.x, car.transform.position.y + 1.0f, car.transform.position.z);
             car.configFilePath = fileName;
             car.LoadConfig();
             cars.Add(car);

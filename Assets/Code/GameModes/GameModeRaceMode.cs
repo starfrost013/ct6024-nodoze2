@@ -19,6 +19,7 @@ internal class GameModeRaceMode : GameMode
     internal override void OnEnter()
     {
         Debug.Log("Entering race...");
+        raceState = RaceState.Active;
     }
 
     internal override void OnFrame()
