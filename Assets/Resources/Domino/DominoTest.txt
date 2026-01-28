@@ -2,3 +2,5 @@
 
 Name = "Domino Test"
 Description = "Hahahahaha"
+Cost = 10
+ExpiryTime = 0
