@@ -15,12 +15,12 @@ class FinishLine : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // don't do anything if it isn't racemode
-        if (GameManager.GetGameState() != GameManager.GameState.RaceMode)
+        if (GameManager.GetGameState() != GameManager.GameModeEnum.RaceMode)
             return; 
 
         if (other.gameObject.GetType() == typeof(Car))
         {
-            GameManager.SetGameState(GameManager.GameState.RaceFinished);
+            GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
         }
     }
 

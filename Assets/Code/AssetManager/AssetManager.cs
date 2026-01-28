@@ -12,7 +12,7 @@ internal static class AssetManager
     {
         // https://stackoverflow.com/questions/552629/c-sharp-print-the-class-name-from-within-a-static-function
         // Reflection is type safe, but 50 times slower!!!!
-        Debug.Log("Game Asset Loader: Loading asset of type " + typeof(T).Name + "");
+        Debug.Log("Game Asset Loader: Loading asset of type " + typeof(T).Name + "" + " (path: " + path + ")");
 
         T newAsset = Resources.Load<T>(path);
 

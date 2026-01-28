@@ -1,3 +1,7 @@
+[Config]
+
+PrefabPath = CarBasic
+
 [Handling]
 
 TopSpeed = 0.3						; Top speed

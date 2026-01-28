@@ -6,19 +6,20 @@ using UnityEngine;
 //
 internal static class DominoManager
 {
-    private const string DOMINO_FILE_EXTENSION = ".txt";
+    private const string DOMINO_FILE_EXTENSION = "*.txt";
 
     internal static List<Domino> dominoes;
 
     internal static void Init()
     {
-        string[] fileNames = FileUtils.GetAssetPathsForDirectory("Assets/Resources/Domino", DOMINO_FILE_EXTENSION);
+        dominoes = new();
+
+        string[] fileNames = FileUtils.GetAssetPathsForDirectory("Domino", DOMINO_FILE_EXTENSION);
 
         foreach (string fileName in fileNames)
         {
-            Domino domino = new();
-            domino.config = AssetManager.LoadAsset<TextAsset>(fileName);
-            domino.LoadConfig();
+            Debug.Log("Loading domino at " + fileName);
+            Domino domino = new(fileName); // create and load the domino
             dominoes.Add(domino);
         }
     }

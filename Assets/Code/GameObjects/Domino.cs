@@ -4,7 +4,7 @@ using UnityEngine;
 //
 // Domino base definitions
 //
-internal class Domino : MonoBehaviour
+internal class Domino
 {
     // 
     // STRUCTS
@@ -18,31 +18,21 @@ internal class Domino : MonoBehaviour
     internal string description;
 
     internal TextAsset config;
+    internal string configFilePath;
 
     //
     // METHODS
     //
 
-    // Run befor eloading
-    internal void LoadConfig()
+    public Domino(string filePath)
     {
+        configFilePath = filePath;  
+        config = AssetManager.LoadAsset<TextAsset>(configFilePath);
+
         // we only ever load values from our cfg's at load time
         ConfigParser.Parse(config.text);
 
         dominoName = ConfigParser.GetValue("Info", "Name");
         description = ConfigParser.GetValue("Info", "Description");
     }
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-        // Temporary until our super fancy camera system is created
-
-
-    }
-
 }

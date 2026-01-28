@@ -9,6 +9,8 @@ internal class GameModeInit : GameMode
         Debug.Log("Initialising game");
         CarManager.Init();
         DominoManager.Init();
+
+        GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
     }
 
     internal override void OnFrame()

@@ -58,7 +58,12 @@ internal class Car : BasePhysicsObject
     // FIELDS
     //
 
-    internal TextAsset config;
+    private TextAsset configText;
+
+    /// <summary>
+    /// Configuration file path
+    /// </summary>
+    internal string configFilePath;
   
     // This is transient like it is in real life
     float coolness;
@@ -81,7 +86,8 @@ internal class Car : BasePhysicsObject
     /* Loads the configuration */
     internal void LoadConfig()
     {
-        ConfigParser.Parse(config.text);
+        configText = AssetManager.LoadAsset<TextAsset>(configFilePath);
+        ConfigParser.Parse(configText.text);
 
         try
         {
@@ -111,7 +117,7 @@ internal class Car : BasePhysicsObject
             Debug.LogError("FAILED to load car settings!!!: " + e);
         }
 
-        Debug.Assert(config, "You didn't load a configuration for this car!!!");
+        Debug.Assert(configText, "You didn't load a configuration for this car!!!");
        
     }
 
@@ -120,7 +126,7 @@ internal class Car : BasePhysicsObject
 
 
         // prevent crash
-        if (!config)
+        if (!configText)
             return;
 
         base.Start();

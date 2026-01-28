@@ -8,8 +8,7 @@ public class GameManagerObject : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameManager.Start();
-        GameManager.SetGameState(GameManager.GameState.Init);
+        GameManager.Start(this);
     }
 
     // Update is called once per frame

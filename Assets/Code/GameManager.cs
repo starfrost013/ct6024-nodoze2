@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
-using System.Runtime.CompilerServices;
 
 internal static class GameManager
 {
     // The game state enum. Tells us what to do
-    public enum GameState
+    public enum GameModeEnum
     {
         Init = 0,
         Shutdown = 1,
@@ -16,36 +15,45 @@ internal static class GameManager
         RaceFinished = 5,
     }
 
-    private static GameState state;
+    private static GameModeEnum state;
     private static GameMode mode;
+    // links the engine and gamemanager
+    private static GameManagerObject managerObject; 
 
     private static Scene scene; 
     
-    public static void Start()
+    public static void Start(GameManagerObject newManagerObject)
     {
-        state = GameState.Init;
-
+        state = GameModeEnum.Init;
+        
         // this is all one scene
         scene = SceneManager.GetActiveScene();
+        managerObject = newManagerObject;
 
+        SetGameState(state);
         // temp
     }
 
-    public static GameState GetGameState()
+    public static GameModeEnum GetGameState()
     {
         return state;
     }
 
-    public static void SetGameState(GameState newState)
+    public static void SetGameState(GameModeEnum newState)
     {
-        GameState oldState = state; 
         state = newState;
         OnGameStateChanged(newState);
     }
 
-    public static Scene GetCurrentScene(Scene scene)
+    public static Scene GetCurrentScene()
     {
         return scene; 
+    }
+
+    // Gets the game manager root object so that stuff can be instantiated
+    public static GameManagerObject GetGameManagerObject()
+    {
+        return managerObject;
     }
 
     public static void OnFrame()
@@ -62,11 +70,13 @@ internal static class GameManager
     }
 
     // I don't like reflection, it cretaes large and ugly programs in C#
-    private static GameMode GetModeFromState(GameState state)
+    private static GameMode GetModeFromState(GameModeEnum state)
     {
         switch (state)
         {
-            case GameState.RaceMode:
+            case GameModeEnum.Init:
+                return new GameModeInit();
+            case GameModeEnum.RaceMode:
                 return new GameModeRaceMode();
             default:
                 Debug.Log("GameManager::GetModeFromState selected invalid game state (Entering race mode...)");
@@ -76,9 +86,9 @@ internal static class GameManager
      }
 
     // privates
-    private static void OnGameStateChanged(GameState newState)
+    private static void OnGameStateChanged(GameModeEnum newState)
     {
-        Debug.Log("Game state is changing to " + Enum.GetName(typeof(GameState), newState));
+        Debug.Log("Game state is changing to " + Enum.GetName(typeof(GameModeEnum), newState));
 
         if (mode != null)
         {
