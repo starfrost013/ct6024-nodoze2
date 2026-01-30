@@ -1,19 +1,20 @@
 [Handling]
 
-TopSpeed = 0.3						; Top speed
-TopSpeedBoost =	0.25				; Top speed during boost
-AccelerationForward = 0.25			; Acceleration of car (needs to ramp up in accordance with a curve)
-AccelerationSteering = 0.20			; Acceleration to apply in lateral direction
-AccelerationForwardAir = 0.025		; Acceleration to apply in forward direction while in the air
-AccelerationSteeringAir = 0.02		; Acceleration to apply in lateral direction while in the air
+TopSpeed = 3.0						; Top speed
+TopSpeedBoost =	5.0					; Top speed during boost
+AccelerationForward = 7.0			; Acceleration of car (needs to ramp up in accordance with a curve)
+AccelerationSteering = 4.0			; Acceleration to apply in lateral direction
+AccelerationForwardAir = 1.0		; Acceleration to apply in forward direction while in the air
+AccelerationSteeringAir = 0.5		; Acceleration to apply in lateral direction while in the air
 Deceleration = 0.975				; Deceleration (must be below 1) 
+DecelerationSteering = 0.95			; Deceleration while steering (must be below 1)
 DecelerationAir = 0.999				; Deceleration in the air
-MaxTorque = 1.0						; Maximum torque
-BoostAccelerationForward = 0.70		; Acceleration of car on TOP of regular acceleation 
-BoostAccelerationSteering = 0.50	; Acceleration of car on TOP of regular acceleation steering
-BoostAccelerationForwardAir = 0.03	; Acceleration of car on TOP of regular acceleation 
-BoostAccelerationSteeringAir = 0.02	; Acceleration of car on TOP of regular acceleation steering
+MaxTorque = 2.0						; Maximum torque
+BoostAccelerationForward = 30.0		; Acceleration of car on TOP of regular acceleation 
+BoostAccelerationSteering = 5.0		; Acceleration of car on TOP of regular acceleation steering
+BoostAccelerationForwardAir = 3.0	; Acceleration of car on TOP of regular acceleation 
+BoostAccelerationSteeringAir = 2.0	; Acceleration of car on TOP of regular acceleation steering
 
-BoostAmount = 2300			; Amount of boost
-SteeringIntensity = 0.4     ; steering intensity (needs to slowly ramp up)
-SteeringType = Manual 		; 0 = Automatic, 1 = Manual, you can use numbers or the names 
+BoostAmount = 2300					; Amount of boost
+SteeringIntensity = 4.0	 			; steering intensity (needs to slowly ramp up)
+SteeringType = Manual 				; 0 = Automatic, 1 = Manual, you can use numbers or the names 

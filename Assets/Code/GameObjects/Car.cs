@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 using Unity.Properties;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -22,8 +23,9 @@ internal class Car : BasePhysicsObject
         internal float accelerationForwardAir;
         internal float accelerationSteeringAir;
         internal float deceleration;
-        internal float decelerationAir;                            // deceleration in the air
-        internal float maxTorque;                                   // deceleration in the air
+        internal float decelerationSteering;                        // deceleration while steering
+        internal float decelerationAir;                             // deceleration in the air
+        internal float maxTorque;                                   // maximum torque
 
         internal float steeringIntensity;                           // the intensity of the steering
 
@@ -42,8 +44,8 @@ internal class Car : BasePhysicsObject
         internal bool inAir;
 
         // movement information - now a torque since we use WheelColliders
-        internal float velocity;
-        internal float torque;
+        internal float forwardTorque;
+        internal float rotationTorque;
 
         internal UInt32 numCollisions;
 
@@ -137,6 +139,7 @@ internal class Car : BasePhysicsObject
             physics.accelerationSteeringAir = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteeringAir"));
 
             physics.deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
+            physics.decelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "DecelerationSteering"));
             physics.decelerationAir = float.Parse(ConfigParser.GetValue("Handling", "DecelerationAir"));
             physics.maxTorque = float.Parse(ConfigParser.GetValue("Handling", "MaxTorque"));
 
@@ -200,7 +203,7 @@ internal class Car : BasePhysicsObject
 
         // boost isn't finished until we slow down after boost is done
         if (physics.boostEnding
-            && (Mathf.Abs(physics.velocity) < physics.topSpeed))
+            && (Mathf.Abs(physics.forwardTorque) < physics.topSpeed))
         {
             physics.boostEnding = false;
         }
@@ -222,7 +225,7 @@ internal class Car : BasePhysicsObject
         // New code does this calculation automatically - Jan 28, 2025 
 
         float forwardAccelerationForThisFrame = forwardAccelHandlingForThisFrame * Time.fixedDeltaTime;
-        float steeringAccelerationForThisFrame  =steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
+        float steeringAccelerationForThisFrame = steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
 
         // if the boost is ending - we want to decelerate
 
@@ -230,49 +233,54 @@ internal class Car : BasePhysicsObject
             || Input.GetKey(KeyCode.W))
         {
             moveInput = true;
-            physics.velocity += -forwardAccelerationForThisFrame;
+            physics.forwardTorque += -forwardAccelerationForThisFrame;
         }
 
         if (Input.GetKey(KeyCode.DownArrow)
             || Input.GetKey(KeyCode.S))
         {
             moveInput = true;
-            physics.velocity += forwardAccelerationForThisFrame;
+            physics.forwardTorque += forwardAccelerationForThisFrame;
         }
 
         if (Input.GetKey(KeyCode.LeftArrow)
         || Input.GetKey(KeyCode.A)
-        && (physics.velocity > EPSILON_MIN))
+        && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
         {
             steeringInput = true;
-            if (Math.Abs(physics.torque) < physics.maxTorque)
-                physics.torque -= physics.steeringIntensity; // normalised?
-            physics.velocity += steeringAccelerationForThisFrame;
+            if (Math.Abs(physics.rotationTorque) < physics.maxTorque)
+                physics.rotationTorque -= physics.steeringIntensity; // normalised?
+            physics.forwardTorque += steeringAccelerationForThisFrame;
         }
 
         if (Input.GetKey(KeyCode.RightArrow)
         || Input.GetKey(KeyCode.D)
-        && (physics.velocity > EPSILON_MIN))
+        && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
         {
             steeringInput = true;
-            if (Math.Abs(physics.torque) < physics.maxTorque)
-                physics.torque += physics.steeringIntensity; // normalised?
-            physics.velocity -= steeringAccelerationForThisFrame;
+            if (Math.Abs(physics.rotationTorque) < physics.maxTorque)
+                physics.rotationTorque += physics.steeringIntensity; // normalised?
+            physics.forwardTorque -= steeringAccelerationForThisFrame;
         }
 
         //
         // APPLICATION
         //
 
+        // this code is awful 
+
         // apply some natural decay
         if ((!moveInput && !steeringInput)
             || physics.boostEnding) // should we lock this?
         {
             if (physics.inAir)
-                physics.velocity /= physics.decelerationAir;
+                physics.forwardTorque *= physics.decelerationAir;
             else
-                physics.velocity /= physics.deceleration;
+                physics.forwardTorque *= physics.deceleration;
         }
+
+        if (!steeringInput)
+            physics.rotationTorque *= physics.decelerationSteering;
 
         // Debug.Log("Velocity: " + physics.velocity.x + " " + physics.velocity.y + " " + physics.velocity.z);
 
@@ -284,34 +292,65 @@ internal class Car : BasePhysicsObject
             topSpeed = physics.topSpeedBoost;
 
         // anti-big rigs (apply this one at a time)
-        if (physics.velocity > topSpeed)
-            physics.velocity = topSpeed;
-        else if (physics.velocity < -topSpeed)
-            physics.velocity = -topSpeed;
+        if (physics.forwardTorque > topSpeed)
+            physics.forwardTorque = topSpeed;
+        else if (physics.forwardTorque < -topSpeed)
+            physics.forwardTorque = -topSpeed;
 
         bool needFrontWheelDrive = (driveType == (CarDriveType.FrontWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
         bool needRearWheelDrive = (driveType == (CarDriveType.RearWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
 
         if (needFrontWheelDrive)
         {
-            physics.wheelLeftBackCollider.motorTorque += physics.velocity;
-            physics.wheelRightBackCollider.motorTorque += physics.velocity;
-            physics.wheelLeftBackCollider.rotationSpeed += physics.torque;
-            physics.wheelRightBackCollider.rotationSpeed += physics.torque;
+            // we want to store the current velocity separately to the actual torque
+            if (!moveInput)
+            {
+                physics.wheelLeftFrontCollider.motorTorque = 0;
+                physics.wheelRightFrontCollider.motorTorque = 0;
+            }
+            else
+            {
+                physics.wheelLeftFrontCollider.motorTorque += physics.forwardTorque;
+                physics.wheelRightFrontCollider.motorTorque += physics.forwardTorque;
+            }
 
             // TODO: rotate the wheels
         }
 
         if (needRearWheelDrive)
         {
-            physics.wheelLeftFrontCollider.motorTorque += physics.velocity;
-            physics.wheelRightFrontCollider.motorTorque += physics.velocity;
-            physics.wheelLeftFrontCollider.rotationSpeed += physics.torque;
-            physics.wheelRightFrontCollider.rotationSpeed += physics.torque;
+            // we want to store the current velocity separately to the actual torque
+            if (!moveInput)
+            {
+                physics.wheelLeftBackCollider.motorTorque = 0;
+                physics.wheelRightBackCollider.motorTorque = 0;
+            }
+            else
+            {
+                physics.wheelLeftBackCollider.motorTorque += physics.forwardTorque;
+                physics.wheelRightBackCollider.motorTorque += physics.forwardTorque;
+            }
         }
 
+        transform.localEulerAngles = new Vector3(
+            transform.localEulerAngles.x,
+            // always divide by 60 as fixedupdate updates 60 times per second
+            transform.localEulerAngles.y + (physics.rotationTorque / 60.0f) * 360.0f * Time.fixedDeltaTime,
+            transform.localEulerAngles.z);
+
+        // rotate the wheels (todo: move3 everything into an array)
+        // setting position has some unfortunate consequences
+        physics.wheelLeftBackCollider.GetWorldPose(out Vector3 _, out Quaternion wheelRotation);
+        wheelLeftBack.transform.rotation = wheelRotation;
+        physics.wheelLeftFrontCollider.GetWorldPose(out Vector3 _, out wheelRotation);
+        wheelLeftFront.transform.rotation = wheelRotation;
+        physics.wheelRightBackCollider.GetWorldPose(out Vector3 _, out wheelRotation);
+        wheelRightBack.transform.rotation = wheelRotation;
+        physics.wheelRightFrontCollider.GetWorldPose(out Vector3 _, out wheelRotation);
+        wheelRightFront.transform.rotation = wheelRotation;
+
         // apply motion
-        
+
         Camera.main.transform.position = transform.position + (transform.forward * 5.0f);
         Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
 

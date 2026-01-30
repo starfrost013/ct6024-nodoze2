@@ -4,12 +4,10 @@ using UnityEngine;
 // It lets us knw
 class FinishLine : MonoBehaviour
 {
-    //maybe put this in a RaceINfo class
-    Car car;
 
     void Start()
     {
-        car = FindFirstObjectByType<Car>(); 
+    
     }
 
     private void OnTriggerEnter(Collider other)
@@ -18,8 +16,9 @@ class FinishLine : MonoBehaviour
         if (GameManager.GetGameState() != GameManager.GameModeEnum.RaceMode)
             return; 
 
-        if (other.gameObject.GetType() == typeof(Car))
+        if (other.gameObject.GetComponent<Car>())
         {
+            Debug.Log("You got to the end of the race!");
             GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
         }
     }
