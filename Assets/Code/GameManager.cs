@@ -4,6 +4,11 @@ using System;
 
 internal static class GameManager
 {
+    // hacks so the gamemanager switches into the right state
+    // i think in the future everything will have to be done in one scene
+    internal const string SCENE_MAIN = "Gameplay";
+    internal const string SCENE_RACE_FINISHED = "RaceDoneTemp";
+
     // The game state enum. Tells us what to do
     public enum GameModeEnum
     {
@@ -28,6 +33,10 @@ internal static class GameManager
         
         // this is all one scene
         scene = SceneManager.GetActiveScene();
+
+        if (scene.name == SCENE_RACE_FINISHED)
+            state = GameModeEnum.RaceFinished;
+
         managerObject = newManagerObject;
 
         SetGameState(state);
@@ -78,6 +87,8 @@ internal static class GameManager
                 return new GameModeInit();
             case GameModeEnum.RaceMode:
                 return new GameModeRaceMode();
+            case GameModeEnum.RaceFinished:
+                return new GameModeRaceFinished();
             default:
                 Debug.Log("GameManager::GetModeFromState selected invalid game state (Entering race mode...)");
                 return new GameModeRaceMode();

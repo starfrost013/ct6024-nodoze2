@@ -18,14 +18,16 @@ internal class Car : BasePhysicsObject
         // Characteristics of the car
         internal float topSpeed;
         internal float topSpeedBoost;
-        internal float accelerationForward;
+        internal float accelerationForward;                         // acceleration while steering
         internal float accelerationSteering;
         internal float accelerationForwardAir;
         internal float accelerationSteeringAir;
         internal float deceleration;
         internal float decelerationSteering;                        // deceleration while steering
         internal float decelerationAir;                             // deceleration in the air
-        internal float maxTorque;                                   // maximum torque
+        internal float decelerationChangeDirection;                 // deceleration when the car changes direction [W/S]
+        internal float decelerationChangeDirectionSteering;         // deceleration when the car changes direction [A/D]
+        internal float maxRotationTorque;                           // maximum torque
 
         internal float steeringIntensity;                           // the intensity of the steering
 
@@ -141,7 +143,9 @@ internal class Car : BasePhysicsObject
             physics.deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
             physics.decelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "DecelerationSteering"));
             physics.decelerationAir = float.Parse(ConfigParser.GetValue("Handling", "DecelerationAir"));
-            physics.maxTorque = float.Parse(ConfigParser.GetValue("Handling", "MaxTorque"));
+            physics.decelerationChangeDirection = float.Parse(ConfigParser.GetValue("Handling", "DecelerationChangeDirection"));
+            physics.decelerationChangeDirectionSteering = float.Parse(ConfigParser.GetValue("Handling", "DecelerationChangeSteering"));
+            physics.maxRotationTorque = float.Parse(ConfigParser.GetValue("Handling", "MaxTorque"));
 
             physics.boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
             physics.boostAccelerationForward = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"));
@@ -228,11 +232,16 @@ internal class Car : BasePhysicsObject
         float steeringAccelerationForThisFrame = steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
 
         // if the boost is ending - we want to decelerate
+        // we also want to rapidly change direction if we are steering
 
         if (Input.GetKey(KeyCode.UpArrow)
             || Input.GetKey(KeyCode.W))
         {
             moveInput = true;
+
+            if (physics.forwardTorque > 0)
+                physics.forwardTorque -= physics.decelerationChangeDirection;
+
             physics.forwardTorque += -forwardAccelerationForThisFrame;
         }
 
@@ -240,27 +249,35 @@ internal class Car : BasePhysicsObject
             || Input.GetKey(KeyCode.S))
         {
             moveInput = true;
+
+            if (physics.forwardTorque < 0)
+                physics.forwardTorque += physics.decelerationChangeDirection;
+
             physics.forwardTorque += forwardAccelerationForThisFrame;
         }
 
         if (Input.GetKey(KeyCode.LeftArrow)
-        || Input.GetKey(KeyCode.A)
+            || Input.GetKey(KeyCode.A)
         && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
         {
             steeringInput = true;
-            if (Math.Abs(physics.rotationTorque) < physics.maxTorque)
+            
+            if (physics.rotationTorque > 0)
+                physics.rotationTorque -= physics.decelerationChangeDirectionSteering;
+            else if (Math.Abs(physics.rotationTorque) < physics.maxRotationTorque)
                 physics.rotationTorque -= physics.steeringIntensity; // normalised?
-            physics.forwardTorque += steeringAccelerationForThisFrame;
         }
 
         if (Input.GetKey(KeyCode.RightArrow)
-        || Input.GetKey(KeyCode.D)
-        && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
+            || Input.GetKey(KeyCode.D)
+            && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
         {
             steeringInput = true;
-            if (Math.Abs(physics.rotationTorque) < physics.maxTorque)
+
+            if (physics.rotationTorque < 0)
+                physics.rotationTorque += physics.decelerationChangeDirectionSteering;
+            else if (Math.Abs(physics.rotationTorque) < physics.maxRotationTorque)
                 physics.rotationTorque += physics.steeringIntensity; // normalised?
-            physics.forwardTorque -= steeringAccelerationForThisFrame;
         }
 
         //

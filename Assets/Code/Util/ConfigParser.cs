@@ -30,7 +30,7 @@
             trimmedLine = trimmedLine.Split(';')[0];
 
             // skip nonsense
-            if (string.IsNullOrWhiteSpace(line))
+            if (string.IsNullOrWhiteSpace(trimmedLine))
                 continue;
 
             // we guaranteed that there is at least *some* non-whitespace here 
