@@ -144,7 +144,7 @@ internal class Car : BasePhysicsObject
             physics.decelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "DecelerationSteering"));
             physics.decelerationAir = float.Parse(ConfigParser.GetValue("Handling", "DecelerationAir"));
             physics.decelerationChangeDirection = float.Parse(ConfigParser.GetValue("Handling", "DecelerationChangeDirection"));
-            physics.decelerationChangeDirectionSteering = float.Parse(ConfigParser.GetValue("Handling", "DecelerationChangeSteering"));
+            physics.decelerationChangeDirectionSteering = float.Parse(ConfigParser.GetValue("Handling", "DecelerationChangeDirectionSteering"));
             physics.maxRotationTorque = float.Parse(ConfigParser.GetValue("Handling", "MaxTorque"));
 
             physics.boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
@@ -261,7 +261,9 @@ internal class Car : BasePhysicsObject
         && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
         {
             steeringInput = true;
-            
+
+            //physics.forwardTorque -= steeringAccelerationForThisFrame;
+
             if (physics.rotationTorque > 0)
                 physics.rotationTorque -= physics.decelerationChangeDirectionSteering;
             else if (Math.Abs(physics.rotationTorque) < physics.maxRotationTorque)
@@ -274,6 +276,8 @@ internal class Car : BasePhysicsObject
         {
             steeringInput = true;
 
+            //physics.forwardTorque += steeringAccelerationForThisFrame;
+
             if (physics.rotationTorque < 0)
                 physics.rotationTorque += physics.decelerationChangeDirectionSteering;
             else if (Math.Abs(physics.rotationTorque) < physics.maxRotationTorque)
@@ -281,7 +285,7 @@ internal class Car : BasePhysicsObject
         }
 
         //
-        // APPLICATION
+        // APPLICATION OF THE MOMENTUM OF THE CAR
         //
 
         // this code is awful 
