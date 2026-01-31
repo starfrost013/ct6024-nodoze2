@@ -29,13 +29,14 @@ internal static class GameManager
     
     public static void Start(GameManagerObject newManagerObject)
     {
-        state = GameModeEnum.Init;
-        
         // this is all one scene
         scene = SceneManager.GetActiveScene();
 
-        if (scene.name == SCENE_RACE_FINISHED)
-            state = GameModeEnum.RaceFinished;
+        // don't bother changing the state on restart if the scene is not the main scene, since we already initialised
+        if (scene.name != SCENE_MAIN)
+            return;
+
+        state = GameModeEnum.Init;
 
         managerObject = newManagerObject;
 
@@ -51,7 +52,18 @@ internal static class GameManager
     public static void SetGameState(GameModeEnum newState)
     {
         state = newState;
-        OnGameStateChanged(newState);
+
+        Debug.Log("Game state is changing to " + Enum.GetName(typeof(GameModeEnum), newState));
+
+        if (mode != null)
+        {
+            // leave the old mode
+            mode.OnLeave();
+        }
+
+        // get the new mode and enter it
+        mode = GetModeFromState(newState);
+        mode.OnEnter();
     }
 
     public static Scene GetCurrentScene()
@@ -95,22 +107,5 @@ internal static class GameManager
         }
     
      }
-
-    // privates
-    private static void OnGameStateChanged(GameModeEnum newState)
-    {
-        Debug.Log("Game state is changing to " + Enum.GetName(typeof(GameModeEnum), newState));
-
-        if (mode != null)
-        {
-            // leave the old mode
-            mode.OnLeave();
-
-        }
-
-        // get the new mode and enter it
-        mode = GetModeFromState(newState);
-        mode.OnEnter();
-    }
 
 }

@@ -1,15 +1,16 @@
-using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 // The gamemode for when the race is finished
 internal class GameModeRaceFinished  : GameMode
 {
-    internal Timer restartTimer;
+    internal Timer restartTimer = new();
 
     internal override void OnEnter()
     {
-        SceneManager.LoadScene(GameManager.SCENE_RACE_FINISHED);
+        // don't repeatedly reload
+        if (GameManager.GetCurrentScene().name != GameManager.SCENE_RACE_FINISHED) 
+            SceneManager.LoadScene(GameManager.SCENE_RACE_FINISHED);
+
         restartTimer.Start(10000);
     }
 

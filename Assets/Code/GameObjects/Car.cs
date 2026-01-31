@@ -256,6 +256,12 @@ internal class Car : BasePhysicsObject
             physics.forwardTorque += forwardAccelerationForThisFrame;
         }
 
+        // multiply so the car can have a smaller turning circle as it gets faster
+        float steeringChangeFactor = physics.steeringIntensity;
+
+        if (Math.Abs(physics.forwardTorque) > 1.0f)
+            steeringChangeFactor *= Math.Abs(physics.forwardTorque) / 4.0f;
+
         if (Input.GetKey(KeyCode.LeftArrow)
             || Input.GetKey(KeyCode.A)
         && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
@@ -267,7 +273,7 @@ internal class Car : BasePhysicsObject
             if (physics.rotationTorque > 0)
                 physics.rotationTorque -= physics.decelerationChangeDirectionSteering;
             else if (Math.Abs(physics.rotationTorque) < physics.maxRotationTorque)
-                physics.rotationTorque -= physics.steeringIntensity; // normalised?
+                physics.rotationTorque -= steeringChangeFactor; // normalised?
         }
 
         if (Input.GetKey(KeyCode.RightArrow)
@@ -281,7 +287,7 @@ internal class Car : BasePhysicsObject
             if (physics.rotationTorque < 0)
                 physics.rotationTorque += physics.decelerationChangeDirectionSteering;
             else if (Math.Abs(physics.rotationTorque) < physics.maxRotationTorque)
-                physics.rotationTorque += physics.steeringIntensity; // normalised?
+                physics.rotationTorque += steeringChangeFactor; // normalised?
         }
 
         //

@@ -26,6 +26,10 @@ public class GameManagerObject : MonoBehaviour
     {
         string dateTime = "**** Alpha - Testing ****\n" + Application.version + " (Unity " + Application.unityVersion + ")\n" + DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
 
-        GUI.Label(new Rect(5, 5, 300, 50), dateTime);
+        // make the font a bit larger
+        GUIStyle style = GUI.skin.label;
+        style.fontSize = 20;
+
+        GUI.Label(new Rect(5, 5, 400, 100), dateTime, style);
     }
 }
