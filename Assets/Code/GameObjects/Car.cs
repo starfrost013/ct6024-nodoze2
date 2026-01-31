@@ -382,16 +382,39 @@ internal class Car : BasePhysicsObject
         Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
 
         // this is going to need a lot of work
+
+        // try to rotate the camera towards the car
         
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
-        Camera.main.transform.rotation = Quaternion.Euler(carRot.x, carRot.y + 180, carRot.z);
+
+        Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x,
+            Camera.main.transform.localEulerAngles.y + (((carRot.y + 180.0f) - Camera.main.transform.localEulerAngles.y) / 60.0f),
+            Camera.main.transform.localEulerAngles.z
+            );
+
+       // Camera.main.transform.rotation = Quaternion.Euler(carRot.x, carRot.y + 180, carRot.z);
         
     }
 
-    private void Update()
+    /// <summary>
+    /// Called by dominoes when they want to apply a modifier to the car so that all updates can be done at once
+    /// </summary>
+    /// <returns></returns>
+    internal PhysicsInfo GetPhysicsInfo()
     {
+        return physics; 
     }
+
+    /// <summary>
+    /// Called once all physics modifiers have been applied.
+    /// </summary>
+    /// <param name="info"></param>
+    internal void SetPhysicsInfo(PhysicsInfo info)
+    {
+        physics = info;
+    }
+    
 
     private void OnCollisionEnter(Collision collision)
     {
