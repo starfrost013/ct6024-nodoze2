@@ -10,7 +10,7 @@ using UnityEngine;
 internal static class CarManager
 {
     // change this when we have assetbundles
-    private const string CAR_PATH = "Cars/Prefabs/";
+    private const string CAR_PATH = "Cars/";
 
     /* these basically get spawned into the world based on templates stored here */
     internal static List<Car> cars;
