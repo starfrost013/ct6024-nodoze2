@@ -7,7 +7,6 @@
  */
 using System;
 using UnityEngine;
-using static Car;
 
 internal class CarModifier
 {
@@ -37,34 +36,33 @@ internal class CarModifier
 
     internal void Load()
     {
+        bool success = false;
 
-        try
-        {
-            topSpeed = float.Parse(ConfigParser.GetValue("Handling", "TopSpeed"));
-            topSpeedBoost = float.Parse(ConfigParser.GetValue("Handling", "TopSpeedBoost"));
-            accelerationForward = float.Parse(ConfigParser.GetValue("Handling", "AccelerationForward"));
-            accelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteering"));
-            accelerationForwardAir = float.Parse(ConfigParser.GetValue("Handling", "AccelerationForwardAir"));
-            accelerationSteeringAir = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteeringAir"));
+        // this is horrible but seemed to be the best way to determine if at least one parse failed
+        success = float.TryParse(ConfigParser.GetValue("Handling", "TopSpeed"), out topSpeed)
+        | float.TryParse(ConfigParser.GetValue("Handling", "TopSpeedBoost"), out topSpeedBoost)
+        | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationForward"), out accelerationForward)
+        | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationSteering"), out accelerationSteering)
+        | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationForwardAir"), out accelerationForwardAir)
+        | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationSteeringAir"), out accelerationSteeringAir)
+        | float.TryParse(ConfigParser.GetValue("Handling", "Deceleration"), out deceleration)
+        | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationSteering"), out decelerationSteering)
+        | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationAir"), out decelerationAir)
+        | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationChangeDirection"), out decelerationChangeDirection)
+        | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationChangeDirectionSteering"), out decelerationChangeDirectionSteering)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaxSteeringTorque"), out maxSteeringTorque)
+        | float.TryParse(ConfigParser.GetValue("Handling", "SteeringRampUpTicks"), out steeringRampUpTicks)
+        | float.TryParse(ConfigParser.GetValue("Handling", "BoostAmount"), out boostAmount)
+        | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"), out boostAccelerationForward)
+        | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"), out boostAccelerationSteering)
+        | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForwardAir"), out boostAccelerationForwardAir)
+        | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"), out boostAccelerationSteeringAir);
+        
+        if (!success)
+            Debug.LogWarning("Some car modifiers failed to load. This may be intended or not...");
 
-            deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
-            decelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "DecelerationSteering"));
-            decelerationAir = float.Parse(ConfigParser.GetValue("Handling", "DecelerationAir"));
-            decelerationChangeDirection = float.Parse(ConfigParser.GetValue("Handling", "DecelerationChangeDirection"));
-            decelerationChangeDirectionSteering = float.Parse(ConfigParser.GetValue("Handling", "DecelerationChangeDirectionSteering"));
-            maxSteeringTorque = float.Parse(ConfigParser.GetValue("Handling", "MaxSteeringTorque"));
-            steeringRampUpTicks = float.Parse(ConfigParser.GetValue("Handling", "SteeringRampUpTicks"));
-
-            boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
-            boostAccelerationForward = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"));
-            boostAccelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"));
-            boostAccelerationForwardAir = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationForwardAir"));
-            boostAccelerationSteeringAir = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"));
-
-        }
-        catch (Exception e)
-        {
-            Debug.LogError("FAILED to load car settings!!!: " + e);
-        }
+        return;
+    // we need to check the condition above a lot of times, so to avoid duplicating failure code, we use a GOTO
+    
     }
 }

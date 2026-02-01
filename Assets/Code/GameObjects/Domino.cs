@@ -18,7 +18,7 @@ internal class Domino
     internal string description;
     internal float cost;
     internal float expiryTime;  // 0 =none, for temporary powerups
-    internal CarModifier modifiers;
+    internal CarModifier modifiers = new();
 
 
     internal TextAsset config;

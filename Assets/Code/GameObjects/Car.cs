@@ -99,9 +99,6 @@ internal class Car : BasePhysicsObject
     // physics information
     PhysicsInfo physics;
 
-    // parent object (to prevent endless "parent = transform.gameObject")
-    GameObject parent;
-
     //
     // METHODS
     //
@@ -129,9 +126,6 @@ internal class Car : BasePhysicsObject
 
         base.Start();
         physRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
-        // get the car
-        parent = transform.gameObject;
 
         // find the wheels
 
@@ -328,7 +322,7 @@ internal class Car : BasePhysicsObject
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
         float newEulerY = (carRot.y + 180.0f) % 360;
-        newEulerY += 23.0f * (physics.rotationTorque / physics.data.maxSteeringTorque);
+        newEulerY += 19.0f * (physics.rotationTorque / physics.data.maxSteeringTorque);
 
         Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x,
             newEulerY,
@@ -338,7 +332,7 @@ internal class Car : BasePhysicsObject
         /* also move a bit forward depending on our overall speed */ 
         Camera.main.transform.position = transform.position + (transform.forward * 5.0f);
         /* Dumb ass way of doing it - there's a better way. */
-        Camera.main.transform.position += ((transform.right * physics.rotationTorque) * 0.5f * (physics.forwardTorque / physics.data.topSpeed));
+        Camera.main.transform.position += 0.1f * ((transform.right * physics.rotationTorque) * (physics.forwardTorque / physics.data.topSpeed));
         Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
     }
 
