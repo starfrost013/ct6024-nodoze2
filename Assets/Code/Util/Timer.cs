@@ -9,6 +9,8 @@ internal class Timer
     private Stopwatch stopwatch;
     private bool isDone;
 
+    internal const Int64 TIMER_CONTINUE_FOREVER = -1;
+
     internal void Start(Int64 timerLength)
     {
         length = timerLength;
@@ -17,7 +19,8 @@ internal class Timer
 
     internal Int64 GetElapsedTime()
     {
-        if (stopwatch.ElapsedMilliseconds > length)
+        if (stopwatch.ElapsedMilliseconds > length
+            && length != -1)
         {
             isDone = true;
             stopwatch.Stop();
