@@ -19,8 +19,7 @@ internal static class DominoManager
         foreach (TextAsset configFile in configFiles)
         {
             Debug.Log("Loading domino at " + configFile.name);
-            Domino domino = new();
-            domino.config = configFile;
+            Domino domino = new(configFile);
             dominoes.Add(domino);
         }
     }

@@ -26,8 +26,10 @@ internal class Domino
     // METHODS
     //
 
-    public Domino()
+    public Domino(TextAsset config)
     {
+        this.config = config;
+
         // we only ever load values from our cfg's at load time
         ConfigParser.Parse(config.text);
 
