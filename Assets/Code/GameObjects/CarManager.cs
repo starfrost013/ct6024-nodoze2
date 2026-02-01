@@ -9,7 +9,8 @@ using UnityEngine;
 //
 internal static class CarManager
 {
-    private const string CAR_FILE_EXTENSION = "*.txt";
+    // change this when we have assetbundles
+    private const string CAR_PATH = "Cars/Prefabs/";
 
     /* these basically get spawned into the world based on templates stored here */
     internal static List<Car> cars;
@@ -18,25 +19,22 @@ internal static class CarManager
     {
         cars = new();
 
-        string[] fileNames = FileUtils.GetAssetPathsForDirectory("Cars", CAR_FILE_EXTENSION);
+        GameObject[] carArray = AssetManager.LoadAssetsInFolder<GameObject>(CAR_PATH);
 
-        foreach (string fileName in fileNames)
+        foreach (GameObject carObject in carArray)
         {
-            Debug.Log("Loading car at " + fileName);
-            GameObject carObject = AssetManager.LoadAsset<GameObject>(fileName);
-
             Car carPrefab = carObject.GetComponent<Car>();
     
             if (!carPrefab)
             {
-                Debug.LogWarning("No car component in car prefab " + fileName + " " + ", adding one...");
+                Debug.LogWarning("No car component in car prefab. Adding one...(It will have default settings)");
                 carPrefab = carObject.AddComponent<Car>();    
             }
 
             Car car = MonoBehaviour.Instantiate(carPrefab);
 
             car.transform.position = new(car.transform.position.x, car.transform.position.y + 1.0f, car.transform.position.z);
-            car.configFilePath = fileName;
+            car.configFilePath = CAR_PATH + StringUtils.GetNonCloneName(car.name);
             car.LoadConfig();
             cars.Add(car);
         }

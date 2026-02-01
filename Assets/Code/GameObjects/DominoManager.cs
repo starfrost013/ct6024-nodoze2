@@ -14,12 +14,13 @@ internal static class DominoManager
     {
         dominoes = new();
 
-        string[] fileNames = FileUtils.GetAssetPathsForDirectory("Domino", DOMINO_FILE_EXTENSION);
+        TextAsset[] configFiles = AssetManager.LoadAssetsInFolder<TextAsset>("Domino");
 
-        foreach (string fileName in fileNames)
+        foreach (TextAsset configFile in configFiles)
         {
-            Debug.Log("Loading domino at " + fileName);
-            Domino domino = new(fileName); // create and load the domino
+            Debug.Log("Loading domino at " + configFile.name);
+            Domino domino = new();
+            domino.config = configFile;
             dominoes.Add(domino);
         }
     }
