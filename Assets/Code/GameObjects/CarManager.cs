@@ -39,9 +39,6 @@ internal static class CarManager
             car.configFilePath = fileName;
             car.LoadConfig();
             cars.Add(car);
-
-            
-
         }
 
         // in the future we'll have a car selection but just load the first car for now

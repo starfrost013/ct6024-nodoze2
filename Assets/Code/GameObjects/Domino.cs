@@ -18,6 +18,7 @@ internal class Domino
     internal string description;
     internal float cost;
     internal float expiryTime;  // 0 =none, for temporary powerups
+    internal CarModifier modifiers;
 
 
     internal TextAsset config;
@@ -39,6 +40,6 @@ internal class Domino
         description = ConfigParser.GetValue("Info", "Description");
         cost = float.Parse(ConfigParser.GetValue("Info", "Cost"));
         expiryTime = float.Parse(ConfigParser.GetValue("Info", "ExpiryTime"));
-
+        modifiers.Load();
     }
 }

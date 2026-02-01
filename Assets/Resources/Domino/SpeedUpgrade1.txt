@@ -1,0 +1,9 @@
+﻿[Info]
+
+Name = "Speed Upgrade"
+Description = "A bit of a boost!!"
+Cost = 20
+ExpiryTime = 0
+
+[Handling]
+

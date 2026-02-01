@@ -15,30 +15,13 @@ internal class Car : BasePhysicsObject
 
     internal struct PhysicsInfo
     {
-        // Characteristics of the car
-        internal float topSpeed;
-        internal float topSpeedBoost;
-        internal float accelerationForward;                         // acceleration while steering
-        internal float accelerationSteering;
-        internal float accelerationForwardAir;
-        internal float accelerationSteeringAir;
-        internal float deceleration;
-        internal float decelerationSteering;                        // deceleration while steering
-        internal float decelerationAir;                             // deceleration in the air
-        internal float decelerationChangeDirection;                 // deceleration when the car changes direction [W/S]
-        internal float decelerationChangeDirectionSteering;         // deceleration when the car changes direction [A/D]
-        internal float maxRotationTorque;                           // maximum torque
+        // Actual physics data, shared with dominoes
+        internal CarModifier data;
 
-        internal float steeringIntensity;                           // the intensity of the steering
+        // Characteristics of the car
+        internal Int32 steeringRampUpTimer;                         // timer for ramping up steering 
 
         internal CarSteeringType steeringType;
-
-        // Boosting characteristics of the car
-        internal float boostAmount;
-        internal float boostAccelerationForward;
-        internal float boostAccelerationSteering;
-        internal float boostAccelerationForwardAir;
-        internal float boostAccelerationSteeringAir;
 
         // boost state - maybe should become a state enum
         internal bool boosting;
@@ -56,8 +39,6 @@ internal class Car : BasePhysicsObject
         internal WheelCollider wheelRightBackCollider;
         internal WheelCollider wheelRightFrontCollider;
     };
-
-
 
     //
     // ENUMS
@@ -131,39 +112,13 @@ internal class Car : BasePhysicsObject
         configText = AssetManager.LoadAsset<TextAsset>(configFilePath);
         ConfigParser.Parse(configText.text);
 
-        try
-        {
-            physics.topSpeed = float.Parse(ConfigParser.GetValue("Handling", "TopSpeed"));
-            physics.topSpeedBoost = float.Parse(ConfigParser.GetValue("Handling", "TopSpeedBoost"));
-            physics.accelerationForward = float.Parse(ConfigParser.GetValue("Handling", "AccelerationForward"));
-            physics.accelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteering"));
-            physics.accelerationForwardAir = float.Parse(ConfigParser.GetValue("Handling", "AccelerationForwardAir"));
-            physics.accelerationSteeringAir = float.Parse(ConfigParser.GetValue("Handling", "AccelerationSteeringAir"));
+        physics.data = new();
+        physics.data.Load();
 
-            physics.deceleration = float.Parse(ConfigParser.GetValue("Handling", "Deceleration"));
-            physics.decelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "DecelerationSteering"));
-            physics.decelerationAir = float.Parse(ConfigParser.GetValue("Handling", "DecelerationAir"));
-            physics.decelerationChangeDirection = float.Parse(ConfigParser.GetValue("Handling", "DecelerationChangeDirection"));
-            physics.decelerationChangeDirectionSteering = float.Parse(ConfigParser.GetValue("Handling", "DecelerationChangeDirectionSteering"));
-            physics.maxRotationTorque = float.Parse(ConfigParser.GetValue("Handling", "MaxTorque"));
-
-            physics.boostAmount = float.Parse(ConfigParser.GetValue("Handling", "BoostAmount"));
-            physics.boostAccelerationForward = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"));
-            physics.boostAccelerationSteering = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"));
-            physics.boostAccelerationForwardAir = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationForwardAir"));
-            physics.boostAccelerationSteeringAir = float.Parse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"));
-
-            physics.steeringIntensity = float.Parse(ConfigParser.GetValue("Handling", "SteeringIntensity"));
-            physics.steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
-
-        }
-        catch (Exception e)
-        {
-            Debug.LogError("FAILED to load car settings!!!: " + e);
-        }
+        // additional data needed for cars only
+        steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
 
         Debug.Assert(configText, "You didn't load a configuration for this car!!!");
-       
     }
 
     protected new void Start()
@@ -173,7 +128,7 @@ internal class Car : BasePhysicsObject
             return;
 
         base.Start();
-        thisRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        physRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         // get the car
         parent = transform.gameObject;
@@ -192,14 +147,18 @@ internal class Car : BasePhysicsObject
     }
 
     // FixedUpdate contains our controls so they feel decent regardless of fraemrate
-
+    // I don't have time to use ISP sorry!
     private void FixedUpdate()
     {
+        // Start by reading inputs 
 
-        // I don't have time to use ISP sorry!
-
-        bool moveInput = false;
-        bool steeringInput = false;
+        bool accelerateInput = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
+        bool decelerateInput = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
+        bool steerLeftInput = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
+        bool steerRightInput = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
+        
+        bool moveInput = (accelerateInput || decelerateInput);
+        bool steerInput = (steerLeftInput || steerRightInput);   
 
         // check if we stopped boosting
         physics.boosting = Input.GetKey(KeyCode.LeftShift);
@@ -207,21 +166,21 @@ internal class Car : BasePhysicsObject
 
         // boost isn't finished until we slow down after boost is done
         if (physics.boostEnding
-            && (Mathf.Abs(physics.forwardTorque) < physics.topSpeed))
+            && (Mathf.Abs(physics.forwardTorque) < physics.data.topSpeed))
         {
             physics.boostEnding = false;
         }
 
-        float forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.accelerationForwardAir : physics.accelerationForward;
-        float steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.accelerationSteeringAir : physics.accelerationSteering;
+        float forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.data.accelerationForwardAir : physics.data.accelerationForward;
+        float steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.data.accelerationSteeringAir : physics.data.accelerationSteering;
 
         // if we ARE boosting, apply boost accel.
         // if we RECENTLY STOPPED boosting, apply zero accel.
         // otherwise, apply 
         if (physics.boosting)
         {
-            forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.boostAccelerationForwardAir : physics.boostAccelerationForward;
-            steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.boostAccelerationSteeringAir : physics.boostAccelerationSteering;
+            forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.data.boostAccelerationForwardAir : physics.data.boostAccelerationForward;
+            steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.data.boostAccelerationSteeringAir : physics.data.boostAccelerationSteering;
         }
         else if (physics.boostEnding)
             forwardAccelHandlingForThisFrame = steeringAccelHandlingForThisFrame = 0.0f;  // only apply natural deceleration of boost is ending
@@ -234,61 +193,46 @@ internal class Car : BasePhysicsObject
         // if the boost is ending - we want to decelerate
         // we also want to rapidly change direction if we are steering
 
-        if (Input.GetKey(KeyCode.UpArrow)
-            || Input.GetKey(KeyCode.W))
+        if (accelerateInput)
         {
-            moveInput = true;
-
             if (physics.forwardTorque > 0)
-                physics.forwardTorque -= physics.decelerationChangeDirection;
+                physics.forwardTorque -= physics.data.decelerationChangeDirection;
 
             physics.forwardTorque += -forwardAccelerationForThisFrame;
         }
 
-        if (Input.GetKey(KeyCode.DownArrow)
-            || Input.GetKey(KeyCode.S))
+        if (decelerateInput)
         {
-            moveInput = true;
-
             if (physics.forwardTorque < 0)
-                physics.forwardTorque += physics.decelerationChangeDirection;
+                physics.forwardTorque += physics.data.decelerationChangeDirection;
 
             physics.forwardTorque += forwardAccelerationForThisFrame;
         }
 
         // multiply so the car can have a smaller turning circle as it gets faster
-        float steeringChangeFactor = physics.steeringIntensity;
+        float steeringChangeFactor = steeringAccelerationForThisFrame;
 
         if (Math.Abs(physics.forwardTorque) > 1.0f)
             steeringChangeFactor *= Math.Abs(physics.forwardTorque) / 4.0f;
 
-        if (Input.GetKey(KeyCode.LeftArrow)
-            || Input.GetKey(KeyCode.A)
-        && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
+        if (steerLeftInput
+            && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
         {
-            steeringInput = true;
-
-            //physics.forwardTorque -= steeringAccelerationForThisFrame;
-
             if (physics.rotationTorque > 0)
-                physics.rotationTorque -= physics.decelerationChangeDirectionSteering;
-            else if (Math.Abs(physics.rotationTorque) < physics.maxRotationTorque)
+                physics.rotationTorque -= physics.data.decelerationChangeDirectionSteering;
+            else if (Math.Abs(physics.rotationTorque) < physics.data.maxSteeringTorque)
                 physics.rotationTorque -= steeringChangeFactor; // normalised?
         }
 
-        if (Input.GetKey(KeyCode.RightArrow)
-            || Input.GetKey(KeyCode.D)
+        if (steerRightInput
             && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
         {
-            steeringInput = true;
-
-            //physics.forwardTorque += steeringAccelerationForThisFrame;
-
             if (physics.rotationTorque < 0)
-                physics.rotationTorque += physics.decelerationChangeDirectionSteering;
-            else if (Math.Abs(physics.rotationTorque) < physics.maxRotationTorque)
+                physics.rotationTorque += physics.data.decelerationChangeDirectionSteering;
+            else if (Math.Abs(physics.rotationTorque) < physics.data.maxSteeringTorque)
                 physics.rotationTorque += steeringChangeFactor; // normalised?
         }
+
 
         //
         // APPLICATION OF THE MOMENTUM OF THE CAR
@@ -297,26 +241,26 @@ internal class Car : BasePhysicsObject
         // this code is awful 
 
         // apply some natural decay
-        if ((!moveInput && !steeringInput)
+        if ((!moveInput && !steerInput)
             || physics.boostEnding) // should we lock this?
         {
             if (physics.inAir)
-                physics.forwardTorque *= physics.decelerationAir;
+                physics.forwardTorque *= physics.data.decelerationAir;
             else
-                physics.forwardTorque *= physics.deceleration;
+                physics.forwardTorque *= physics.data.deceleration;
         }
 
-        if (!steeringInput)
-            physics.rotationTorque *= physics.decelerationSteering;
+        if (!steerInput)
+            physics.rotationTorque *= physics.data.decelerationSteering;
 
         // Debug.Log("Velocity: " + physics.velocity.x + " " + physics.velocity.y + " " + physics.velocity.z);
 
-        float topSpeed = physics.topSpeed;
+        float topSpeed = physics.data.topSpeed;
 
         // test
         // if the player is boosting we don't want them 
         if (physics.boosting || physics.boostEnding)
-            topSpeed = physics.topSpeedBoost;
+            topSpeed = physics.data.topSpeedBoost;
 
         // anti-big rigs (apply this one at a time)
         if (physics.forwardTorque > topSpeed)
@@ -359,6 +303,8 @@ internal class Car : BasePhysicsObject
             }
         }
 
+        // car rotation 
+
         transform.localEulerAngles = new Vector3(
             transform.localEulerAngles.x,
             // always divide by 60 as fixedupdate updates 60 times per second
@@ -378,43 +324,41 @@ internal class Car : BasePhysicsObject
 
         // apply motion
 
-        Camera.main.transform.position = transform.position + (transform.forward * 5.0f);
-        Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
-
-        // this is going to need a lot of work
-
-        // try to rotate the camera towards the car
-        
+        // car was incorrectly exported and bad bad artists won't re-export
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
+        float newEulerY = (carRot.y + 180.0f) % 360;
+        newEulerY += 23.0f * (physics.rotationTorque / physics.data.maxSteeringTorque);
 
         Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x,
-            Camera.main.transform.localEulerAngles.y + (((carRot.y + 180.0f) - Camera.main.transform.localEulerAngles.y) / 60.0f),
+            newEulerY,
             Camera.main.transform.localEulerAngles.z
             );
-
-       // Camera.main.transform.rotation = Quaternion.Euler(carRot.x, carRot.y + 180, carRot.z);
         
+        /* also move a bit forward depending on our overall speed */ 
+        Camera.main.transform.position = transform.position + (transform.forward * 5.0f);
+        /* Dumb ass way of doing it - there's a better way. */
+        Camera.main.transform.position += ((transform.right * physics.rotationTorque) * 0.5f * (physics.forwardTorque / physics.data.topSpeed));
+        Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
     }
 
     /// <summary>
     /// Called by dominoes when they want to apply a modifier to the car so that all updates can be done at once
     /// </summary>
     /// <returns></returns>
-    internal PhysicsInfo GetPhysicsInfo()
+    internal CarModifier GetCarModifier()
     {
-        return physics; 
+        return physics.data; 
     }
 
     /// <summary>
     /// Called once all physics modifiers have been applied.
     /// </summary>
     /// <param name="info"></param>
-    internal void SetPhysicsInfo(PhysicsInfo info)
+    internal void SetCarModifier(CarModifier info)
     {
-        physics = info;
+        physics.data = info;
     }
-    
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -428,9 +372,6 @@ internal class Car : BasePhysicsObject
         physics.inAir = (physics.numCollisions == 0);
 
         if (physics.inAir)
-        {
             Debug.Log("In Air");
-
-        }
     }
 }
