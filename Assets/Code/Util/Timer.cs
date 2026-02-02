@@ -20,7 +20,7 @@ internal class Timer
     internal Int64 GetElapsedTime()
     {
         if (stopwatch.ElapsedMilliseconds > length
-            && length != -1)
+            && length != TIMER_CONTINUE_FOREVER)
         {
             isDone = true;
             stopwatch.Stop();

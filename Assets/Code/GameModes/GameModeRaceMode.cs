@@ -82,7 +82,7 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnLegacyGUI()
     {
-        GUIStyle raceGuiStyle = GUI.skin.label;
+        GUIStyle raceGuiStyle = GUI.skin.label; 
 
         switch (raceState)
         {
@@ -91,10 +91,11 @@ internal class GameModeRaceMode : GameMode
                 if (!raceStartTimer.HasStarted())
                     raceStartTimer.Start(RACE_START_TIME);
 
+                Int64 remainingTime = ((raceStartTimer.length - raceStartTimer.GetElapsedTime()) / 1000) + 1; // +1 for "3, 2, 1..."
+
                 raceGuiStyle.fontSize = 72;
                 GUI.color = Color.red;
-                GUI.Label(new((Screen.width / 2) - 50, (Screen.height / 2 - 100), 40, 100), 
-                    (raceStartTimer.length - (raceStartTimer.GetElapsedTime() / 1000)).ToString(), raceGuiStyle);
+                GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);
 
                 if (raceStartTimer.IsDone())
                     raceState = RaceState.Active;
