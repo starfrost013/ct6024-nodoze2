@@ -36,4 +36,10 @@ public class DominoUIController : MonoBehaviour
         Domino domino = DominoManager.GetDominoByName("Sonic Mode");
         CarManager.ApplyDominoToFirstCar(domino);
     }
+
+    public void TempSetHarsherAcceleration()
+    {
+        Domino domino = DominoManager.GetDominoByName("Harsher Acceleration");
+        CarManager.ApplyDominoToFirstCar(domino);
+    }
 }

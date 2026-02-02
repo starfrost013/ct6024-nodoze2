@@ -1,10 +1,10 @@
 [Info]
 
-Name = Domino Test
+Name = Harsher Acceleration
 Description = Hahahahaha
 Cost = 10
 ExpiryTime = 0
 
 [Handling]
-
-TopSpeed = -0.5
+Acceleration = 0.02
+Deceleration = 0.02
