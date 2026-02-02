@@ -101,7 +101,8 @@ internal static class GameManager
         if (Input.GetKey(KeyCode.R))
         {
             initialised = false; // make everything get reinit'ed
-            SceneManager.LoadScene(scene.buildIndex);
+            GameManager.SetCurrentScene(GameManager.SCENE_MAIN);
+            return;
         }
 
         mode.OnFrame();
