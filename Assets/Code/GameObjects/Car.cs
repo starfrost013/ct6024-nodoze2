@@ -219,7 +219,7 @@ internal class Car : BasePhysicsObject
         float steeringChangeFactor = steeringAccelerationForThisFrame;
 
         if (Math.Abs(physics.forwardTorque) > 1.0f)
-            steeringChangeFactor *= Math.Abs(physics.forwardTorque) / 4.0f;
+            steeringChangeFactor *= Math.Abs(physics.forwardTorque) / 3.0f;
 
         if (steerLeftInput
             && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))

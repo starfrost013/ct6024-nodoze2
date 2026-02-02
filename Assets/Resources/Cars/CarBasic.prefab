@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 4752569153995839617}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.344, y: 0.4, z: -0.568}
+  m_LocalPosition: {x: 0.436, y: 0.4, z: -0.568}
   m_LocalScale: {x: 0.99999976, y: 1, z: 0.99999976}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -97,7 +97,7 @@ Transform:
   m_GameObject: {fileID: 5485191409325101434}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.369, y: 0.4, z: 0.629}
+  m_LocalPosition: {x: 0.461, y: 0.4, z: 0.629}
   m_LocalScale: {x: 0.99999976, y: 1, z: 0.99999976}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -168,7 +168,7 @@ Transform:
   m_GameObject: {fileID: 8040780227480344745}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.362, y: 0.4, z: 0.629}
+  m_LocalPosition: {x: -0.431, y: 0.4, z: 0.629}
   m_LocalScale: {x: 0.99999976, y: 1, z: 0.99999976}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -239,7 +239,7 @@ Transform:
   m_GameObject: {fileID: 8494217582961069307}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.362, y: 0.4, z: -0.568}
+  m_LocalPosition: {x: -0.431, y: 0.4, z: -0.568}
   m_LocalScale: {x: 0.99999976, y: 1, z: 0.99999976}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -434,7 +434,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1000
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.35
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -470,8 +470,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.60718775, z: 1.8961173}
-  m_Center: {x: 2.949678e-16, y: 0.38217902, z: 0.10424346}
+  m_Size: {x: 0.8674218, y: 0.46033573, z: 0.05963801}
+  m_Center: {x: 0.0017804354, y: 0.45560503, z: -0.8765813}
 --- !u!4 &4106122810300449170 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
@@ -501,6 +501,6 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5668833170292645477, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
