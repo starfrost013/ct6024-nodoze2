@@ -77,6 +77,11 @@ internal static class GameManager
         return managerObject;
     }
 
+    public static GameMode GetGameModeObject()
+    {
+        return mode;
+    }
+
     public static void OnFrame()
     {
         if (Input.GetKey(KeyCode.R))
@@ -88,6 +93,11 @@ internal static class GameManager
     public static void OnFixedUpdate()
     {
         mode.OnFixedUpdate();   
+    }
+
+    public static void OnLegacyGUI()
+    {
+        mode.OnLegacyGUI();
     }
 
     // I don't like reflection, it cretaes large and ugly programs in C#

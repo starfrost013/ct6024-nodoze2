@@ -29,6 +29,15 @@ internal class Timer
         return stopwatch.ElapsedMilliseconds;
     }
 
+    /// <summary>
+    /// Determines if the timer has ever been started.
+    /// </summary>
+    /// <returns>A boolean value determining if the timer has ever been started</returns>
+    internal bool HasStarted()
+    {
+        return (stopwatch != null);
+    }
+
     internal bool IsDone()
     {
         _ = GetElapsedTime();

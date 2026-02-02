@@ -144,6 +144,18 @@ internal class Car : BasePhysicsObject
     // I don't have time to use ISP sorry!
     private void FixedUpdate()
     {
+        // Check if the race is active so we can move (using temporary UI)
+        GameMode mode = GameManager.GetGameModeObject();
+
+        // HACK (avoids us doing a second call
+        if (mode is GameModeRaceMode)
+        {
+            GameModeRaceMode raceMode = (GameModeRaceMode)mode;
+
+            if (raceMode.raceState != GameModeRaceMode.RaceState.Active)
+                return;
+        }
+
         // Start by reading inputs 
 
         bool accelerateInput = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);

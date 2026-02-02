@@ -1,12 +1,21 @@
 using System;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 // This thingy is a connector between unity and our fancy stuff
 
 public class GameManagerObject : MonoBehaviour
 {
     /* temp */ 
-    Timer gameTimer = new(); 
+    Timer gameTimer = new();
+
+    internal enum GameManagerFlags
+    {
+        DisableTimer = 1,
+    };
+
+    internal GameManagerFlags flags;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,18 +35,8 @@ public class GameManagerObject : MonoBehaviour
         GameManager.OnFixedUpdate();
     }
 
-    private void OnGUI()
+    private void DrawTimer(GUIStyle style)
     {
-        string dateTime = "**** Alpha - Testing ****\n" + Application.version + " (Unity " + Application.unityVersion + ")\n" + DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
-
-        // make the font a bit larger
-        GUIStyle style = GUI.skin.label;
-        style.fontSize = 20;
-
-        GUI.Label(new Rect(5, 5, 400, 100), dateTime, style);
-
-        //maybe we need to update less...
-
         Int64 totalTime = gameTimer.GetElapsedTime();
 
         // easier to use constants. 60000 seconds 
@@ -49,7 +48,9 @@ public class GameManagerObject : MonoBehaviour
 
         // this might be a slow operation
         if (milliseconds < 10)
-            millisecondsString = '0' + millisecondsString;
+            millisecondsString = "00" + millisecondsString;
+        else if (milliseconds < 100)
+            millisecondsString = "0" + millisecondsString;
 
         if (seconds < 10)
             secondsString = '0' + secondsString;
@@ -57,7 +58,28 @@ public class GameManagerObject : MonoBehaviour
         if (minutes < 10)
             minutesString = '0' + minutesString;
 
-        string timerString = minutesString + ":" + secondsString + ":" + millisecondsString;
-        GUI.Label(new Rect(Screen.width - 100, 5, 400, 100), timerString);
+        style.fontSize = 36;
+
+        string timerString = minutesString + ":" + secondsString + "." + millisecondsString;
+        GUI.color = Color.red;
+        GUI.Label(new Rect(Screen.width - 170, 0, 400, 100), timerString, style);
+    }
+
+    private void OnGUI()
+    {
+        string dateTime = "**** Alpha - Testing ****\n" + Application.version + " (Unity " + Application.unityVersion + ")\n" + DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
+
+        // make the font a bit larger
+        GUIStyle style = GUI.skin.label;
+        style.fontSize = 20;
+        
+        GUI.Label(new Rect(5, 5, 400, 100), dateTime, style);
+
+        //maybe we need to update less...
+
+        if (!flags.HasFlag(GameManagerFlags.DisableTimer))
+            DrawTimer(style);
+
+        GameManager.OnLegacyGUI();
     }
 }

@@ -9,4 +9,7 @@ internal abstract class GameMode
     internal abstract void OnFrame();
     internal abstract void OnFixedUpdate();
     internal abstract void OnLeave();
+
+    // Legacy GUI (good for debug/temp uis)
+    internal virtual void OnLegacyGUI() { } // not needed
 }
