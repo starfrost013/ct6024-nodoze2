@@ -20,10 +20,12 @@ DecelerationChangeDirectionSteering = -3.0	; Deceleration while steering and cha
 
 DecelerationAir = -0.999					; Deceleration in the air
 MaxSteeringTorque = -9.0					; Maximum torque
-BoostAccelerationForward = -30.0			; Acceleration of car on TOP of regular acceleation 
-BoostAccelerationSteering = -5.0			; Acceleration of car on TOP of regular acceleation steering
-BoostAccelerationForwardAir = -3.0			; Acceleration of car on TOP of regular acceleation 
-BoostAccelerationSteeringAir = -2.0			; Acceleration of car on TOP of regular acceleation steering
+BoostAccelerationForward = -30.0			; Acceleration of car on TOP of regular acceleration 
+BoostAccelerationSteering = -5.0			; Acceleration of car on TOP of regular acceleration steering
+BoostAccelerationForwardAir = -3.0			; Acceleration of car on TOP of regular acceleration in the air
+BoostAccelerationSteeringAir = -2.0			; Acceleration of car on TOP of regular acceleration steering in the air
 	
-BoostAmount = 2300							; Amount of boost
+BoostAmount = -3000							; Amount of boost
+BoostDepletionPerTick = -10					; Boost depletion per 1/60 of a second
+BoostRegenPerTick = -6						; Boost regeneration per 1/60 of a second
 SteeringType = Manual 						; 0 = Automatic, 1 = Manual, you can use numbers or the names 
