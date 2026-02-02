@@ -30,4 +30,10 @@ public class DominoUIController : MonoBehaviour
         Domino domino = DominoManager.GetDominoByName("Speed Upgrade 3");
         CarManager.ApplyDominoToFirstCar(domino);
     }
+
+    public void TempSetSonicSpeed()
+    {
+        Domino domino = DominoManager.GetDominoByName("Sonic Mode");
+        CarManager.ApplyDominoToFirstCar(domino);
+    }
 }

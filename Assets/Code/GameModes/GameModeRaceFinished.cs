@@ -12,7 +12,7 @@ internal class GameModeRaceFinished : GameMode
     {
         // don't repeatedly reload
         if (GameManager.GetCurrentScene().name != GameManager.SCENE_RACE_FINISHED) 
-            SceneManager.LoadScene(GameManager.SCENE_RACE_FINISHED);
+            GameManager.SetCurrentScene(GameManager.SCENE_RACE_FINISHED);
 
 
         restartTimer.Start(10000);
@@ -34,6 +34,6 @@ internal class GameModeRaceFinished : GameMode
     {
         /* This code is HORRIBLE but it is the only way I know to prevent a race condition at 2:30am that fucks everything up */
 
-        SceneManager.LoadScene(GameManager.SCENE_MAIN);
+        GameManager.SetCurrentScene(GameManager.SCENE_MAIN);
     }
 }

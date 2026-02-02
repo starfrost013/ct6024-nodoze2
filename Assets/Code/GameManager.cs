@@ -29,6 +29,7 @@ internal static class GameManager
     private static Scene scene;
 
     private static bool initialised = false;
+    private static bool loading = false; 
 
     public static void Start(GameManagerObject newManagerObject)
     {
@@ -74,6 +75,14 @@ internal static class GameManager
     public static Scene GetCurrentScene()
     {
         return scene; 
+    }
+
+    public static void SetCurrentScene(string name)
+    {
+        loading = true; 
+        // Temporary. Will load async...
+        SceneManager.LoadScene(name);
+        loading = false; 
     }
 
     // Gets the game manager root object so that stuff can be instantiated

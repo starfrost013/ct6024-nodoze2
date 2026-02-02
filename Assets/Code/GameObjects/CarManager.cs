@@ -24,6 +24,13 @@ internal static class CarManager
         if (!initialised)
             carArray = AssetManager.LoadAssetsInFolder<GameObject>(CAR_PATH);
 
+        initialised = true;
+
+        // in the future we'll have a car selection but just load the first car for now
+    }
+
+    internal static void SpawnCars()
+    {
         foreach (GameObject carObject in carArray)
         {
             Car carPrefab = carObject.GetComponent<Car>();
@@ -50,9 +57,6 @@ internal static class CarManager
             }
         }
 
-        initialised = true;
-
-        // in the future we'll have a car selection but just load the first car for now
     }
 
     /// <summary>

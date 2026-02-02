@@ -1,7 +1,7 @@
 [Info]
 
-Name = "Domino Test"
-Description = "Hahahahaha"
+Name = Domino Test
+Description = Hahahahaha
 Cost = 10
 ExpiryTime = 0
 

@@ -1,0 +1,11 @@
+﻿[Info]
+
+Name = Sonic Mode
+Description = GOTTA GO FAST!!!
+Cost = 200
+ExpiryTime = 0
+
+[Handling]
+TopSpeed = 400.0
+Acceleration = 100.0
+AccelerationSteering = 150.0
