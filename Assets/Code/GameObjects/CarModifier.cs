@@ -25,14 +25,14 @@ internal class CarModifier
     internal float maxSteeringTorque;                           // maximum torque
     internal float steeringRampUpTicks;                         // timer for ramping up steering 
 
-    internal float steeringIntensity;                           // the intensity of the steering
-
     // Boosting characteristics of the car
     internal float boostAmount;
     internal float boostAccelerationForward;
     internal float boostAccelerationSteering;
     internal float boostAccelerationForwardAir;
     internal float boostAccelerationSteeringAir;
+
+    internal string name;
 
     internal void Load()
     {

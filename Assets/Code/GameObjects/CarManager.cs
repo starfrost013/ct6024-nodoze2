@@ -41,4 +41,16 @@ internal static class CarManager
 
         // in the future we'll have a car selection but just load the first car for now
     }
+
+    /// <summary>
+    /// TEMP - DO NOT RELY ON THIS
+    /// </summary>
+    /// <param name="domino">Domino to apply to the first car</param>
+    internal static void ApplyDominoToFirstCar(Domino domino)
+    {
+        if (cars.Count <= 0)
+            return;
+
+        cars[0].ApplyModifier(domino.modifiers);
+    }
 }

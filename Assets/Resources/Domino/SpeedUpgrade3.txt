@@ -1,10 +1,9 @@
 ﻿[Info]
 
 Name = Speed Upgrade
-Description = A bit of a boost!!
-Cost = 20
+Description = Drunk Driver!
+Cost = 100
 ExpiryTime = 0
 
 [Handling]
-TopSpeed = 0.3
 

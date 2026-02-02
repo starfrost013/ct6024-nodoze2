@@ -1,10 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
-using Unity.Properties;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using static UnityEngine.Rendering.STP;
 
 // It's a car :D
 internal class Car : BasePhysicsObject
@@ -81,7 +78,12 @@ internal class Car : BasePhysicsObject
     [SerializeField]
     CarDriveType driveType;
 
-    private TextAsset configText;
+    /// <summary>
+    /// Modifier sets that have been applied 
+    /// </summary>
+    List<CarModifier> appliedModifierSets;
+
+    TextAsset configText;
 
     /// <summary>
     /// Configuration file path
@@ -361,9 +363,30 @@ internal class Car : BasePhysicsObject
     /// Called once all physics modifiers have been applied.
     /// </summary>
     /// <param name="info"></param>
-    internal void SetCarModifier(CarModifier info)
+    internal void ApplyModifier(CarModifier info)
     {
-        physics.data = info;
+        // is this needed? probably needed later
+        appliedModifierSets.Add(info);
+
+        // The worst code ever
+        physics.data.accelerationForward += info.accelerationForward;
+        physics.data.accelerationForwardAir += info.accelerationForwardAir;
+        physics.data.accelerationSteering += info.accelerationSteering;
+        physics.data.accelerationSteeringAir += info.accelerationSteeringAir;
+        physics.data.boostAccelerationForward += info.boostAccelerationForward;
+        physics.data.boostAccelerationForwardAir += info.boostAccelerationForwardAir;
+        physics.data.boostAccelerationSteering += info.boostAccelerationSteering;
+        physics.data.boostAccelerationSteeringAir += info.boostAccelerationSteeringAir;
+        physics.data.boostAmount += info.boostAmount;
+        physics.data.deceleration += info.deceleration;
+        physics.data.decelerationAir += info.decelerationAir;
+        physics.data.decelerationChangeDirection += info.decelerationChangeDirection;
+        physics.data.decelerationChangeDirectionSteering += info.decelerationChangeDirectionSteering;
+        physics.data.decelerationSteering += info.decelerationSteering;
+        physics.data.maxSteeringTorque += info.maxSteeringTorque;
+        physics.data.steeringRampUpTicks += info.steeringRampUpTicks;
+        physics.data.topSpeed += info.topSpeed;
+        physics.data.topSpeedBoost += info.topSpeedBoost;
     }
 
     private void OnCollisionEnter(Collision collision)

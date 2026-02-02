@@ -38,5 +38,9 @@ internal class Domino
         cost = float.Parse(ConfigParser.GetValue("Info", "Cost"));
         expiryTime = float.Parse(ConfigParser.GetValue("Info", "ExpiryTime"));
         modifiers.Load();
+
+        // duplicated for car use
+
+        modifiers.name = dominoName;
     }
 }
