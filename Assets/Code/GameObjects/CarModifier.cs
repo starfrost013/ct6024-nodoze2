@@ -26,7 +26,9 @@ internal class CarModifier
     internal float steeringRampUpTicks;                         // timer for ramping up steering 
 
     // Boosting characteristics of the car
-    internal float boostAmount;
+    internal float boostMax;                                 // total boost amount per 1/60 of a second
+    internal float boostDepletionPerTick;                       // total boost depletion per 1/60 of a second
+    internal float boostRegenPerTick;                           // total boost regen per 1/60 of a second
     internal float boostAccelerationForward;
     internal float boostAccelerationSteering;
     internal float boostAccelerationForwardAir;
@@ -52,7 +54,8 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationChangeDirectionSteering"), out decelerationChangeDirectionSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "MaxSteeringTorque"), out maxSteeringTorque)
         | float.TryParse(ConfigParser.GetValue("Handling", "SteeringRampUpTicks"), out steeringRampUpTicks)
-        | float.TryParse(ConfigParser.GetValue("Handling", "BoostAmount"), out boostAmount)
+        | float.TryParse(ConfigParser.GetValue("Handling", "BoostAmount"), out boostMax)
+        | float.TryParse(ConfigParser.GetValue("Handling", "BoostDepletionPerTick"), out boostDepletionPerTick)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"), out boostAccelerationForward)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"), out boostAccelerationSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForwardAir"), out boostAccelerationForwardAir)

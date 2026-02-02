@@ -20,5 +20,7 @@ BoostAccelerationSteering = 5.0				; Acceleration of car on TOP of regular accel
 BoostAccelerationForwardAir = 3.0			; Acceleration of car on TOP of regular acceleation 
 BoostAccelerationSteeringAir = 2.0			; Acceleration of car on TOP of regular acceleation steering
 	
-BoostAmount = 2300							; Amount of boost
+BoostAmount = 3000							; Amount of boost
+BoostDepletionPerTick = 10					; Boost depletion per 1/60 of a second
+BoostRegenPerTick = 6						; Boost depletion per 1/60 of a second
 SteeringType = Manual 						; 0 = Automatic, 1 = Manual, you can use numbers or the names 

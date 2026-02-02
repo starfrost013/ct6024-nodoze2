@@ -21,9 +21,10 @@ internal class Car : BasePhysicsObject
         internal CarSteeringType steeringType;
 
         // boost state - maybe should become a state enum
-        internal bool boosting;
-        internal bool boostEnding;                        // lets us slowly ramp down
-        internal bool inAir;
+        internal bool boosting;                                     // are we boosting?
+        internal float boostCurrent;                                // current amount of boost
+        internal bool boostEnding;                                  // lets us slowly ramp down
+        internal bool inAir;                                        // are we in the air?
 
         // movement information - now a torque since we use WheelColliders
         internal float forwardTorque;
@@ -138,6 +139,7 @@ internal class Car : BasePhysicsObject
         physics.wheelLeftFrontCollider = wheelLeftFront.GetComponent<WheelCollider>();
         physics.wheelRightBackCollider = wheelRightBack.GetComponent<WheelCollider>();
         physics.wheelRightFrontCollider = wheelRightFront.GetComponent<WheelCollider>();
+        physics.boostCurrent = physics.data.boostMax;
 
         Debug.Assert(physics.wheelLeftBackCollider && physics.wheelLeftFrontCollider && physics.wheelRightBackCollider && physics.wheelRightFrontCollider, "All car wheels must have WheelColliders!");
     }
@@ -166,11 +168,22 @@ internal class Car : BasePhysicsObject
         bool steerRightInput = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
         
         bool moveInput = (accelerateInput || decelerateInput);
-        bool steerInput = (steerLeftInput || steerRightInput);   
+        bool steerInput = (steerLeftInput || steerRightInput);
 
         // check if we stopped boosting
+        bool didWeStopBoosting = physics.boosting;
         physics.boosting = Input.GetKey(KeyCode.LeftShift);
-        physics.boostEnding = Input.GetKeyUp(KeyCode.LeftShift);
+        physics.boostEnding = (didWeStopBoosting && !physics.boosting); // keyup is only true for a single frame and isn't reliable in fixedupdate
+
+        // handle boost shutdown
+        if (physics.boosting)
+        {
+            physics.boostCurrent -= physics.data.boostDepletionPerTick;
+
+            if (physics.boostCurrent < (physics.data.boostMax - physics.data.boostRegenPerTick))
+                physics.boostCurrent += physics.data.boostRegenPerTick;
+        }
+
 
         // boost isn't finished until we slow down after boost is done
         if (physics.boostEnding
@@ -377,7 +390,7 @@ internal class Car : BasePhysicsObject
         physics.data.boostAccelerationForwardAir += info.boostAccelerationForwardAir;
         physics.data.boostAccelerationSteering += info.boostAccelerationSteering;
         physics.data.boostAccelerationSteeringAir += info.boostAccelerationSteeringAir;
-        physics.data.boostAmount += info.boostAmount;
+        physics.data.boostMax += info.boostMax;
         physics.data.deceleration += info.deceleration;
         physics.data.decelerationAir += info.decelerationAir;
         physics.data.decelerationChangeDirection += info.decelerationChangeDirection;

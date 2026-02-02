@@ -6,8 +6,6 @@ using UnityEngine;
 //
 internal static class DominoManager
 {
-    private const string DOMINO_FILE_EXTENSION = "*.txt";
-
     internal static List<Domino> dominoes;
 
     internal static void Init()
