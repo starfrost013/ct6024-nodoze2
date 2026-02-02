@@ -1,7 +1,7 @@
 using UnityEngine.SceneManagement;
 
 // The gamemode for when the race is finished
-internal class GameModeRaceFinished  : GameMode
+internal class GameModeRaceFinished : GameMode
 {
     internal Timer restartTimer = new();
 

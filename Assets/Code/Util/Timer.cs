@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 internal class Timer
 {
-    private Int64 length;
+    internal Int64 length { get; private set; } 
     private Stopwatch stopwatch;
     private bool isDone;
 

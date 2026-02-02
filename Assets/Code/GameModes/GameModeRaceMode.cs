@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Rendering;
+using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 // The main race mode game mode/.
 internal class GameModeRaceMode : GameMode
@@ -19,13 +21,15 @@ internal class GameModeRaceMode : GameMode
 
     Timer raceStartTimer = new();
 
+    /* temp */
+    Timer gameTimer = new();
+
     internal string raceConfigFile;
 
     internal override void OnEnter()
     {
         Debug.Log("Entering race...");
         raceState = RaceState.Starting;
-        raceStartTimer.Start(3000);
     }
 
     internal override void OnFrame()
@@ -43,6 +47,39 @@ internal class GameModeRaceMode : GameMode
 
     }
 
+    private void DrawTimer(GUIStyle raceGuiStyle)
+    {
+        if (!gameTimer.HasStarted())
+            gameTimer.Start(Timer.TIMER_CONTINUE_FOREVER);
+
+        Int64 totalTime = gameTimer.GetElapsedTime();
+
+        // easier to use constants. 60000 seconds 
+        Int64 milliseconds = totalTime % 1000;
+        Int64 seconds = (totalTime / 1000) % 60;
+        Int64 minutes = ((totalTime / 1000) / 60) % 60;
+
+        string millisecondsString = milliseconds.ToString(), secondsString = seconds.ToString(), minutesString = minutes.ToString();
+
+        // this might be a slow operation
+        if (milliseconds < 10)
+            millisecondsString = "00" + millisecondsString;
+        else if (milliseconds < 100)
+            millisecondsString = "0" + millisecondsString;
+
+        if (seconds < 10)
+            secondsString = '0' + secondsString;
+
+        if (minutes < 10)
+            minutesString = '0' + minutesString;
+
+        raceGuiStyle.fontSize = 36;
+
+        string timerString = minutesString + ":" + secondsString + "." + millisecondsString;
+        GUI.color = Color.red;
+        GUI.Label(new Rect(Screen.width - 170, 0, 400, 100), timerString, raceGuiStyle);
+    }
+
     internal override void OnLegacyGUI()
     {
         GUIStyle raceGuiStyle = GUI.skin.label;
@@ -50,12 +87,21 @@ internal class GameModeRaceMode : GameMode
         switch (raceState)
         {
             case RaceState.Starting:
+
+                if (!raceStartTimer.HasStarted())
+                    raceStartTimer.Start(RACE_START_TIME);
+
                 raceGuiStyle.fontSize = 72;
                 GUI.color = Color.red;
-                GUI.Label(new((Screen.width / 2) - 50, (Screen.height / 2 - 100), 40, 40), (raceStartTimer.GetElapsedTime() / 1000).ToString(), raceGuiStyle);
+                GUI.Label(new((Screen.width / 2) - 50, (Screen.height / 2 - 100), 40, 100), 
+                    (raceStartTimer.length - (raceStartTimer.GetElapsedTime() / 1000)).ToString(), raceGuiStyle);
 
                 if (raceStartTimer.IsDone())
                     raceState = RaceState.Active;
+                break;
+            case RaceState.Active:
+                // draw various uis here
+                DrawTimer(raceGuiStyle);
                 break;
         }
     }
