@@ -1,9 +1,16 @@
 ﻿[Info]
 
-Name = Speed Upgrade
+Name = Speed Upgrade 3
 Description = Drunk Driver!
 Cost = 100
 ExpiryTime = 0
 
 [Handling]
-
+Acceleration = 15.0
+AccelerationSteering = 8.0
+AccelerationForwardAir = 4.0				; Acceleration to apply in forward direction while in the air
+AccelerationSteeringAir = 20.0				; Acceleration to apply in lateral direction while in the air
+Deceleration = 0.98							; Deceleration (must be below 1) 
+DecelerationSteering = 0.97					; Deceleration while steering (must be below 1)
+DecelerationChangeDirection = 8.0			; Deceleration while changing direction
+DecelerationChangeDirectionSteering = 6.0	; Deceleration while steering and changing direction

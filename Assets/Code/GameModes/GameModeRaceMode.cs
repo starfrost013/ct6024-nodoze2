@@ -30,6 +30,14 @@ internal class GameModeRaceMode : GameMode
     {
         Debug.Log("Entering race...");
         raceState = RaceState.Starting;
+
+        // Initialise the car and domino managers since we don't need them anywhere else
+        CarManager.Init();
+        DominoManager.Init();
+
+        // wrost hack ever
+        if (raceStartTimer.HasStarted())
+            raceStartTimer.Start(Timer.TIMER_CONTINUE_FOREVER);
     }
 
     internal override void OnFrame()
@@ -94,7 +102,7 @@ internal class GameModeRaceMode : GameMode
                 Int64 remainingTime = ((raceStartTimer.length - raceStartTimer.GetElapsedTime()) / 1000) + 1; // +1 for "3, 2, 1..."
 
                 raceGuiStyle.fontSize = 72;
-                GUI.color = Color.red;
+                GUI.color = Color.yellow;
                 GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);
 
                 if (raceStartTimer.IsDone())

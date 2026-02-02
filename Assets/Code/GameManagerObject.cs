@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI.MessageBox;
 
@@ -7,14 +6,6 @@ using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 public class GameManagerObject : MonoBehaviour
 {
-
-    internal enum GameManagerFlags
-    {
-        DisableTimer = 1,
-    };
-
-    internal GameManagerFlags flags;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

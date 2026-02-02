@@ -11,7 +11,6 @@ internal class GameModeRaceFinished : GameMode
         if (GameManager.GetCurrentScene().name != GameManager.SCENE_RACE_FINISHED) 
             SceneManager.LoadScene(GameManager.SCENE_RACE_FINISHED);
 
-        GameManager.GetGameManagerObject().flags |= GameManagerObject.GameManagerFlags.DisableTimer;
 
         restartTimer.Start(10000);
     }
@@ -28,8 +27,8 @@ internal class GameModeRaceFinished : GameMode
     }
 
     internal override void OnLeave()
-    {
-        GameManager.GetGameManagerObject().flags &= ~GameManagerObject.GameManagerFlags.DisableTimer;
+    {        
+        
         SceneManager.LoadScene(GameManager.SCENE_MAIN);
     }
 }

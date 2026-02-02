@@ -82,7 +82,7 @@ internal class Car : BasePhysicsObject
     /// <summary>
     /// Modifier sets that have been applied 
     /// </summary>
-    List<CarModifier> appliedModifierSets;
+    List<CarModifier> appliedModifierSets = new();
 
     TextAsset configText;
 

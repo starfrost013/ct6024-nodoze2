@@ -12,14 +12,17 @@ internal static class CarManager
     // change this when we have assetbundles
     private const string CAR_PATH = "Cars/";
 
-    /* these basically get spawned into the world based on templates stored here */
-    internal static List<Car> cars;
+    /* these basically get spawned into the world based on prototype objects stored here */
+    internal static List<Car> cars = new();
+    internal static GameObject[] carArray;
 
     internal static void Init()
     {
-        cars = new();
-
-        GameObject[] carArray = AssetManager.LoadAssetsInFolder<GameObject>(CAR_PATH);
+        // don't reinit on e.g. race restart
+        if (cars.Count == 0)
+        {
+            carArray = AssetManager.LoadAssetsInFolder<GameObject>(CAR_PATH);
+        }   
 
         foreach (GameObject carObject in carArray)
         {

@@ -6,10 +6,13 @@ using UnityEngine;
 //
 internal static class DominoManager
 {
-    internal static List<Domino> dominoes;
+    internal static List<Domino> dominoes = new();
 
     internal static void Init()
     {
+        if (dominoes.Count > 0)
+            return;
+
         dominoes = new();
 
         TextAsset[] configFiles = AssetManager.LoadAssetsInFolder<TextAsset>("Domino");
@@ -20,5 +23,19 @@ internal static class DominoManager
             Domino domino = new(configFile);
             dominoes.Add(domino);
         }
+    }
+
+    internal static Domino GetDominoByName(string dominoName)
+    {
+        if (dominoes.Count == 0)
+            return null;
+
+        foreach (Domino domino in dominoes)
+        {
+            if (domino.dominoName == dominoName) 
+                return domino;
+        }
+
+        return null; // no matching domino
     }
 }

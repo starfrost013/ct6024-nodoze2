@@ -25,22 +25,26 @@ internal static class GameManager
     // links the engine and gamemanager
     private static GameManagerObject managerObject; 
 
-    private static Scene scene; 
+    private static Scene scene;
+
+    private static bool initialised = false; 
     
     public static void Start(GameManagerObject newManagerObject)
     {
+        // only initialise once
+        if (initialised)
+            return;
+
         // this is all one scene
         scene = SceneManager.GetActiveScene();
-
-        // don't bother changing the state on restart if the scene is not the main scene, since we already initialised
-        if (scene.name != SCENE_MAIN)
-            return;
 
         state = GameModeEnum.Init;
 
         managerObject = newManagerObject;
 
         SetGameState(state);
+
+        initialised = true; 
         // temp
     }
 
@@ -85,8 +89,11 @@ internal static class GameManager
     public static void OnFrame()
     {
         if (Input.GetKey(KeyCode.R))
+        {
+            initialised = false; // make everything get reinit'ed
             SceneManager.LoadScene(scene.buildIndex);
-       
+        }
+
         mode.OnFrame();
     }
 
