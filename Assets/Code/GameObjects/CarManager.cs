@@ -13,25 +13,25 @@ internal static class CarManager
     private const string CAR_PATH = "Cars/";
 
     /* these basically get spawned into the world based on prototype objects stored here */
-    internal static List<Car> cars = new();
     internal static GameObject[] carArray;
+    internal static List<CarModifier> modifiers = new(); 
+
+    private static bool initialised;
 
     internal static void Init()
     {
         // don't reinit on e.g. race restart
-        if (cars.Count == 0)
-        {
+        if (!initialised)
             carArray = AssetManager.LoadAssetsInFolder<GameObject>(CAR_PATH);
-        }   
 
         foreach (GameObject carObject in carArray)
         {
             Car carPrefab = carObject.GetComponent<Car>();
-    
+
             if (!carPrefab)
             {
                 Debug.LogWarning("No car component in car prefab. Adding one...(It will have default settings)");
-                carPrefab = carObject.AddComponent<Car>();    
+                carPrefab = carObject.AddComponent<Car>();
             }
 
             Car car = MonoBehaviour.Instantiate(carPrefab);
@@ -39,8 +39,18 @@ internal static class CarManager
             car.transform.position = new(car.transform.position.x, car.transform.position.y + 1.0f, car.transform.position.z);
             car.configFilePath = CAR_PATH + StringUtils.GetNonCloneName(car.name);
             car.LoadConfig();
-            cars.Add(car);
+
+            // ***TEMP*** These are applied to EVERY CAR. This is a TEMPORARY HACK FOR V0.3. We need to basically make template objects that get instantiated.
+            // Copy the prefab and apply it there.
+            // but this is ok for now
+
+            foreach (CarModifier modifier in modifiers)
+            {
+                car.ApplyModifier(modifier);
+            }
         }
+
+        initialised = true;
 
         // in the future we'll have a car selection but just load the first car for now
     }
@@ -51,9 +61,6 @@ internal static class CarManager
     /// <param name="domino">Domino to apply to the first car</param>
     internal static void ApplyDominoToFirstCar(Domino domino)
     {
-        if (cars.Count <= 0)
-            return;
-
-        cars[0].ApplyModifier(domino.modifiers);
+        modifiers.Add(domino.modifiers);
     }
 }

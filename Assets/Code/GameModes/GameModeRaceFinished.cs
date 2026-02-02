@@ -1,9 +1,12 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // The gamemode for when the race is finished
 internal class GameModeRaceFinished : GameMode
 {
     internal Timer restartTimer = new();
+
+    private bool totalHack = false; 
 
     internal override void OnEnter()
     {
@@ -26,9 +29,11 @@ internal class GameModeRaceFinished : GameMode
 
     }
 
+
     internal override void OnLeave()
-    {        
-        
+    {
+        /* This code is HORRIBLE but it is the only way I know to prevent a race condition at 2:30am that fucks everything up */
+
         SceneManager.LoadScene(GameManager.SCENE_MAIN);
     }
 }

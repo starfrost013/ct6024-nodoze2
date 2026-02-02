@@ -31,9 +31,6 @@ internal class GameModeRaceMode : GameMode
         Debug.Log("Entering race...");
         raceState = RaceState.Starting;
 
-        // Initialise the car and domino managers since we don't need them anywhere else
-        CarManager.Init();
-        DominoManager.Init();
 
         // wrost hack ever
         if (raceStartTimer.HasStarted())
@@ -106,7 +103,13 @@ internal class GameModeRaceMode : GameMode
                 GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);
 
                 if (raceStartTimer.IsDone())
+                {
+                    // Initialise the car and domino managers since we don't need them anywhere else and to fix a horrible HACK HACK HACK
+                    CarManager.Init();
+                    DominoManager.Init();
                     raceState = RaceState.Active;
+
+                }
                 break;
             case RaceState.Active:
                 // draw various uis here

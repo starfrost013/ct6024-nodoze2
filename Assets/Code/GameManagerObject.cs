@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 // This thingy is a connector between unity and our fancy stuff
@@ -22,6 +24,7 @@ public class GameManagerObject : MonoBehaviour
     {
         GameManager.OnFixedUpdate();
     }
+
 
     private void OnGUI()
     {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using System.Collections;
 
 internal static class GameManager
 {
@@ -27,8 +28,8 @@ internal static class GameManager
 
     private static Scene scene;
 
-    private static bool initialised = false; 
-    
+    private static bool initialised = false;
+
     public static void Start(GameManagerObject newManagerObject)
     {
         // only initialise once
@@ -122,7 +123,5 @@ internal static class GameManager
                 Debug.Log("GameManager::GetModeFromState selected invalid game state (Entering race mode...)");
                 return new GameModeRaceMode();
         }
-    
      }
-
 }
