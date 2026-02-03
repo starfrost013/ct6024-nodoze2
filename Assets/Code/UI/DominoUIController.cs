@@ -42,4 +42,9 @@ public class DominoUIController : MonoBehaviour
         Domino domino = DominoManager.GetDominoByName("Harsher Acceleration");
         CarManager.ApplyDominoToFirstCar(domino);
     }
+
+    public void DoneClicked()
+    {
+        GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
+    }
 }
