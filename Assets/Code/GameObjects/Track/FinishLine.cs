@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // This is the finish line.
-// It lets us knw
+// It lets us know when we are done
 class FinishLine : MonoBehaviour
 {
 
