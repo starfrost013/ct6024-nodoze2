@@ -20,7 +20,13 @@ class Garage : MonoBehaviour
         if (car != null)
         {
             CarModifier modifier = car.GetCarModifiers();
-            car.physics.fuelCurrent += (modifier.fuelMax * (modifier.refuelGaragePercent * 100.0f));
+
+            float fuelPercentHealed = modifier.refuelGaragePercent / 100.0f;
+           
+            car.physics.fuelCurrent += (modifier.fuelMax * (modifier.refuelGaragePercent / 100.0f));
+        
+            if (car.physics.fuelCurrent > modifier.fuelMax)
+                car.physics.fuelCurrent = modifier.fuelMax; 
         }
     }
 
