@@ -227,7 +227,7 @@ internal class Car : BasePhysicsObject
         if (accelerateInput)
         {
             if (physics.forwardTorque > 0)
-                physics.forwardTorque -= physics.data.decelerationChangeDirection;
+                physics.forwardTorque -= physics.data.decelerationChangeDirection * Time.fixedDeltaTime;
 
             physics.forwardTorque += -forwardAccelerationForThisFrame;
         }
@@ -235,7 +235,7 @@ internal class Car : BasePhysicsObject
         if (decelerateInput)
         {
             if (physics.forwardTorque < 0)
-                physics.forwardTorque += physics.data.decelerationChangeDirection;
+                physics.forwardTorque += physics.data.decelerationChangeDirection * Time.fixedDeltaTime;
 
             physics.forwardTorque += forwardAccelerationForThisFrame;
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Player information. 
 /// 
-/// Stores the current car, the current player
+/// Stores the current car, the current player and so on
 /// </summary>
 internal class Player
 {
@@ -19,3 +19,4 @@ internal class Player
     internal PlayerStats stats;
     
 }
+

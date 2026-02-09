@@ -94,8 +94,8 @@ internal class GameModeRaceMode : GameMode
 
         float fuelPercentage = (car.physics.fuelCurrent / car.GetCarModifiers().fuelMax) * 100;
 
-        float x = Screen.width - 215;
-        float y = Screen.height - 65;
+        float x = Screen.width - 205;
+        float y = Screen.height - 50;
 
         if (fuelPercentage > 0)
             GUI.Label(new Rect(x, y, 400, 100), "Fuel: " + fuelPercentage.ToString("F1") + "%");
