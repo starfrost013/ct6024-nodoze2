@@ -45,6 +45,14 @@ public class DominoUIController : MonoBehaviour
     public void DoneClicked()
     {
         Domino domino = DominoManager.GetDominoByName(theDropdown.options[theDropdown.value].text);
+        
+        if (domino == null)
+        {
+            Debug.LogError("Obtained INVALID domino " + theDropdown.options[theDropdown.value].text);
+            return; 
+        }
+
+        CarManager.ApplyDominoToFirstCar(domino);   
         GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
     }
 }
