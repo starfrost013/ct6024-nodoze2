@@ -87,6 +87,24 @@ internal class GameModeRaceMode : GameMode
         GUI.Label(new Rect(Screen.width - 170, 0, 400, 100), timerString, raceGuiStyle);
     }
 
+    private void DrawFuelGauge(GUIStyle raceGuiStyle)
+    {
+        // Temp code until player system exists - usser will be able to select one of multiple cars
+        Car car = GameObject.FindFirstObjectByType<Car>();      
+
+        GUI.color = Color.blue;
+
+        float fuelPercentage = (car.GetPhysicsInfo().fuelCurrent / car.GetCarModifiers().fuelMax) * 100;
+
+        float x = Screen.width - 215;
+        float y = Screen.height - 65;
+
+        if (fuelPercentage > 0)
+            GUI.Label(new Rect(x, y, 400, 100), "Fuel: " + fuelPercentage.ToString("F1") + "%");
+        else
+            GUI.Label(new Rect(x, y, 400, 100), "Out of fuel!");
+    }
+
     internal override void OnLegacyGUI()
     {
         GUIStyle raceGuiStyle = GUI.skin.label; 
@@ -115,6 +133,7 @@ internal class GameModeRaceMode : GameMode
             case RaceState.Active:
                 // draw various uis here
                 DrawTimer(raceGuiStyle);
+                DrawFuelGauge(raceGuiStyle);
                 break;
         }
     }

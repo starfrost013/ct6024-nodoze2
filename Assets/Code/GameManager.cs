@@ -29,7 +29,9 @@ internal static class GameManager
     private static Scene scene;
 
     private static bool initialised = false;
-    private static bool loading = false; 
+    private static bool loading = false;
+
+    private static Player player;
 
     public static void Start(GameManagerObject newManagerObject)
     {
@@ -39,10 +41,9 @@ internal static class GameManager
 
         // this is all one scene
         scene = SceneManager.GetActiveScene();
-
         state = GameModeEnum.Init;
-
         managerObject = newManagerObject;
+        player = new();
 
         SetGameState(state);
 

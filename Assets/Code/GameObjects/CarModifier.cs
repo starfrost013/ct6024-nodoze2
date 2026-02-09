@@ -34,6 +34,11 @@ internal class CarModifier
     internal float boostAccelerationForwardAir;
     internal float boostAccelerationSteeringAir;
 
+    // Fueling characteristics of the car
+    internal float fuelMax;
+    internal float fuelDepletionPerTick;
+    internal float refuelGaragePercent;
+
     internal string name;
 
     internal void Load()
@@ -59,7 +64,11 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"), out boostAccelerationForward)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"), out boostAccelerationSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForwardAir"), out boostAccelerationForwardAir)
-        | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"), out boostAccelerationSteeringAir);
+        | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"), out boostAccelerationSteeringAir)
+        | float.TryParse(ConfigParser.GetValue("Fuel", "Max"), out fuelMax)
+        | float.TryParse(ConfigParser.GetValue("Fuel", "DepletionPerTick"), out fuelDepletionPerTick)
+        | float.TryParse(ConfigParser.GetValue("Fuel", "RefuelGaragePercent"), out refuelGaragePercent);
+        ;
         
         if (!success)
             Debug.LogWarning("Some car modifiers failed to load. This may be intended or not...");

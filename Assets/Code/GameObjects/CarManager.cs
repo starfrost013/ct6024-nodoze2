@@ -48,7 +48,6 @@ internal static class CarManager
             car.LoadConfig();
 
             // ***TEMP*** These are applied to EVERY CAR. This is a TEMPORARY HACK FOR V0.3. We need to basically make template objects that get instantiated.
-            // Copy the prefab and apply it there.
             // but this is ok for now
 
             foreach (CarModifier modifier in modifiers)
@@ -56,8 +55,9 @@ internal static class CarManager
                 car.ApplyModifier(modifier);
             }
         }
-
     }
+
+    
 
     /// <summary>
     /// TEMP - DO NOT RELY ON THIS

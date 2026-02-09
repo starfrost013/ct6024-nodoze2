@@ -32,8 +32,10 @@ internal class Car : BasePhysicsObject
 
         internal UInt32 numCollisions;
 
+        internal float fuelCurrent;
+
         internal WheelCollider wheelLeftBackCollider;
-        internal WheelCollider wheelLeftFrontCollider; 
+        internal WheelCollider wheelLeftFrontCollider;
         internal WheelCollider wheelRightBackCollider;
         internal WheelCollider wheelRightFrontCollider;
     };
@@ -49,7 +51,7 @@ internal class Car : BasePhysicsObject
     }
 
     internal enum CarDriveType
-    { 
+    {
         RearWheelDrive = 0,
         FrontWheelDrive = 1,
         FourWheelDrive = 2,
@@ -90,9 +92,6 @@ internal class Car : BasePhysicsObject
     /// Configuration file path
     /// </summary>
     internal string configFilePath;
-  
-    // This is transient like it is in real life
-    float coolness;
 
     //todo: move to "BaseObject" class
 
@@ -100,7 +99,21 @@ internal class Car : BasePhysicsObject
     const float EPSILON_MIN = 0.003f;
 
     // physics information
-    PhysicsInfo physics;
+    private PhysicsInfo physics; 
+
+    /// <summary>
+    /// lets it continue to be a field unlike if it was a property
+    /// </summary>
+    internal PhysicsInfo GetPhysicsInfo()
+    {
+        return physics;
+    }
+
+    // Modify physics, DO NOT APPLY MODIFIER
+    internal void SetPhysicsInfo(PhysicsInfo info)
+    {
+        physics = info;
+    }
 
     //
     // METHODS
@@ -132,16 +145,17 @@ internal class Car : BasePhysicsObject
 
         // find the wheels
 
-        Debug.Assert(wheelLeftBack && wheelLeftFront && wheelRightBack && wheelRightFront, "Please set the wheels up in the editor!!");
-
         // check the wheels actually have colliders
         physics.wheelLeftBackCollider = wheelLeftBack.GetComponent<WheelCollider>();
         physics.wheelLeftFrontCollider = wheelLeftFront.GetComponent<WheelCollider>();
         physics.wheelRightBackCollider = wheelRightBack.GetComponent<WheelCollider>();
         physics.wheelRightFrontCollider = wheelRightFront.GetComponent<WheelCollider>();
         physics.boostCurrent = physics.data.boostMax;
+        physics.fuelCurrent = physics.data.fuelMax;
 
+        Debug.Assert(wheelLeftBack && wheelLeftFront && wheelRightBack && wheelRightFront, "Please set the wheels up in the editor!!");
         Debug.Assert(physics.wheelLeftBackCollider && physics.wheelLeftFrontCollider && physics.wheelRightBackCollider && physics.wheelRightFrontCollider, "All car wheels must have WheelColliders!");
+
     }
 
     // FixedUpdate contains our controls so they feel decent regardless of fraemrate
@@ -160,6 +174,12 @@ internal class Car : BasePhysicsObject
                 return;
         }
 
+        if (physics.fuelCurrent <= 0)
+        {
+            physics.fuelCurrent = 0;
+            return; 
+        }
+
         // Start by reading inputs 
 
         bool accelerateInput = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
@@ -169,6 +189,9 @@ internal class Car : BasePhysicsObject
         
         bool moveInput = (accelerateInput || decelerateInput);
         bool steerInput = (steerLeftInput || steerRightInput);
+
+        // use for fuel checks
+        bool anyInput = (moveInput || steerInput);  
 
         // check if we stopped boosting
         bool didWeStopBoosting = physics.boosting;
@@ -262,7 +285,7 @@ internal class Car : BasePhysicsObject
         // this code is awful 
 
         // apply some natural decay
-        if ((!moveInput && !steerInput)
+        if (!anyInput
             || physics.boostEnding) // should we lock this?
         {
             if (physics.inAir)
@@ -273,8 +296,6 @@ internal class Car : BasePhysicsObject
 
         if (!steerInput)
             physics.rotationTorque *= physics.data.decelerationSteering;
-
-        // Debug.Log("Velocity: " + physics.velocity.x + " " + physics.velocity.y + " " + physics.velocity.z);
 
         float topSpeed = physics.data.topSpeed;
 
@@ -288,6 +309,10 @@ internal class Car : BasePhysicsObject
             physics.forwardTorque = topSpeed;
         else if (physics.forwardTorque < -topSpeed)
             physics.forwardTorque = -topSpeed;
+
+        //
+        // APPLY MOTION
+        //
 
         bool needFrontWheelDrive = (driveType == (CarDriveType.FrontWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
         bool needRearWheelDrive = (driveType == (CarDriveType.RearWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
@@ -343,7 +368,9 @@ internal class Car : BasePhysicsObject
         physics.wheelRightFrontCollider.GetWorldPose(out Vector3 _, out wheelRotation);
         wheelRightFront.transform.rotation = wheelRotation;
 
-        // apply motion
+        //
+        // CAMERA
+        //
 
         // car was incorrectly exported and bad bad artists won't re-export
         // Fix when model correctly imported
@@ -361,13 +388,28 @@ internal class Car : BasePhysicsObject
         /* Dumb ass way of doing it - there's a better way. */
         Camera.main.transform.position += 0.1f * ((transform.right * physics.rotationTorque) * (physics.forwardTorque / physics.data.topSpeed));
         Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
+
+        //
+        // Fuel handling 
+        //
+
+        if (Math.Abs(physics.forwardTorque) > EPSILON_MIN)
+        {
+            float fuelUseMultiplier = Math.Abs(physics.forwardTorque);
+            if (Math.Abs(physics.forwardTorque) < 0.1) // TODO: MAKE THIS PHYSICS INFO AND INCORPROATE STEERING
+                fuelUseMultiplier = 0.1f;
+
+            physics.fuelCurrent -= (physics.data.fuelDepletionPerTick * fuelUseMultiplier);
+
+            Debug.Log("Fuel multiplier " + fuelUseMultiplier);
+        }
     }
 
     /// <summary>
     /// Called by dominoes when they want to apply a modifier to the car so that all updates can be done at once
     /// </summary>
     /// <returns></returns>
-    internal CarModifier GetCarModifier()
+    internal CarModifier GetCarModifiers()
     {
         return physics.data; 
     }
@@ -400,6 +442,10 @@ internal class Car : BasePhysicsObject
         physics.data.steeringRampUpTicks += info.steeringRampUpTicks;
         physics.data.topSpeed += info.topSpeed;
         physics.data.topSpeedBoost += info.topSpeedBoost;
+
+        physics.data.fuelMax += info.fuelMax;   
+        physics.data.fuelDepletionPerTick += info.fuelDepletionPerTick; 
+        physics.data.refuelGaragePercent += info.refuelGaragePercent;   
     }
 
     private void OnCollisionEnter(Collision collision)

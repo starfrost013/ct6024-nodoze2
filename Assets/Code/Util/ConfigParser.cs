@@ -1,4 +1,6 @@
-﻿internal static class ConfigParser
+﻿using JetBrains.Annotations;
+
+internal static class ConfigParser
 {
     //
     // FIELDS
@@ -79,6 +81,10 @@
 
     internal static string GetValue(string section, string key)
     {
+        // make sure that the key doesn't exist so not all sections are requried
+        if (!file.ContainsKey(section))
+            return null;
+
         return file[section].ContainsKey(key) ? file[section][key] : null;
     }
 }
