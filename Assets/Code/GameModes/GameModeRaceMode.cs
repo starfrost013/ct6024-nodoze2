@@ -20,8 +20,6 @@ internal class GameModeRaceMode : GameMode
     internal RaceState raceState { get; private set; }
 
     Timer raceStartTimer = new();
-
-    /* temp */
     Timer gameTimer = new();
 
     internal string raceConfigFile;
