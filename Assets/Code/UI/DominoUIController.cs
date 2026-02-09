@@ -3,48 +3,48 @@
  * Controls the Domino UI
  */
 
+using NUnit.Framework;
+using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DominoUIController : MonoBehaviour
 {
-    public void TempSetBreakCar()
-    {
-        Domino domino = DominoManager.GetDominoByName("Break Car");
-        CarManager.ApplyDominoToFirstCar(domino);
-    }
+    const string DROPDOWN_NAME = "SelectDominoDropdown";
 
-    public void TempSetSpeed1()
-    {
-        Domino domino = DominoManager.GetDominoByName("Speed Upgrade 1");
-        CarManager.ApplyDominoToFirstCar(domino);
-    }
+    TMP_Dropdown theDropdown = null; 
 
-    public void TempSetSpeed2()
+    public void Start()
     {
-        Domino domino = DominoManager.GetDominoByName("Speed Upgrade 2");
-        CarManager.ApplyDominoToFirstCar(domino);
-    }
+        // get the right dropdown - needs to be in SelectDominoDropdown
+        TMP_Dropdown[] dropdowns = transform.parent.gameObject.GetComponentsInChildren<TMP_Dropdown>(); 
 
-    public void TempSetSpeed3()
-    {
-        Domino domino = DominoManager.GetDominoByName("Speed Upgrade 3");
-        CarManager.ApplyDominoToFirstCar(domino);
-    }
+        foreach (TMP_Dropdown dropdown in dropdowns)
+        {
+            if (dropdown.gameObject.name == DROPDOWN_NAME)
+                theDropdown = dropdown;
+        }
 
-    public void TempSetSonicSpeed()
-    {
-        Domino domino = DominoManager.GetDominoByName("Sonic Mode");
-        CarManager.ApplyDominoToFirstCar(domino);
-    }
+        if (!theDropdown)
+            return;
 
-    public void TempSetHarsherAcceleration()
-    {
-        Domino domino = DominoManager.GetDominoByName("Harsher Acceleration");
-        CarManager.ApplyDominoToFirstCar(domino);
+        // i am bad at programming
+        if (theDropdown.options.Count > 0)
+            return;
+
+        List<string> options = new(); 
+
+        foreach (Domino domino in DominoManager.dominoes)
+        {
+            options.Add(domino.dominoName);
+        }
+
+        theDropdown.AddOptions(options);    
     }
 
     public void DoneClicked()
     {
+        Domino domino = DominoManager.GetDominoByName(theDropdown.options[theDropdown.value].text);
         GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
     }
 }
