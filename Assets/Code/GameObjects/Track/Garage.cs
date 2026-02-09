@@ -19,12 +19,8 @@ class Garage : MonoBehaviour
 
         if (car != null)
         {
-            Car.PhysicsInfo physInfo = car.GetPhysicsInfo();
             CarModifier modifier = car.GetCarModifiers();
-
-            physInfo.fuelCurrent += (modifier.fuelMax * (modifier.refuelGaragePercent * 100.0f));
-
-            car.SetPhysicsInfo(physInfo);
+            car.physics.fuelCurrent += (modifier.fuelMax * (modifier.refuelGaragePercent * 100.0f));
         }
     }
 

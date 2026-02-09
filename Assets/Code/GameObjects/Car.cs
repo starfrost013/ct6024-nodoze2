@@ -99,21 +99,8 @@ internal class Car : BasePhysicsObject
     const float EPSILON_MIN = 0.003f;
 
     // physics information
-    private PhysicsInfo physics; 
+    internal PhysicsInfo physics; 
 
-    /// <summary>
-    /// lets it continue to be a field unlike if it was a property
-    /// </summary>
-    internal PhysicsInfo GetPhysicsInfo()
-    {
-        return physics;
-    }
-
-    // Modify physics, DO NOT APPLY MODIFIER
-    internal void SetPhysicsInfo(PhysicsInfo info)
-    {
-        physics = info;
-    }
 
     //
     // METHODS

@@ -94,7 +94,7 @@ internal class GameModeRaceMode : GameMode
 
         GUI.color = Color.blue;
 
-        float fuelPercentage = (car.GetPhysicsInfo().fuelCurrent / car.GetCarModifiers().fuelMax) * 100;
+        float fuelPercentage = (car.physics.fuelCurrent / car.GetCarModifiers().fuelMax) * 100;
 
         float x = Screen.width - 215;
         float y = Screen.height - 65;
