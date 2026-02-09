@@ -42,8 +42,17 @@ internal static class CarManager
             }
 
             Car car = MonoBehaviour.Instantiate(carPrefab);
+            // move the car to the start location
 
-            car.transform.position = new(car.transform.position.x, car.transform.position.y + 1.0f, car.transform.position.z);
+            GameObject start = GameObject.Find("Start");
+
+            if (start != null)
+                car.transform.position = start.transform.position + new Vector3(0.5f, 1.0f, 0.5f);
+            else
+            {
+                Debug.LogWarning("Please insert a start point!");
+                car.transform.position = new(car.transform.position.x, car.transform.position.y + 1.0f, car.transform.position.z);
+            }
             car.configFilePath = CAR_PATH + StringUtils.GetNonCloneName(car.name);
             car.LoadConfig();
 
@@ -54,6 +63,9 @@ internal static class CarManager
             {
                 car.ApplyModifier(modifier);
             }
+
+
+            
         }
     }
 
