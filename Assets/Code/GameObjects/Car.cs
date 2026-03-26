@@ -430,6 +430,7 @@ internal class Car : BasePhysicsObject
         appliedModifierSets.Add(info);
 
         // The worst code ever
+        // TODO: turn into an operator...
         physics.data.accelerationForward += info.accelerationForward;
         physics.data.accelerationForwardAir += info.accelerationForwardAir;
         physics.data.accelerationSteering += info.accelerationSteering;
@@ -448,9 +449,11 @@ internal class Car : BasePhysicsObject
         physics.data.steeringRampUpTicks += info.steeringRampUpTicks;
         physics.data.topSpeed += info.topSpeed;
         physics.data.topSpeedBoost += info.topSpeedBoost;
+        physics.data.maximumTurnCameraAngle += info.maximumTurnCameraAngle;
 
         physics.data.fuelMax += info.fuelMax;   
-        physics.data.fuelDepletionPerTick += info.fuelDepletionPerTick; 
+        physics.data.fuelDepletionPerTick += info.fuelDepletionPerTick;
+        physics.data.decelerationFuelCutoff = info.decelerationFuelCutoff; 
         physics.data.refuelGaragePercent += info.refuelGaragePercent;   
     }
 
