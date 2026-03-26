@@ -6,6 +6,7 @@
  * For dominoes, these are RELATIVE values (i.e. -0.5 to remove 0.5 from it)
  */
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 internal class CarModifier
@@ -26,15 +27,22 @@ internal class CarModifier
     internal float steeringRampUpTicks;                         // timer for ramping up steering 
 
     // Boosting characteristics of the car
-    internal float boostMax;                                 // total boost amount per 1/60 of a second
+    internal float boostMax;                                    // total boost amount per 1/60 of a second
     internal float boostDepletionPerTick;                       // total boost depletion per 1/60 of a second
     internal float boostRegenPerTick;                           // total boost regen per 1/60 of a second
     internal float boostAccelerationForward;
     internal float boostAccelerationSteering;
     internal float boostAccelerationForwardAir;
     internal float boostAccelerationSteeringAir;
-    internal float maximumTurnCameraAngle;
 
+    // Camera characteristics of the car
+    internal float maximumTurnCameraAngle;
+    internal float maximumTurnCameraAmount;
+    internal float cameraRelativeX;                             // relative camera X coord to car
+    internal float cameraRelativeY;                             // relative camera Y coord to car
+    internal float cameraRelativeZ;                             // relative camera Z coord to car
+    internal float cameraTurnFactor;                            // turn factor of the camera
+    
     // Fueling characteristics of the car
     internal float fuelMax;
     internal float fuelDepletionPerTick;
@@ -68,7 +76,12 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"), out boostAccelerationSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForwardAir"), out boostAccelerationForwardAir)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"), out boostAccelerationSteeringAir)
-        | float.TryParse(ConfigParser.GetValue("Handling", "MaximumTurnCameraAngle"), out maximumTurnCameraAngle)
+        | float.TryParse(ConfigParser.GetValue("Camera", "MaximumTurnCameraAngle"), out maximumTurnCameraAngle)
+        | float.TryParse(ConfigParser.GetValue("Camera", "MaximumTurnCameraAmount"), out maximumTurnCameraAmount)
+        | float.TryParse(ConfigParser.GetValue("Camera", "CameraRelativeX"), out cameraRelativeX)
+        | float.TryParse(ConfigParser.GetValue("Camera", "CameraRelativeY"), out cameraRelativeY)
+        | float.TryParse(ConfigParser.GetValue("Camera", "CameraRelativeZ"), out cameraRelativeZ)
+        | float.TryParse(ConfigParser.GetValue("Camera", "CameraTurnFactor"), out cameraRelativeZ)
         | float.TryParse(ConfigParser.GetValue("Fuel", "Max"), out fuelMax)
         | float.TryParse(ConfigParser.GetValue("Fuel", "DepletionPerTick"), out fuelDepletionPerTick)
         | float.TryParse(ConfigParser.GetValue("Fuel", "RefuelGaragePercent"), out refuelGaragePercent)

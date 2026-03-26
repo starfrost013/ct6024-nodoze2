@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Runtime.ConstrainedExecution;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -187,6 +188,17 @@ internal class Car : BasePhysicsObject
 
         // Start by reading inputs 
 
+        // first, check with the flip input (temporary input for debug)
+        bool flipInput = Input.GetKey(KeyCode.F);
+
+        // handle on its own
+        if (flipInput)
+        {
+            transform.localEulerAngles = (new(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z + 180.0f));
+            transform.position = new(transform.position.x, transform.position.y + 0.1f, transform.position.z);
+            return; 
+        }
+
         bool accelerateInput = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
         bool decelerateInput = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
         bool steerLeftInput = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
@@ -272,7 +284,7 @@ internal class Car : BasePhysicsObject
                 physics.rotationTorque -= steeringChangeFactor; // normalised?
 
             // camera angle handling
-            cameraTurnPercentage -= 0.001f * ((1.0f - 0.001f) * 5);
+            cameraTurnPercentage -= 0.001f * ((1.0f - 0.001f) * physics.data.cameraTurnFactor);
 
             if (cameraTurnPercentage < -1.0f)
                 cameraTurnPercentage = -1.0f;
@@ -287,7 +299,7 @@ internal class Car : BasePhysicsObject
                 physics.rotationTorque += steeringChangeFactor; // normalised?
 
             // camera angle handling
-            cameraTurnPercentage += 0.001f * ((1.0f - 0.001f) * 5);
+            cameraTurnPercentage += 0.001f * ((1.0f - 0.001f) * physics.data.cameraTurnFactor);
 
             if (cameraTurnPercentage > 1.0f)
                 cameraTurnPercentage = 1.0f;
@@ -389,10 +401,10 @@ internal class Car : BasePhysicsObject
         Debug.Log("Maximum Camera Turn Angle = " + physics.data.maximumTurnCameraAngle + " % Factor = " + cameraTurnPercentage);
 
         /* also move a bit forward depending on our overall speed */ 
-        Camera.main.transform.position = transform.position + (transform.forward * 5.0f);
+        Camera.main.transform.position = transform.position + (transform.forward * physics.data.cameraRelativeZ);
         /* Dumb ass way of doing it - there's a better way. */
-        Camera.main.transform.position += 0.1f * (transform.right * cameraTurnPercentage);
-        Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
+        Camera.main.transform.position += physics.data.cameraRelativeX * (transform.right * cameraTurnPercentage);
+        Camera.main.transform.position += new Vector3(0.0f, physics.data.cameraRelativeY, 0.0f);
 
         //
         // Fuel handling 
@@ -452,7 +464,13 @@ internal class Car : BasePhysicsObject
         physics.data.steeringRampUpTicks += info.steeringRampUpTicks;
         physics.data.topSpeed += info.topSpeed;
         physics.data.topSpeedBoost += info.topSpeedBoost;
+
         physics.data.maximumTurnCameraAngle += info.maximumTurnCameraAngle;
+        physics.data.maximumTurnCameraAmount += info.maximumTurnCameraAmount;
+        physics.data.cameraRelativeX += info.cameraRelativeX;
+        physics.data.cameraRelativeY += info.cameraRelativeY;
+        physics.data.cameraRelativeZ += info.cameraRelativeZ;
+        physics.data.cameraTurnFactor += info.cameraTurnFactor;
 
         physics.data.fuelMax += info.fuelMax;   
         physics.data.fuelDepletionPerTick += info.fuelDepletionPerTick;
