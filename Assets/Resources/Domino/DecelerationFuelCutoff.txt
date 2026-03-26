@@ -1,0 +1,10 @@
+[Info]
+
+Name = Deceleration Fuel Cutoff
+Description = Decreases fuel usage by only draining fuel if it is accelerating.
+Cost = 100
+ExpiryTime = 0
+
+[Handling]
+
+DecelerationFuelCutoff = true 

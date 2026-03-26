@@ -4,12 +4,6 @@ using UnityEngine;
 // It lets us know when we are done
 class FinishLine : MonoBehaviour
 {
-
-    void Start()
-    {
-    
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         // don't do anything if it isn't racemode

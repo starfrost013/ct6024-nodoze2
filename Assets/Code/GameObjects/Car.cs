@@ -105,8 +105,15 @@ internal class Car : BasePhysicsObject
     // generic epsilon
     const float EPSILON_MIN = 0.003f;
 
-    // physics information
-    internal PhysicsInfo physics; 
+    /// <summary>
+    /// Holds the physics information.
+    /// </summary>
+    internal PhysicsInfo physics;
+    
+    /// <summary>
+    /// Percentage of the camera angle. -1 < x < 1, applied as soon as there is an input
+    /// </summary>
+    float cameraTurnPercentage; 
 
     //
     // METHODS
@@ -115,7 +122,7 @@ internal class Car : BasePhysicsObject
     /* Loads the configuration */
     internal void LoadConfig()
     {
-        configFilePath = CarManager.CAR_PATH + StringUtils.GetNonCloneName(name);
+        configFilePath = CarManager.CAR_PATH + GameUtils.GetNonCloneName(name);
 
         configText = AssetManager.LoadAsset<TextAsset>(configFilePath);
         ConfigParser.Parse(configText.text);
@@ -130,9 +137,7 @@ internal class Car : BasePhysicsObject
 
         // apply the loaded modifier
         foreach (CarModifier modifier in modifiers)
-        {
             ApplyModifierSet(modifier);
-        }
     }
 
     protected new void Start()
@@ -207,7 +212,6 @@ internal class Car : BasePhysicsObject
                 physics.boostCurrent += physics.data.boostRegenPerTick;
         }
 
-
         // boost isn't finished until we slow down after boost is done
         if (physics.boostEnding
             && (Mathf.Abs(physics.forwardTorque) < physics.data.topSpeed))
@@ -266,6 +270,12 @@ internal class Car : BasePhysicsObject
                 physics.rotationTorque -= physics.data.decelerationChangeDirectionSteering;
             else if (Math.Abs(physics.rotationTorque) < physics.data.maxSteeringTorque)
                 physics.rotationTorque -= steeringChangeFactor; // normalised?
+
+            // camera angle handling
+            cameraTurnPercentage -= 0.001f * ((1.0f - 0.001f) * 5);
+
+            if (cameraTurnPercentage < -1.0f)
+                cameraTurnPercentage = -1.0f;
         }
 
         if (steerRightInput
@@ -275,8 +285,22 @@ internal class Car : BasePhysicsObject
                 physics.rotationTorque += physics.data.decelerationChangeDirectionSteering;
             else if (Math.Abs(physics.rotationTorque) < physics.data.maxSteeringTorque)
                 physics.rotationTorque += steeringChangeFactor; // normalised?
+
+            // camera angle handling
+            cameraTurnPercentage += 0.001f * ((1.0f - 0.001f) * 5);
+
+            if (cameraTurnPercentage > 1.0f)
+                cameraTurnPercentage = 1.0f;
         }
 
+        // decay camera angle towards zero
+        if (!steerLeftInput && !steerRightInput)
+        {
+            cameraTurnPercentage *= 0.95f;
+
+            if (Math.Abs(cameraTurnPercentage) < float.Epsilon)
+                cameraTurnPercentage = 0;
+        }
 
         //
         // APPLICATION OF THE MOMENTUM OF THE CAR
@@ -319,34 +343,14 @@ internal class Car : BasePhysicsObject
 
         if (needFrontWheelDrive)
         {
-            // we want to store the current velocity separately to the actual torque
-            if (!moveInput)
-            {
-                physics.wheelLeftFrontCollider.motorTorque = 0;
-                physics.wheelRightFrontCollider.motorTorque = 0;
-            }
-            else
-            {
-                physics.wheelLeftFrontCollider.motorTorque += physics.forwardTorque;
-                physics.wheelRightFrontCollider.motorTorque += physics.forwardTorque;
-            }
-
-            // TODO: rotate the wheels
+            physics.wheelLeftFrontCollider.motorTorque = (moveInput) ? (physics.wheelLeftFrontCollider.motorTorque + physics.forwardTorque) : 0;
+            physics.wheelRightFrontCollider.motorTorque = (moveInput) ? (physics.wheelRightFrontCollider.motorTorque + physics.forwardTorque) : 0;
         }
 
         if (needRearWheelDrive)
         {
-            // we want to store the current velocity separately to the actual torque
-            if (!moveInput)
-            {
-                physics.wheelLeftBackCollider.motorTorque = 0;
-                physics.wheelRightBackCollider.motorTorque = 0;
-            }
-            else
-            {
-                physics.wheelLeftBackCollider.motorTorque += physics.forwardTorque;
-                physics.wheelRightBackCollider.motorTorque += physics.forwardTorque;
-            }
+            physics.wheelLeftBackCollider.motorTorque = (moveInput) ? (physics.wheelLeftBackCollider.motorTorque + physics.forwardTorque) : 0;
+            physics.wheelRightBackCollider.motorTorque = (moveInput) ? (physics.wheelRightBackCollider.motorTorque + physics.forwardTorque) : 0;
         }
 
         // car rotation 
@@ -375,18 +379,19 @@ internal class Car : BasePhysicsObject
         // car was incorrectly exported and bad bad artists won't re-export
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
-        float newEulerY = (carRot.y + 180.0f) % 360;
-        newEulerY += (physics.data.maximumTurnCameraAngle) * (physics.rotationTorque / physics.data.maxSteeringTorque);
+        float newEulerY = ((carRot.y + 180.0f) % 360) + (physics.data.maximumTurnCameraAngle * cameraTurnPercentage);         
 
         Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x,
-            newEulerY,
-            Camera.main.transform.localEulerAngles.z
-            );
-        
+                newEulerY,
+                Camera.main.transform.localEulerAngles.z
+                );
+
+        Debug.Log("Maximum Camera Turn Angle = " + physics.data.maximumTurnCameraAngle + " % Factor = " + cameraTurnPercentage);
+
         /* also move a bit forward depending on our overall speed */ 
         Camera.main.transform.position = transform.position + (transform.forward * 5.0f);
         /* Dumb ass way of doing it - there's a better way. */
-        Camera.main.transform.position += 0.1f * ((transform.right * physics.rotationTorque) * (physics.forwardTorque / physics.data.topSpeed));
+        Camera.main.transform.position += 0.1f * (transform.right * cameraTurnPercentage);
         Camera.main.transform.position += new Vector3(0.0f, 1.4f, 0.0f);
 
         //
@@ -406,8 +411,6 @@ internal class Car : BasePhysicsObject
             }
 
             physics.fuelCurrent -= (physics.data.fuelDepletionPerTick * fuelUseMultiplier);
-
-            Debug.Log("Fuel multiplier " + fuelUseMultiplier);
         }
     }
 

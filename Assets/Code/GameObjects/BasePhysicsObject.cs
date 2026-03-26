@@ -7,9 +7,9 @@ using UnityEngine;
 //
 internal class BasePhysicsObject : MonoBehaviour
 {
-    //
-    // Unity Rigidbody componetn
-    //
+    /// <summary>
+    /// Unity Rigidbody componen for car physics
+    /// </summary>
     protected Rigidbody physRigidbody;
 
     protected void Start()
@@ -22,5 +22,4 @@ internal class BasePhysicsObject : MonoBehaviour
             physRigidbody = gameObject.AddComponent<Rigidbody>();
         }
     }
-
 }

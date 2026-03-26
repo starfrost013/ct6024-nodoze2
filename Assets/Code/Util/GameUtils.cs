@@ -5,7 +5,7 @@ using UnityEngine;
 //
 // File Utilities
 //
-internal static class StringUtils
+internal static class GameUtils
 {
     internal static string[] GetAssetPathsForDirectory(string path, string extension)
     {
@@ -21,7 +21,6 @@ internal static class StringUtils
 
         foreach (FileInfo file in fileNames)
         {
-
             /* Unity requires you to not use an extension */
             string processedExtension = extension.Replace("*", ""); // you have to provide windows-style wildcards
             string fileName = file.FullName.Replace(processedExtension, "");
@@ -44,4 +43,5 @@ internal static class StringUtils
         // this creates an implicit dependency on both unity's clone naming scene and on GameObject.Instantiate's behaviour. need to fix
         return name.Replace("(Clone)", "");
     }
+
 }
