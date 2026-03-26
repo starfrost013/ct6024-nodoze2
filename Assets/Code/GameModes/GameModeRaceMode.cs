@@ -136,8 +136,8 @@ internal class GameModeRaceMode : GameMode
                     // since there is no car selection menu
                     CarManager.SetPlayerCar("CarBasic");
                     raceState = RaceState.Active;
-
                 }
+
                 break;
             case RaceState.Active:
                 // draw various uis here

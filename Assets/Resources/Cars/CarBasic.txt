@@ -8,7 +8,7 @@ AccelerationForward = 5.0					; Acceleration of car (needs to ramp up in accorda
 AccelerationSteering = 4.0					; Acceleration to apply in lateral direction
 AccelerationForwardAir = 1.0				; Acceleration to apply in forward direction while in the air
 AccelerationSteeringAir = 5.0				; Acceleration to apply in lateral direction while in the air
-Deceleration = 0.965							; Deceleration (must be below 1) 
+Deceleration = 0.965						; Deceleration while idle (must be below 1) 
 DecelerationSteering = 0.95					; Deceleration while steering (must be below 1)
 DecelerationChangeDirection = 8.0			; Deceleration while changing direction
 DecelerationChangeDirectionSteering = 6.0	; Deceleration while steering and changing direction
@@ -29,4 +29,5 @@ MaximumTurnCameraAngle = 19.0				; Maximum camera turn angle
 [Fuel]
 Max = 4000									; Maximum fuel count
 DepletionPerTick = 0.5						; Fuel depletion per 1/60 of a second
-RefuelGaragePercent = 25.0					; % of fuel refueled by the gargae
+RefuelGaragePercent = 25.0					; % of fuel refueled by the garage
+DecelerationFuelCutoff = true				; Turn off fuel 

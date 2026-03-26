@@ -399,6 +399,12 @@ internal class Car : BasePhysicsObject
             if (Math.Abs(physics.forwardTorque) < 0.1) // TODO: MAKE THIS PHYSICS INFO AND INCORPROATE STEERING
                 fuelUseMultiplier = 0.1f;
 
+            if (physics.data.decelerationFuelCutoff
+                && !anyInput)
+            {
+                fuelUseMultiplier = 0f;
+            }
+
             physics.fuelCurrent -= (physics.data.fuelDepletionPerTick * fuelUseMultiplier);
 
             Debug.Log("Fuel multiplier " + fuelUseMultiplier);

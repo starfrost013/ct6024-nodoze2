@@ -40,6 +40,8 @@ internal class CarModifier
     internal float fuelDepletionPerTick;
     internal float refuelGaragePercent;
 
+    internal bool decelerationFuelCutoff;
+
     internal string name;
 
     internal void Load()
@@ -69,7 +71,8 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "MaximumTurnCameraAngle"), out maximumTurnCameraAngle)
         | float.TryParse(ConfigParser.GetValue("Fuel", "Max"), out fuelMax)
         | float.TryParse(ConfigParser.GetValue("Fuel", "DepletionPerTick"), out fuelDepletionPerTick)
-        | float.TryParse(ConfigParser.GetValue("Fuel", "RefuelGaragePercent"), out refuelGaragePercent);
+        | float.TryParse(ConfigParser.GetValue("Fuel", "RefuelGaragePercent"), out refuelGaragePercent)
+        | bool.TryParse(ConfigParser.GetValue("Fuel", "DecelerationFuelCutoff"), out decelerationFuelCutoff);
         ;
         
         if (!success)
