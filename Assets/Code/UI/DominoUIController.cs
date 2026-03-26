@@ -52,7 +52,7 @@ public class DominoUIController : MonoBehaviour
             return; 
         }
 
-        CarManager.ApplyDominoToFirstCar(domino);   
+        CarManager.ApplyModifierSetToPlayerCar(domino.modifiers);   
         GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
     }
 }

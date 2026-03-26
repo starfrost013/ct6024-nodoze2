@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 
-// It's a car :D
+/// <summary>
+/// Implements the car
+/// </summary>
 internal class Car : BasePhysicsObject
 {
     //
@@ -57,7 +60,6 @@ internal class Car : BasePhysicsObject
         FourWheelDrive = 2,
     };
 
-
     //
     // FIELDS
     //
@@ -82,6 +84,11 @@ internal class Car : BasePhysicsObject
     CarDriveType driveType;
 
     /// <summary>
+    /// All modifier sets known to exist
+    /// </summary>
+    internal static List<CarModifier> modifiers = new();
+
+    /// <summary>
     /// Modifier sets that have been applied 
     /// </summary>
     List<CarModifier> appliedModifierSets = new();
@@ -101,7 +108,6 @@ internal class Car : BasePhysicsObject
     // physics information
     internal PhysicsInfo physics; 
 
-
     //
     // METHODS
     //
@@ -109,6 +115,8 @@ internal class Car : BasePhysicsObject
     /* Loads the configuration */
     internal void LoadConfig()
     {
+        configFilePath = CarManager.CAR_PATH + StringUtils.GetNonCloneName(name);
+
         configText = AssetManager.LoadAsset<TextAsset>(configFilePath);
         ConfigParser.Parse(configText.text);
 
@@ -119,6 +127,12 @@ internal class Car : BasePhysicsObject
         steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
 
         Debug.Assert(configText, "You didn't load a configuration for this car!!!");
+
+        // apply the loaded modifier
+        foreach (CarModifier modifier in modifiers)
+        {
+            ApplyModifierSet(modifier);
+        }
     }
 
     protected new void Start()
@@ -142,7 +156,6 @@ internal class Car : BasePhysicsObject
 
         Debug.Assert(wheelLeftBack && wheelLeftFront && wheelRightBack && wheelRightFront, "Please set the wheels up in the editor!!");
         Debug.Assert(physics.wheelLeftBackCollider && physics.wheelLeftFrontCollider && physics.wheelRightBackCollider && physics.wheelRightFrontCollider, "All car wheels must have WheelColliders!");
-
     }
 
     // FixedUpdate contains our controls so they feel decent regardless of fraemrate
@@ -405,7 +418,7 @@ internal class Car : BasePhysicsObject
     /// Called once all physics modifiers have been applied.
     /// </summary>
     /// <param name="info"></param>
-    internal void ApplyModifier(CarModifier info)
+    internal void ApplyModifierSet(CarModifier info)
     {
         // is this needed? probably needed later
         appliedModifierSets.Add(info);

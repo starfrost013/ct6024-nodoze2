@@ -85,11 +85,23 @@ internal class GameModeRaceMode : GameMode
         GUI.Label(new Rect(Screen.width - 170, 0, 400, 100), timerString, raceGuiStyle);
     }
 
+    private void DrawMoneyAmount(GUIStyle raceGuiStyle)
+    {
+        Car car = GameManager.player.car;
+        GUI.color = Color.green;
+
+        float fuelPercentage = (GameManager.player.stats.money) * 100;
+
+        float x = Screen.width - 205;
+        float y = Screen.height - 90;
+
+        GUI.Label(new Rect(x, y, 400, 100), "Money: $" + GameManager.player.stats.money, raceGuiStyle);
+
+    }
+
     private void DrawFuelGauge(GUIStyle raceGuiStyle)
     {
-        // Temp code until player system exists - usser will be able to select one of multiple cars
-        Car car = GameObject.FindFirstObjectByType<Car>();      
-
+        Car car = GameManager.player.car;  
         GUI.color = Color.blue;
 
         float fuelPercentage = (car.physics.fuelCurrent / car.GetCarModifiers().fuelMax) * 100;
@@ -110,7 +122,6 @@ internal class GameModeRaceMode : GameMode
         switch (raceState)
         {
             case RaceState.Starting:
-
                 if (!raceStartTimer.HasStarted())
                     raceStartTimer.Start(RACE_START_TIME);
 
@@ -122,8 +133,8 @@ internal class GameModeRaceMode : GameMode
 
                 if (raceStartTimer.IsDone())
                 {
-                    // Initialise the car and domino managers since we don't need them anywhere else and to fix a horrible HACK HACK HACK
-                    CarManager.SpawnCars();
+                    // since there is no car selection menu
+                    CarManager.SetPlayerCar("CarBasic");
                     raceState = RaceState.Active;
 
                 }
@@ -132,6 +143,7 @@ internal class GameModeRaceMode : GameMode
                 // draw various uis here
                 DrawTimer(raceGuiStyle);
                 DrawFuelGauge(raceGuiStyle);
+                DrawMoneyAmount(raceGuiStyle);
                 break;
         }
     }

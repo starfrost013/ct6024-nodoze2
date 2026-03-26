@@ -71,6 +71,9 @@ internal static class ConfigParser
     // I hope it's trivial
     internal static string GetValue(string key)
     {
+        if (file == null)
+            return null;
+
         foreach (NAryDictionary<string, string> section in file.Values)
         {
             return (section.ContainsKey(key)) ? section[key] : null;
@@ -81,6 +84,9 @@ internal static class ConfigParser
 
     internal static string GetValue(string section, string key)
     {
+        if (file == null)
+            return null;
+
         // make sure that the key doesn't exist so not all sections are requried
         if (!file.ContainsKey(section))
             return null;

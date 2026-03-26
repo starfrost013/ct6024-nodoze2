@@ -52,7 +52,7 @@ internal static class GameManager
     internal static Player player
     {
         get { return _player; }
-        set { _player = value; }
+        private set { _player = value; }
     }
 
     public static void Start(GameManagerObject newManagerObject)
@@ -83,11 +83,8 @@ internal static class GameManager
 
         Debug.Log("Game state is changing to " + Enum.GetName(typeof(GameModeEnum), newState));
 
-        if (mode != null)
-        {
-            // leave the old mode
-            mode.OnLeave();
-        }
+        // does a null check
+        mode?.OnLeave();
 
         // get the new mode and enter it
         mode = GetModeFromState(newState);
