@@ -33,6 +33,7 @@ internal class CarModifier
     internal float boostAccelerationSteering;
     internal float boostAccelerationForwardAir;
     internal float boostAccelerationSteeringAir;
+    internal float maximumTurnCameraAngle;
 
     // Fueling characteristics of the car
     internal float fuelMax;
@@ -65,6 +66,7 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"), out boostAccelerationSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForwardAir"), out boostAccelerationForwardAir)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"), out boostAccelerationSteeringAir)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaximumTurnCameraAngle"), out maximumTurnCameraAngle)
         | float.TryParse(ConfigParser.GetValue("Fuel", "Max"), out fuelMax)
         | float.TryParse(ConfigParser.GetValue("Fuel", "DepletionPerTick"), out fuelDepletionPerTick)
         | float.TryParse(ConfigParser.GetValue("Fuel", "RefuelGaragePercent"), out refuelGaragePercent);
@@ -74,7 +76,6 @@ internal class CarModifier
             Debug.LogWarning("Some car modifiers failed to load. This may be intended or not...");
 
         return;
-    // we need to check the condition above a lot of times, so to avoid duplicating failure code, we use a GOTO
     
     }
 }

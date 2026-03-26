@@ -22,16 +22,38 @@ internal static class GameManager
     }
 
     private static GameModeEnum state;
-    private static GameMode mode;
-    // links the engine and gamemanager
-    private static GameManagerObject managerObject; 
 
-    private static Scene scene;
+    private static GameMode _mode;
+
+    internal static GameMode mode
+    {
+        get { return _mode; }
+        private set { _mode = value; }
+    }
+
+    // links the engine and gamemanager
+    private static GameManagerObject _managerObject; 
+
+    internal static GameManagerObject managerObject
+    {
+        get { return _managerObject; }
+        private set {  _managerObject = value; }
+    }
+
+    private static Scene scene
+    {
+        get { return SceneManager.GetActiveScene(); }
+    }
 
     private static bool initialised = false;
-    private static bool loading = false;
 
-    private static Player player;
+    private static Player _player;
+
+    internal static Player player
+    {
+        get { return _player; }
+        set { _player = value; }
+    }
 
     public static void Start(GameManagerObject newManagerObject)
     {
@@ -40,7 +62,6 @@ internal static class GameManager
             return;
 
         // this is all one scene
-        scene = SceneManager.GetActiveScene();
         state = GameModeEnum.Init;
         managerObject = newManagerObject;
         player = new();
@@ -80,21 +101,8 @@ internal static class GameManager
 
     public static void SetCurrentScene(string name)
     {
-        loading = true; 
-        // Temporary. Will load async...
+        // Sets scene field
         SceneManager.LoadScene(name);
-        loading = false; 
-    }
-
-    // Gets the game manager root object so that stuff can be instantiated
-    public static GameManagerObject GetGameManagerObject()
-    {
-        return managerObject;
-    }
-
-    public static GameMode GetGameModeObject()
-    {
-        return mode;
     }
 
     public static void OnFrame()

@@ -11,5 +11,5 @@ internal abstract class GameMode
     internal abstract void OnLeave();
 
     // Legacy GUI (good for debug/temp uis)
-    internal virtual void OnLegacyGUI() { } // not needed
+    internal virtual void OnLegacyGUI() { } // not needed for all classes
 }

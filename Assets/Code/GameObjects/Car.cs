@@ -150,7 +150,7 @@ internal class Car : BasePhysicsObject
     private void FixedUpdate()
     {
         // Check if the race is active so we can move (using temporary UI)
-        GameMode mode = GameManager.GetGameModeObject();
+        GameMode mode = GameManager.mode;
 
         // HACK (avoids us doing a second call
         if (mode is GameModeRaceMode)
@@ -363,7 +363,7 @@ internal class Car : BasePhysicsObject
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
         float newEulerY = (carRot.y + 180.0f) % 360;
-        newEulerY += 19.0f * (physics.rotationTorque / physics.data.maxSteeringTorque);
+        newEulerY += (physics.data.maximumTurnCameraAngle) * (physics.rotationTorque / physics.data.maxSteeringTorque);
 
         Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x,
             newEulerY,

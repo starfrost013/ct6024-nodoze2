@@ -24,8 +24,9 @@ BoostAmount = 3000							; Amount of boost
 BoostDepletionPerTick = 10					; Boost depletion per 1/60 of a second
 BoostRegenPerTick = 6						; Boost depletion per 1/60 of a second
 SteeringType = Manual 						; 0 = Automatic, 1 = Manual, you can use numbers or the names 
+MaximumTurnCameraAngle = 19.0				; Maximum camera turn angle
 
 [Fuel]
 Max = 4000									; Maximum fuel count
 DepletionPerTick = 0.5						; Fuel depletion per 1/60 of a second
-RefuelGaragePercent = 25.0
+RefuelGaragePercent = 25.0					; % of fuel refueled by the gargae

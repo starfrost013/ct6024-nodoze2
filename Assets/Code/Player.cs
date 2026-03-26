@@ -16,7 +16,6 @@ internal class Player
 
     
     internal Car car;
-    internal PlayerStats stats;
-    
+    internal PlayerStats stats; 
 }
 
