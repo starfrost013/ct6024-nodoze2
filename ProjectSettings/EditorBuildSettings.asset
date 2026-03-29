@@ -6,10 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Menu/MenuMain.unity
+    guid: c35c2dc4c43e66943b7604236eaf2274
+  - enabled: 1
     path: Assets/Scenes/Gameplay/Gameplay.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/Gameplay/RaceDoneTemp.unity
+    path: Assets/Scenes/Gameplay/PostRace.unity
     guid: b088856f948c39543b15def9c3e4e652
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

@@ -7,15 +7,16 @@ internal static class GameManager
 {
     // hacks so the gamemanager switches into the right state
     // i think in the future everything will have to be done in one scene
-    internal const string SCENE_MAIN = "Gameplay";
-    internal const string SCENE_RACE_FINISHED = "RaceDoneTemp";
+    internal const string SCENE_MAIN_MENU = "MenuMain";
+    internal const string SCENE_RACE = "Gameplay";
+    internal const string SCENE_RACE_FINISHED = "PostRace";
 
     // The game state enum. Tells us what to do
     public enum GameModeEnum
     {
         Init = 0,
         Shutdown = 1,
-        Menu = 2,
+        MainMenu = 2,
         BuildMode = 3,
         RaceMode = 4,
         RaceFinished = 5,
@@ -104,10 +105,11 @@ internal static class GameManager
 
     public static void OnFrame()
     {
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetKey(KeyCode.R)
+            && state == GameModeEnum.RaceMode)
         {
             initialised = false; // make everything get reinit'ed
-            GameManager.SetCurrentScene(GameManager.SCENE_MAIN);
+            GameManager.SetCurrentScene(GameManager.SCENE_RACE);
             return;
         }
 
@@ -131,6 +133,8 @@ internal static class GameManager
         {
             case GameModeEnum.Init:
                 return new GameModeInit();
+            case GameModeEnum.MainMenu:
+                return new GameModeMainMenu();  
             case GameModeEnum.RaceMode:
                 return new GameModeRaceMode();
             case GameModeEnum.RaceFinished:

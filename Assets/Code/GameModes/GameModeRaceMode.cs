@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 // The main race mode game mode/.
@@ -26,6 +27,13 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnEnter()
     {
+        // ensure we are in the right scene
+        if (GameManager.GetCurrentScene().name != GameManager.SCENE_RACE)
+        {
+            // blocks
+            GameManager.SetCurrentScene(GameManager.SCENE_RACE);
+        }
+
         Debug.Log("Entering race...");
         raceState = RaceState.Starting;
 

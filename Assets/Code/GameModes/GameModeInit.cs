@@ -8,7 +8,7 @@ internal class GameModeInit : GameMode
     {
         Debug.Log("Initialising game");
 
-        GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
+        GameManager.SetGameState(GameManager.GameModeEnum.MainMenu);
     }
 
     internal override void OnFrame()
