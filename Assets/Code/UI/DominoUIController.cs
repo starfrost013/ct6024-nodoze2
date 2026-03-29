@@ -11,44 +11,45 @@ using UnityEngine;
 public class DominoUIController : MonoBehaviour
 {
     const string DROPDOWN_NAME = "SelectDominoDropdown";
+    const string DESCRIPTION_TEXT_NAME = "TextDominoDescription";
 
-    TMP_Dropdown theDropdown = null; 
+    TMP_Dropdown selectDominoDropdown = null;
+    TMP_Text descriptionText = null;
 
     public void Start()
     {
-        // get the right dropdown - needs to be in SelectDominoDropdown
-        TMP_Dropdown[] dropdowns = transform.parent.gameObject.GetComponentsInChildren<TMP_Dropdown>(); 
+        GameObject dropdownObject = transform.parent.transform.Find(DROPDOWN_NAME).gameObject;
+        selectDominoDropdown = dropdownObject.GetComponent<TMP_Dropdown>();
 
-        foreach (TMP_Dropdown dropdown in dropdowns)
-        {
-            if (dropdown.gameObject.name == DROPDOWN_NAME)
-                theDropdown = dropdown;
-        }
-
-        if (!theDropdown)
+        if (!selectDominoDropdown)
             return;
-
-        // i am bad at programming
-        if (theDropdown.options.Count > 0)
-            return;
+        GameObject textObject = transform.parent.transform.Find(DESCRIPTION_TEXT_NAME).gameObject;
+        descriptionText = textObject.GetComponent<TMP_Text>(); 
 
         List<string> options = new(); 
 
         foreach (Domino domino in DominoManager.dominoes)
         {
-            options.Add(domino.dominoName);
+            options.Add(domino.name);
         }
 
-        theDropdown.AddOptions(options);    
+        selectDominoDropdown.AddOptions(options);
+        selectDominoDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
+        OnDropdownValueChanged(selectDominoDropdown.value); // ensure a default item just in case
+    }
+
+    public void OnDropdownValueChanged(int index)
+    {
+        descriptionText.text = DominoManager.dominoes[index].description;   
     }
 
     public void DoneClicked()
     {
-        Domino domino = DominoManager.GetDominoByName(theDropdown.options[theDropdown.value].text);
+        Domino domino = DominoManager.GetDominoByName(selectDominoDropdown.options[selectDominoDropdown.value].text);
         
         if (domino == null)
         {
-            Debug.LogError("Obtained INVALID domino " + theDropdown.options[theDropdown.value].text);
+            Debug.LogError("Obtained INVALID domino " + selectDominoDropdown.options[selectDominoDropdown.value].text);
             return; 
         }
 

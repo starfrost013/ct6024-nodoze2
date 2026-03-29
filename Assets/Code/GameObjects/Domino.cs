@@ -14,7 +14,7 @@ internal class Domino
     // FIELDS
     //
 
-    internal string dominoName; // UnityEngine.Object has name
+    internal string name; // UnityEngine.Object has name
     internal string description;
     internal float cost;
     internal float expiryTime;  // 0 =none, for temporary powerups
@@ -33,7 +33,7 @@ internal class Domino
         // we only ever load values from our cfg's at load time
         ConfigParser.Parse(config.text);
 
-        dominoName = ConfigParser.GetValue("Info", "Name");
+        name = ConfigParser.GetValue("Info", "Name");
         description = ConfigParser.GetValue("Info", "Description");
         cost = float.Parse(ConfigParser.GetValue("Info", "Cost"));
         expiryTime = float.Parse(ConfigParser.GetValue("Info", "ExpiryTime"));
@@ -41,6 +41,6 @@ internal class Domino
 
         // duplicated for car use
 
-        modifiers.name = dominoName;
+        modifiers.name = name;
     }
 }

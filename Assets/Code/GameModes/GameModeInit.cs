@@ -3,7 +3,6 @@
 // The main race mode game mode.
 internal class GameModeInit : GameMode
 {
-
     internal override void OnEnter()
     {
         Debug.Log("Initialising game");

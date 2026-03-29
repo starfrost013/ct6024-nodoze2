@@ -32,7 +32,7 @@ internal static class DominoManager
 
         foreach (Domino domino in dominoes)
         {
-            if (domino.dominoName == dominoName) 
+            if (domino.name == dominoName) 
                 return domino;
         }
 
