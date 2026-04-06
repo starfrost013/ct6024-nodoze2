@@ -56,34 +56,56 @@ internal static class CarManager
     /// <param name="name">The name ofthe car in the car prefabs folder to load</param>
     internal static void SetPlayerCar(string name)
     {
-        Car carPrefab = GetCarPrefabByName(name);
+        Car carPrefab;
 
-        if (carPrefab != null)
+        // don't reset car unless we are changing the car
+        if (GameManager.player.car == null
+            || GameManager.player.car.name != name)
         {
-            if (GameManager.player.HasCar())
+            carPrefab = GetCarPrefabByName(name);
+
+            if (carPrefab != null)
             {
-                // get rid of the car that already exists
-                GameManager.player.DestroyCar();
+                if (GameManager.player.HasCar())
+                {
+                    // get rid of the car that already exists
+                    GameManager.player.DestroyCar();
+                }
+
+                // first set the palyer's car to the original prefab
+                GameManager.player.car = carPrefab; //MonoBehaviour.Instantiate(carPrefab);
+                GameManager.player.car.LoadConfig();
             }
+        }
+        else
+        {
+            carPrefab = GameManager.player.car;
+        }
 
-            GameManager.player.car = MonoBehaviour.Instantiate(carPrefab);
+        // instantiate the gameobject for the same copy that will be in the world
+        // we don't care about this car anymore. it will control itself and will be destroyed when we set the scene
+        GameManager.player.carInWorld = MonoBehaviour.Instantiate(carPrefab);
+        GameManager.player.carInWorld.LoadConfigFromString(GameManager.player.car.configText.text); // we need to load the config again so load it from a string
 
-            // move the car to the start location
-            GameObject start = GameObject.Find("CarStart");
+        // apply all the modifiers to the car
+        foreach (CarModifier modifier in GameManager.player.car.appliedModifierSets)
+        {
+            GameManager.player.carInWorld.ApplyModifierSet(modifier);  
+        }
 
-            if (start != null)
-                GameManager.player.car.transform.position = start.transform.position + new Vector3(0.5f, 1.0f, 0.5f);
-            else
-            {
-                Debug.LogWarning("Please insert a start point!");
+        // move the car to the start location
+        GameObject start = GameObject.Find("CarStart");
 
-                // ensure it's not stuck
-                GameManager.player.car.transform.position = new(GameManager.player.car.transform.position.x, 
-                    GameManager.player.car.transform.position.y + 1.0f, 
-                    GameManager.player.car.transform.position.z);
-            }
+        if (start != null)
+            GameManager.player.carInWorld.transform.position = start.transform.position + new Vector3(0.5f, 1.0f, 0.5f);
+        else
+        {
+            Debug.LogWarning("Please insert a start point!");
 
-            GameManager.player.car.LoadConfig();
+            // ensure it's not stuck by moving it up 1 unit
+            GameManager.player.carInWorld.transform.position = new(GameManager.player.carInWorld.transform.position.x, 
+                GameManager.player.carInWorld.transform.position.y + 1.0f, 
+                GameManager.player.carInWorld.transform.position.z);
         }
     }
  

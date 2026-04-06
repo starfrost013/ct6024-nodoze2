@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Runtime.ConstrainedExecution;
 using Unity.VisualScripting;
+
 using UnityEngine;
 
 /// <summary>
@@ -85,16 +86,20 @@ internal class Car : BasePhysicsObject
     CarDriveType driveType;
 
     /// <summary>
-    /// All modifier sets known to exist
-    /// </summary>
-    internal static List<CarModifier> modifiers = new();
-
-    /// <summary>
     /// Modifier sets that have been applied 
     /// </summary>
-    List<CarModifier> appliedModifierSets = new();
+    List<CarModifier> _appliedModifierSets = new();
 
-    TextAsset configText;
+    internal List<CarModifier> appliedModifierSets
+    {
+        get { return _appliedModifierSets; }
+        private set { _appliedModifierSets = value; }
+    }
+
+    internal TextAsset configText
+    {
+        get; private set;
+    }
 
     /// <summary>
     /// Configuration file path
@@ -120,12 +125,8 @@ internal class Car : BasePhysicsObject
     // METHODS
     //
 
-    /* Loads the configuration */
-    internal void LoadConfig()
+    private void LoadConfigInternal()
     {
-        configFilePath = CarManager.CAR_PATH + GameUtils.GetNonCloneName(name);
-
-        configText = AssetManager.LoadAsset<TextAsset>(configFilePath);
         ConfigParser.Parse(configText.text);
 
         physics.data = new();
@@ -136,9 +137,31 @@ internal class Car : BasePhysicsObject
 
         Debug.Assert(configText, "You didn't load a configuration for this car!!!");
 
-        // apply the loaded modifier
-        foreach (CarModifier modifier in modifiers)
-            ApplyModifierSet(modifier);
+        // modifiers are always loaded later 
+
+        // setup stuff not dependent on gameobjects here
+        physics.boostCurrent = physics.data.boostMax;
+        physics.fuelCurrent = physics.data.fuelMax;
+    }
+
+    /// <summary>
+    /// Loads the car configuration 
+    /// </summary>
+    internal void LoadConfig()
+    {
+        configFilePath = CarManager.CAR_PATH + GameUtils.GetNonCloneName(name);
+        configText = AssetManager.LoadAsset<TextAsset>(configFilePath);
+        LoadConfigInternal(); 
+    }
+
+    /// <summary>
+    /// Loads the car configuration from a string so that we don't need to reload it when we spawn prefabs
+    /// </summary>
+    /// <param name="configStr"></param>
+    internal void LoadConfigFromString(string configStr)
+    {
+        configText = new(configStr);
+        LoadConfigInternal(); 
     }
 
     protected new void Start()
@@ -157,8 +180,7 @@ internal class Car : BasePhysicsObject
         physics.wheelLeftFrontCollider = wheelLeftFront.GetComponent<WheelCollider>();
         physics.wheelRightBackCollider = wheelRightBack.GetComponent<WheelCollider>();
         physics.wheelRightFrontCollider = wheelRightFront.GetComponent<WheelCollider>();
-        physics.boostCurrent = physics.data.boostMax;
-        physics.fuelCurrent = physics.data.fuelMax;
+
 
         Debug.Assert(wheelLeftBack && wheelLeftFront && wheelRightBack && wheelRightFront, "Please set the wheels up in the editor!!");
         Debug.Assert(physics.wheelLeftBackCollider && physics.wheelLeftFrontCollider && physics.wheelRightBackCollider && physics.wheelRightFrontCollider, "All car wheels must have WheelColliders!");
@@ -476,6 +498,22 @@ internal class Car : BasePhysicsObject
         physics.data.fuelDepletionPerTick += info.fuelDepletionPerTick;
         physics.data.decelerationFuelCutoff = info.decelerationFuelCutoff; 
         physics.data.refuelGaragePercent += info.refuelGaragePercent;   
+    }
+
+    /// <summary>
+    /// Returns true if the car has the modifier set "name"
+    /// </summary>
+    /// <param name="name">The modifier set to look for</param>
+    /// <returns>A boolean indicating if the car has the modifier set set.</returns>
+    internal bool HasModifierSet(string name)
+    {
+        foreach (CarModifier modifier in appliedModifierSets)
+        {
+            if (modifier.name == name)
+                return true;
+        }
+
+        return false; 
     }
 
     private void OnCollisionEnter(Collision collision)

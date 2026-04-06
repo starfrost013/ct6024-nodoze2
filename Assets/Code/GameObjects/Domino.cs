@@ -14,10 +14,11 @@ internal class Domino
     // FIELDS
     //
 
-    internal string name; // UnityEngine.Object has name
+    internal string name;
     internal string description;
+    internal string required;           // optional - domino required 
     internal float cost;
-    internal float expiryTime;  // 0 =none, for temporary powerups
+    internal float expiryTime;          // 0 =none, for temporary powerups
     internal CarModifier modifiers = new();
 
     internal TextAsset config;
@@ -37,9 +38,10 @@ internal class Domino
         description = ConfigParser.GetValue("Info", "Description");
         cost = float.Parse(ConfigParser.GetValue("Info", "Cost"));
         expiryTime = float.Parse(ConfigParser.GetValue("Info", "ExpiryTime"));
+        required = ConfigParser.GetValue("Info", "Required");
         modifiers.Load();
 
-        // duplicated for car use
+        // duplicated for use in various other places 
 
         modifiers.name = name;
     }

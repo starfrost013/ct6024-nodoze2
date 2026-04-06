@@ -30,7 +30,22 @@ public class DominoUIController : MonoBehaviour
 
         foreach (Domino domino in DominoManager.dominoes)
         {
-            options.Add(domino.name);
+            // criteria for skipping:
+                // - set already present
+                // - not unlocked yet
+                // - not enough money but don't do that here 
+            bool skip = false;
+            if (GameManager.player.car.HasModifierSet(domino.name))
+                skip = true;
+
+            if (!string.IsNullOrWhiteSpace(domino.required)
+                && !GameManager.player.car.HasModifierSet(domino.required))
+            {
+                skip = true; 
+            }
+
+            if (!skip)
+                options.Add(domino.name);
         }
 
         selectDominoDropdown.AddOptions(options);

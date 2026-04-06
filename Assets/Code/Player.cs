@@ -14,8 +14,19 @@ internal class Player
         internal float money; 
     };
 
-  
+    /// <summary>
+    /// The prefab that the car is stored frrom - use for persistent data
+    /// </summary>
     internal Car car;
+
+    /// <summary>
+    /// The actual GameObject that represents the car.
+    /// </summary>
+    internal Car carInWorld;
+
+    /// <summary>
+    /// The player's stats.
+    /// </summary>
     internal PlayerStats stats; 
 
     public Player()

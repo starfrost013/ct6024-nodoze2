@@ -40,7 +40,7 @@ internal static class GameUtils
 
     internal static string GetNonCloneName(string name)
     {
-        // this creates an implicit dependency on both unity's clone naming scene and on GameObject.Instantiate's behaviour. need to fix
+        // this creates an implicit dependency on both unity's clone naming scheme and on GameObject.Instantiate's behaviour. need to fix
         return name.Replace("(Clone)", "");
     }
 

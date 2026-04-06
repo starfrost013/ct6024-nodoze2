@@ -4,6 +4,7 @@ Name = Speed Upgrade 2
 Description = A lot of dominoes!!
 Cost = 40
 ExpiryTime = 0
+Required = Speed Upgrade
 
 [Handling]
 TopSpeed = 1.0

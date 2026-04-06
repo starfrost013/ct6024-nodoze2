@@ -14,7 +14,7 @@ internal class CarModifier
     // Characteristics of the car
     internal float topSpeed;
     internal float topSpeedBoost;
-    internal float accelerationForward;                         // acceleration while steering
+    internal float accelerationForward;                         // acceleration while moving forward
     internal float accelerationSteering;
     internal float accelerationForwardAir;
     internal float accelerationSteeringAir;

@@ -95,7 +95,7 @@ internal class GameModeRaceMode : GameMode
 
     private void DrawMoneyAmount(GUIStyle raceGuiStyle)
     {
-        Car car = GameManager.player.car;
+        Car car = GameManager.player.carInWorld;
         GUI.color = Color.green;
 
         float fuelPercentage = (GameManager.player.stats.money) * 100;
@@ -109,7 +109,7 @@ internal class GameModeRaceMode : GameMode
 
     private void DrawFuelGauge(GUIStyle raceGuiStyle)
     {
-        Car car = GameManager.player.car;  
+        Car car = GameManager.player.carInWorld;  
         GUI.color = Color.blue;
 
         float fuelPercentage = (car.physics.fuelCurrent / car.GetCarModifiers().fuelMax) * 100;
