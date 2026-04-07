@@ -392,7 +392,7 @@ internal class Car : BasePhysicsObject
         transform.localEulerAngles = new Vector3(
             transform.localEulerAngles.x,
             // always divide by 60 as fixedupdate updates 60 times per second
-            transform.localEulerAngles.y + (physics.rotationTorque / 60.0f) * 360.0f * Time.fixedDeltaTime,
+            transform.localEulerAngles.y + (physics.rotationTorque / 20.0f) * 360.0f * Time.fixedDeltaTime,
             transform.localEulerAngles.z);
 
         // rotate the wheels (todo: move3 everything into an array)

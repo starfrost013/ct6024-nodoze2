@@ -24,7 +24,7 @@ internal class CarModifier
     internal float decelerationChangeDirection;                 // deceleration when the car changes direction [W/S]
     internal float decelerationChangeDirectionSteering;         // deceleration when the car changes direction [A/D]
     internal float maxSteeringTorque;                           // maximum torque
-    internal float steeringRampUpTicks;                         // timer for ramping up steering 
+    internal float steeringRampUpTicks;                         // torque multiplier 
 
     // Boosting characteristics of the car
     internal float boostMax;                                    // total boost amount per 1/60 of a second
