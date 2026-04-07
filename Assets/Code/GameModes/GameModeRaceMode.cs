@@ -37,6 +37,7 @@ internal class GameModeRaceMode : GameMode
         Debug.Log("Entering race...");
         raceState = RaceState.Starting;
 
+        AudioManager.Init();
         CarManager.Init();
         DominoManager.Init();
 

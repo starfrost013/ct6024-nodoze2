@@ -1,7 +1,7 @@
 [Info]
 
 Name = Harsher Acceleration
-Description = Hahahahaha
+Description = Increases brake effectiveness
 Cost = 10
 ExpiryTime = 0
 
