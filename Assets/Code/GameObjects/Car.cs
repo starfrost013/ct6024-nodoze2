@@ -420,7 +420,7 @@ internal class Car : BasePhysicsObject
                 Camera.main.transform.localEulerAngles.z
                 );
 
-        Debug.Log("Maximum Camera Turn Angle = " + physics.data.maximumTurnCameraAngle + " % Factor = " + cameraTurnPercentage);
+       // Debug.Log("Maximum Camera Turn Angle = " + physics.data.maximumTurnCameraAngle + " % Factor = " + cameraTurnPercentage);
 
         /* also move a bit forward depending on our overall speed */ 
         Camera.main.transform.position = transform.position + (transform.forward * physics.data.cameraRelativeZ);

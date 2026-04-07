@@ -35,6 +35,7 @@ public class DominoUIController : MonoBehaviour
                 // - not unlocked yet
                 // - not enough money but don't do that here 
             bool skip = false;
+            
             if (GameManager.player.car.HasModifierSet(domino.name))
                 skip = true;
 

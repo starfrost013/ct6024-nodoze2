@@ -37,10 +37,6 @@ internal class GameModeRaceMode : GameMode
         Debug.Log("Entering race...");
         raceState = RaceState.Starting;
 
-        AudioManager.Init();
-        CarManager.Init();
-        DominoManager.Init();
-
         // wrost hack ever
         if (raceStartTimer.HasStarted())
             raceStartTimer.Start(Timer.TIMER_CONTINUE_FOREVER);

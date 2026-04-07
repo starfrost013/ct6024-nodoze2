@@ -7,6 +7,10 @@ internal class GameModeInit : GameMode
     {
         Debug.Log("Initialising game");
 
+        AudioManager.Init();
+        CarManager.Init();
+        DominoManager.Init();
+
         GameManager.SetGameState(GameManager.GameModeEnum.MainMenu);
     }
 
