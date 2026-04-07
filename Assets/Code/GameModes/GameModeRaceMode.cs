@@ -17,6 +17,7 @@ internal class GameModeRaceMode : GameMode
         Finished = 2,
     };
 
+
     // externally accessed property -- the subset of the race
     internal RaceState raceState { get; private set; }
 
@@ -24,6 +25,9 @@ internal class GameModeRaceMode : GameMode
     Timer gameTimer = new();
 
     internal string raceConfigFile;
+
+    // THIS IS A TERRIBLE WAY OF DOING THIS!
+    private bool countdown3Done = false, countdown2Done = false, countdown1Done = false;
 
     internal override void OnEnter()
     {
@@ -130,14 +134,37 @@ internal class GameModeRaceMode : GameMode
                 if (!raceStartTimer.HasStarted())
                     raceStartTimer.Start(RACE_START_TIME);
 
+                // remaining time in seconds
                 Int64 remainingTime = ((raceStartTimer.length - raceStartTimer.GetElapsedTime()) / 1000) + 1; // +1 for "3, 2, 1..."
 
                 raceGuiStyle.fontSize = 72;
                 GUI.color = Color.yellow;
                 GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);
 
+                // just hardcode this for now
+                if (remainingTime < 4
+                    && !countdown3Done)
+                {
+                    countdown3Done = true;
+                    AudioManager.PlayAudioAtPoint("Announcer_Countdown3", Camera.main.transform.position, 1.0f);
+                }
+                else if (remainingTime < 3
+                    && !countdown2Done)
+                {
+                    countdown2Done = true;
+                    AudioManager.PlayAudioAtPoint("Announcer_Countdown2", Camera.main.transform.position, 1.0f);
+                }
+                else if (remainingTime < 2
+                    && !countdown1Done)
+                {
+                    countdown1Done = true;
+                    AudioManager.PlayAudioAtPoint("Announcer_Countdown1", Camera.main.transform.position, 1.0f);
+                }
+
+
                 if (raceStartTimer.IsDone())
                 {
+                    AudioManager.PlayAudioAtPoint("Announcer_CountdownGO", Camera.main.transform.position, 1.0f);
                     // since there is no car selection menu
                     CarManager.SetPlayerCar("CarBasic");
                     raceState = RaceState.Active;

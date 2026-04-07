@@ -86,7 +86,7 @@ internal static class CarManager
         GameManager.player.carInWorld.LoadConfigFromString(GameManager.player.car.configText.text); // we need to load the config again so load it from a string
 
         // apply all the modifiers to the car
-        foreach (CarModifier modifier in GameManager.player.car.appliedModifierSets)
+        foreach (CarModifier modifier in GameManager.player.car.modifiers)
         {
             GameManager.player.carInWorld.ApplyModifierSet(modifier);  
         }

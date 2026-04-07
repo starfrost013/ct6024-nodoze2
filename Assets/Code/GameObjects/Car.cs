@@ -88,12 +88,12 @@ internal class Car : BasePhysicsObject
     /// <summary>
     /// Modifier sets that have been applied 
     /// </summary>
-    List<CarModifier> _appliedModifierSets = new();
+    List<CarModifier> _modifiers = new();
 
-    internal List<CarModifier> appliedModifierSets
+    internal List<CarModifier> modifiers
     {
-        get { return _appliedModifierSets; }
-        private set { _appliedModifierSets = value; }
+        get { return _modifiers; }
+        private set { _modifiers = value; }
     }
 
     internal TextAsset configText
@@ -464,7 +464,7 @@ internal class Car : BasePhysicsObject
     internal void ApplyModifierSet(CarModifier info)
     {
         // is this needed? probably needed later
-        appliedModifierSets.Add(info);
+        modifiers.Add(info);
 
         // The worst code ever
         // TODO: turn into an operator...
@@ -507,7 +507,7 @@ internal class Car : BasePhysicsObject
     /// <returns>A boolean indicating if the car has the modifier set set.</returns>
     internal bool HasModifierSet(string name)
     {
-        foreach (CarModifier modifier in appliedModifierSets)
+        foreach (CarModifier modifier in modifiers)
         {
             if (modifier.name == name)
                 return true;
