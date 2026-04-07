@@ -13,7 +13,7 @@ internal static class AudioManager
     /// <summary>
     /// The audio clips
     /// </summary>
-    static AudioClip[] clips { get; private set; };
+    internal static AudioClip[] clips { get; private set; }
     
     private static bool initialised;
 
@@ -23,9 +23,7 @@ internal static class AudioManager
     internal static void Init()
     {
         Debug.Log("Loading audio...");
-
         clips = AssetManager.LoadAssetsInFolder<AudioClip>(AUDIO_PATH);
-
         initialised = (clips != null);
     }
 
@@ -45,7 +43,7 @@ internal static class AudioManager
                 return clip; 
         }
 
-        Debug.LogError("The audio by " + name + " doesn't exist. Please put it in Assets\Resources\Audio");
+        Debug.LogError("The audio by " + name + " doesn't exist. Please put it in Assets\\Resources\\Audio");
         return null;
     }
 
