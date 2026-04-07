@@ -17,9 +17,8 @@ internal class GameModeRaceMode : GameMode
         Finished = 2,
     };
 
-
     // externally accessed property -- the subset of the race
-    internal RaceState raceState { get; private set; }
+    internal RaceState raceState { get; set; }
 
     Timer raceStartTimer = new();
     Timer gameTimer = new();
@@ -171,12 +170,18 @@ internal class GameModeRaceMode : GameMode
                 }
 
                 break;
+            // the race is active
             case RaceState.Active:
                 // draw various uis here
                 DrawTimer(raceGuiStyle);
                 DrawFuelGauge(raceGuiStyle);
                 DrawMoneyAmount(raceGuiStyle);
                 break;
+            // the race is done
+            case RaceState.Finished:
+                GameManager.player.stats.money += 100; // TEMP. There needs to be a *RACE CONFIGURATION* which will specify the scene to load, etc.
+                GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
+                break; 
         }
     }
 }

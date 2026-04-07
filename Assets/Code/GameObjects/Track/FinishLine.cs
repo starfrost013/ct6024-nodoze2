@@ -13,6 +13,12 @@ class FinishLine : MonoBehaviour
         if (other.gameObject.GetComponent<Car>())
         {
             Debug.Log("You got to the end of the race!");
+
+            // tell racemode we are finished
+            GameModeRaceMode mode = (GameModeRaceMode)GameManager.mode;
+
+            mode.raceState = GameModeRaceMode.RaceState.Finished;
+
             GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
         }
     }
