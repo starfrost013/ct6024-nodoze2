@@ -216,8 +216,8 @@ internal class Car : BasePhysicsObject
         // handle on its own
         if (flipInput)
         {
-            transform.localEulerAngles = (new(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z + 180.0f));
-            transform.position = new(transform.position.x, transform.position.y + 0.1f, transform.position.z);
+            transform.localEulerAngles = (new(transform.localEulerAngles.x, transform.localEulerAngles.y, 0.0f));
+            transform.position = new(transform.position.x, transform.position.y + 0.2f, transform.position.z);
             return; 
         }
 
