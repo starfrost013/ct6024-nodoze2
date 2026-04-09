@@ -50,9 +50,10 @@ internal static class ProgressionCoordinator
 
         private set
         {
-            if (_currentLevel != null
-            || !progressionWasExited)
-                GameManager.RemoveSceneAdditive(currentLevel.scene);
+            // If progression was exited, we are assuming that a different scene was loaded since the game state changed.
+            if ((_currentLevel != null) 
+                && !progressionWasExited)
+                GameManager.RemoveSceneAdditive(_currentLevel.scene);
 
             progressionWasExited = false; 
 
@@ -206,10 +207,11 @@ internal static class ProgressionCoordinator
 
     /// <summary>
     /// "Normal" progresson was exited (e.g. RaceFinished)
+    /// 
+    /// Whatever called this is going to replace the MainScene
     /// </summary>
-    internal static void ExitNormalProgression()
+    internal static void OnExitRaceScene()
     {
-        GameManager.RemoveSceneAdditive(currentLevel.scene);
         progressionWasExited = true;
     }
 };

@@ -30,6 +30,9 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnEnter()
     {
+        // ensure we are in the scene known as race mode
+        GameManager.SetCurrentScene(GameManager.SCENE_RACE_MODE);   
+
         ProgressionCoordinator.AdvanceNormal();
 
         Debug.Log("Entering race...");
@@ -52,7 +55,7 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnLeave()
     {
-        ProgressionCoordinator.ExitNormalProgression(); 
+        ProgressionCoordinator.OnExitRaceScene(); 
     }
 
     private void DrawTimer(GUIStyle raceGuiStyle)
