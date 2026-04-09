@@ -45,7 +45,11 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFrame()
     {
-        
+        if (Input.GetKeyDown(KeyCode.F7))
+            ProgressionCoordinator.AdvanceNormal();
+
+        if (Input.GetKeyDown(KeyCode.F8))
+            ProgressionCoordinator.AdvanceNormal();
     }
 
     internal override void OnFixedUpdate()

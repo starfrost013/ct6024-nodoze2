@@ -71,7 +71,7 @@ internal static class CarManager
                 }
 
                 // first set the palyer's car to the original prefab
-                GameManager.player.car = carPrefab; //MonoBehaviour.Instantiate(carPrefab);
+                GameManager.player.car = carPrefab;
                 GameManager.player.car.LoadConfig();
             }
         }

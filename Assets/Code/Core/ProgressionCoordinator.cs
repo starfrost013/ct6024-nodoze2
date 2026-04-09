@@ -123,6 +123,10 @@ internal static class ProgressionCoordinator
             }
         }
 
+        // ensure we reset to level zero on reset (hack?)
+        if (currentLevel != null)
+            currentLevel = null;
+
         Debug.Log("Progression coordinator initialised");
     }
 

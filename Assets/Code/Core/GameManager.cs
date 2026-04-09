@@ -124,11 +124,25 @@ internal static class GameManager
     }
 
     /// <summary>
-    /// Unload an additive scene. THIS BLOCKS!
+    /// Unload an additive scene. THIS DOESN'T DO ANY SHIT!
     /// </summary>
     /// <param name="name">The additive scene to unload</param>
     internal static void RemoveSceneAdditive(string name)
     {
+        Scene sceneWeWant = SceneManager.GetSceneByName(name);  
+
+        if (!sceneWeWant.IsValid())
+        {
+            Debug.LogError("GameManager::RemoveSceneAdditive - Please put the scene " + name + "in the build index!");
+            return;
+        }
+        
+        if (!sceneWeWant.isLoaded)
+        {
+            Debug.LogError("GameManager::RemoveSceneAdditive - the scene " + name + " is not even loaded so we would crash. THIS IS A BUG!");
+            return;
+        }
+
         // Our code sucks and isn't set up to do this, so, er, don't bother, and just block.
         // no, you can't unload additive scenes async
         AsyncOperation async = SceneManager.UnloadSceneAsync(name);
