@@ -37,9 +37,11 @@ internal static class ProgressionCoordinator
     /// <summary>
     /// If we need to re-enter normal progression, do this. Don't unload the old scene, even if it's set
     /// </summary>
-    private static bool progressionWasExited;
+    private static bool dontUnloadOldLevel;
    
-
+    /// <summary>
+    /// backing field for _currentlevel
+    /// </summary>
     private static LevelReference _currentLevel; 
     // avoid state duplication with this
 
@@ -69,12 +71,12 @@ internal static class ProgressionCoordinator
             // If progression was exited, we are assuming that a different scene was loaded since the game state changed. (check the old level for this)
             if ((_currentLevel != null) 
                 
-                && !progressionWasExited)
+                && !dontUnloadOldLevel)
             {
                 GameManager.RemoveSceneAdditive(_currentLevel.scene);
             }
 
-            progressionWasExited = false;
+            dontUnloadOldLevel = false;
             _currentLevel = value;
 
             Debug.Log("ProgressionCoordinator::CurrentLevel::set: Level is now " + _currentLevel.scene);
@@ -228,6 +230,6 @@ internal static class ProgressionCoordinator
     /// </summary>
     internal static void OnExitRaceScene()
     {
-        progressionWasExited = true;
+        dontUnloadOldLevel = true;
     }
 };
