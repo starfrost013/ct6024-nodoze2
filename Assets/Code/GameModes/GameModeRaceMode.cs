@@ -45,8 +45,7 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFrame()
     {
-        // restart the race
-        // TODO: Less bad race state system
+        // TODO: This code is completely broken. The scene doesn't swtich in time for the new CarStart for instance.
         if (Input.GetKeyDown(KeyCode.F7))
         {
             ProgressionCoordinator.AdvanceNormal();

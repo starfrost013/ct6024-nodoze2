@@ -38,6 +38,7 @@ internal static class ProgressionCoordinator
     /// If we need to re-enter normal progression, do this. Don't unload the old scene, even if it's set
     /// </summary>
     private static bool progressionWasExited;
+   
 
     private static LevelReference _currentLevel; 
     // avoid state duplication with this
@@ -57,8 +58,7 @@ internal static class ProgressionCoordinator
                 GameManager.RemoveSceneAdditive(_currentLevel.scene);
             }
 
-            progressionWasExited = false; 
-
+            progressionWasExited = false;
             _currentLevel = value;
 
             // todo
@@ -125,6 +125,15 @@ internal static class ProgressionCoordinator
             }
         }
 
+        // add a sentinel value
+        // this level always sets itself over and over again
+        levels.Add(new LevelReference
+        { 
+            scene = NO_MORE_LEVELS,
+            sceneOnNormalCompletion = NO_MORE_LEVELS,
+            sceneOnSpecialCompletion = NO_MORE_LEVELS,
+        });
+
         // ensure we reset to level zero on reset (hack?)
         if (currentLevel != null)
             currentLevel = null;
@@ -170,9 +179,6 @@ internal static class ProgressionCoordinator
     /// </summary>
     internal static void AdvanceNormal()
     {
-        if (levels.Count == 0)
-            return;
-
         // case: first level
         if (currentLevel == null)
             currentLevel = levels[0];
@@ -193,9 +199,6 @@ internal static class ProgressionCoordinator
     /// </summary>
     internal static void AdvanceSpecial()
     {
-        if (levels.Count == 0)
-            return;
-
         if (currentLevel == null)
             currentLevel = levels[0];
         else
