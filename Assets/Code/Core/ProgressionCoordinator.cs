@@ -1,8 +1,5 @@
 
-using NUnit.Framework;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UnityEditorInternal;
 using UnityEngine;
 
 /// <summary>
@@ -98,7 +95,7 @@ internal static class ProgressionCoordinator
                 Debug.LogWarning("Scene ID for level " + levelString + " (ID " + i + ") has no \"normal\" next level! Progression will be screwed up");
             else
             {
-                Debug.Log("Level " + (i + 1) + " is specified to scene " + currentScene);
+                Debug.Log("Level " + (i + 1) + " is specified to scene " + currentScene + " normal exit = " + nextSceneNormal + ", special exit = " + nextSceneSpecial);
 
                 levels.Add(new LevelReference
                 {
