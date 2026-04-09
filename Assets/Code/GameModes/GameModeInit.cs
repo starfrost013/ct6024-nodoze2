@@ -7,6 +7,7 @@ internal class GameModeInit : GameMode
     {
         Debug.Log("Initialising game");
 
+        ProgressionCoordinator.Init();
         AudioManager.Init();
         CarManager.Init();
         DominoManager.Init();

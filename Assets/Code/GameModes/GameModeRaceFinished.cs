@@ -25,6 +25,6 @@ internal class GameModeRaceFinished : GameMode
     {
         /* This code is HORRIBLE but it is the only way I know to prevent a race condition at 2:30am that fucks everything up */
 
-        GameManager.SetCurrentScene(GameManager.SCENE_RACE);
+        GameManager.SetCurrentScene(GameManager.SCENE_RACE_MODE);
     }
 }

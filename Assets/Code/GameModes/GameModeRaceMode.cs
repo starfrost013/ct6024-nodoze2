@@ -31,10 +31,10 @@ internal class GameModeRaceMode : GameMode
     internal override void OnEnter()
     {
         // ensure we are in the right scene
-        if (GameManager.GetCurrentScene().name != GameManager.SCENE_RACE)
+        if (GameManager.GetCurrentScene().name != GameManager.SCENE_RACE_MODE)
         {
             // blocks
-            GameManager.SetCurrentScene(GameManager.SCENE_RACE);
+            GameManager.SetCurrentScene(GameManager.SCENE_RACE_MODE);
         }
 
         Debug.Log("Entering race...");

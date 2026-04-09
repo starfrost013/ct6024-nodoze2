@@ -1,0 +1,11 @@
+; Game progression info format 1.0
+; Levels are listed in order
+
+[Progression]
+
+; The number of levels to load
+NumLevels = 2
+
+; level id = scene name
+Level0 = Level1
+Level1 = Level2
