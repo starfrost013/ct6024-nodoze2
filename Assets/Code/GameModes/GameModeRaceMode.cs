@@ -30,12 +30,7 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnEnter()
     {
-        // ensure we are in the right scene
-        if (GameManager.GetCurrentScene().name != GameManager.SCENE_RACE_MODE)
-        {
-            // blocks
-            GameManager.SetCurrentScene(GameManager.SCENE_RACE_MODE);
-        }
+        ProgressionCoordinator.AdvanceNormal();
 
         Debug.Log("Entering race...");
         raceState = RaceState.Starting;
@@ -57,7 +52,7 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnLeave()
     {
-
+        ProgressionCoordinator.ExitNormalProgression(); 
     }
 
     private void DrawTimer(GUIStyle raceGuiStyle)
@@ -159,7 +154,6 @@ internal class GameModeRaceMode : GameMode
                     countdown1Done = true;
                     AudioManager.PlayAudioAtPoint("Announcer_Countdown1", Camera.main.transform.position, 1.0f);
                 }
-
 
                 if (raceStartTimer.IsDone())
                 {

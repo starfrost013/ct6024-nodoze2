@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +6,10 @@ using UnityEngine;
 /// 
 /// Handles level transitions when you are in GameState::RaceMode
 /// Might be required to move this into gamemanager or as a part of gamestateracemode
+/// 
+/// Level progression information is loaded from the ProgressionInfo.txt file and a list of level references is obtained from this. These level references are then (on call from the current game mode)
+/// obtained. "End" is used for the last level. When a level is switched to, if a level is already loaded its scene is unloadeda dditively and then
+/// the scene for the level is loaded additively. Therefore, the Game Manager is no longer located in each level.
 /// </summary>
 internal static class ProgressionCoordinator
 {
@@ -31,6 +34,11 @@ internal static class ProgressionCoordinator
     internal static List<LevelReference> levels { get; private set; } = new(); 
     static TextAsset progressionInfo;
 
+    /// <summary>
+    /// If we need to re-enter normal progression, do this. Don't unload the old scene, even if it's set
+    /// </summary>
+    private static bool progressionWasExited;
+
     private static LevelReference _currentLevel; 
     // avoid state duplication with this
     internal static LevelReference currentLevel
@@ -42,8 +50,11 @@ internal static class ProgressionCoordinator
 
         private set
         {
-            if (_currentLevel != null)
-                GameManager.RemoveSceneAdditive(currentLevel.scene);    
+            if (_currentLevel != null
+            || !progressionWasExited)
+                GameManager.RemoveSceneAdditive(currentLevel.scene);
+
+            progressionWasExited = false; 
 
             _currentLevel = value;
 
@@ -54,6 +65,8 @@ internal static class ProgressionCoordinator
                 return; 
             }
 
+            Debug.Log("ProgressionCoordinator::CurrentLevel::set: Level is now " + currentLevel.scene);
+
             GameManager.AddSceneAdditive(currentLevel.scene);
         }
     }
@@ -62,6 +75,9 @@ internal static class ProgressionCoordinator
     // METHODS
     //
 
+    /// <summary>
+    /// Initialises the ProgressionCoordiantor.
+    /// </summary>
     internal static void Init()
     {
         progressionInfo = AssetManager.LoadAsset<TextAsset>(PROGRESSION_INFO_PATH);
@@ -109,6 +125,11 @@ internal static class ProgressionCoordinator
         Debug.Log("Progression coordinator initialised");
     }
 
+    /// <summary>
+    /// Get a level reference by its scene name.
+    /// </summary>
+    /// <param name="name">The name of the level to swtich to.</param>
+    /// <returns>NULL is the level exists in the ProgressionInfo.txt file, otherwise NULL</returns>
     internal static LevelReference GetLevelByScene(string name)
     {
         foreach (LevelReference level in levels)
@@ -120,38 +141,75 @@ internal static class ProgressionCoordinator
         return null;
     }
 
-    internal static void SetLevel(string level)
+    /// <summary>
+    /// Advance to the level set.
+    /// </summary>
+    /// <param name="scene">The scene of the level tos et to</param>
+    internal static void SetLevel(string scene)
     {
-        currentLevel = GetLevelByScene(level);
+        LevelReference reference = GetLevelByScene(scene);
+
+        if (reference == null)
+        {
+            Debug.LogError("ProgressionCoordinator::SetLevel - failed, level " + scene + "does not exist!");
+            return; 
+        }
+
+        currentLevel = reference;
     }
 
+    /// <summary>
+    /// Advance using a normal exit.
+    /// </summary>
     internal static void AdvanceNormal()
     {
-        if (string.IsNullOrWhiteSpace(currentLevel.sceneOnNormalCompletion))
-        {
-            Debug.LogError("ProgressionCoordinator failed to progress to the next \"NORMAL\" type level due to the lack of a OnNormalCompletion for the current level, " + currentLevel.scene);
-            return;
-        }
-
         if (levels.Count == 0)
             return;
 
-        // first level
-        currentLevel = (currentLevel == null) ? levels[0] : GetLevelByScene(currentLevel.sceneOnNormalCompletion);
+        // case: first level
+        if (currentLevel == null)
+            currentLevel = levels[0];
+        else
+        {
+            if (string.IsNullOrWhiteSpace(currentLevel.sceneOnNormalCompletion))
+            {
+                Debug.LogError("ProgressionCoordinator failed to progress to the next \"NORMAL\" type level due to the lack of a OnNormalCompletion for the current level, " + currentLevel.scene);
+                return;
+            }
+
+            currentLevel = GetLevelByScene(currentLevel.sceneOnNormalCompletion);
+        }
     }
 
+    /// <summary>
+    /// Advance using a special exit.
+    /// </summary>
     internal static void AdvanceSpecial()
     {
-        if (string.IsNullOrWhiteSpace(currentLevel.sceneOnSpecialCompletion))
-        {
-            Debug.LogError("ProgressionCoordinator failed to progress to the next \"SPECIAL\" type level due to the lack of a OnNormalCompletion for the current level, " + currentLevel.scene);
-            return;
-        }
-
         if (levels.Count == 0)
             return;
 
-        // first level
-        currentLevel = (currentLevel == null) ? levels[0] : GetLevelByScene(currentLevel.sceneOnSpecialCompletion);
+        if (currentLevel == null)
+            currentLevel = levels[0];
+        else
+        {
+            if (string.IsNullOrWhiteSpace(currentLevel.sceneOnSpecialCompletion))
+            {
+                Debug.LogError("ProgressionCoordinator failed to progress to the next \"SPECIAL\" type level due to the lack of a OnSpecialCompletion for the current level, " + currentLevel.scene);
+                return;
+            }
+
+            currentLevel = GetLevelByScene(currentLevel.sceneOnSpecialCompletion);
+        }
+
+    }
+
+    /// <summary>
+    /// "Normal" progresson was exited (e.g. RaceFinished)
+    /// </summary>
+    internal static void ExitNormalProgression()
+    {
+        GameManager.RemoveSceneAdditive(currentLevel.scene);
+        progressionWasExited = true;
     }
 };

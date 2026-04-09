@@ -7,10 +7,6 @@ using UnityEngine;
 //
 internal static class GameUtils
 {
-    /// <summary>
-    /// Maximum time an async operation can block (in ms).
-    /// </summary>
-    internal const int ASYNCOP_BLOCK_MAX_TIME = 30000;
 
     internal static string[] GetAssetPathsForDirectory(string path, string extension)
     {
