@@ -51,6 +51,14 @@ internal static class ProgressionCoordinator
 
         private set
         {
+            // Don't bother if there are no more levels for now
+            // Probably we will just go back to the main menu
+            if (value.scene == NO_MORE_LEVELS)
+            {
+                Debug.Log("You beat the game! [ADD END SCREEN OR GO BACK TO FIRST LEVEL OR TITLE SCREEN OR ADD RUN THING OR WHATEVER HERE]");
+                return;
+            }
+
             // If progression was exited, we are assuming that a different scene was loaded since the game state changed.
             if ((_currentLevel != null) 
                 && !progressionWasExited)
@@ -61,13 +69,7 @@ internal static class ProgressionCoordinator
             progressionWasExited = false;
             _currentLevel = value;
 
-            // todo
-            if (_currentLevel.scene == NO_MORE_LEVELS)
-            {
-                Debug.Log("You beat the game! [ADD END SCREEN OR GO BACK TO FIRST LEVEL OR TITLE SCREEN OR ADD RUN THING OR WHATEVER HERE]");
-                return; 
-            }
-
+ 
             Debug.Log("ProgressionCoordinator::CurrentLevel::set: Level is now " + currentLevel.scene);
 
             GameManager.AddSceneAdditive(currentLevel.scene);

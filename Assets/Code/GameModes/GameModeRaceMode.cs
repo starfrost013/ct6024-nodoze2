@@ -60,7 +60,6 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFixedUpdate()
     {
-
     }
 
     internal override void OnLeave()
