@@ -70,16 +70,13 @@ internal static class CarManager
 
             if (carPrefab != null)
             {
-
                 // first set the palyer's car to the original prefab
                 GameManager.player.car = carPrefab;
                 GameManager.player.car.LoadConfig();
             }
         }
         else
-        {
             carPrefab = GameManager.player.car;
-        }
 
         // instantiate the gameobject for the same copy that will be in the world
         // we don't care about this car anymore. it will control itself and will be destroyed when we set the scene
@@ -96,15 +93,15 @@ internal static class CarManager
         GameObject start = GameObject.Find("CarStart");
 
         if (start != null)
-            GameManager.player.carInWorld.transform.position = start.transform.position + new Vector3(0.5f, 1.0f, 0.5f);
+            GameManager.player.carInWorld.gameObject.transform.position = start.transform.position + new Vector3(0.5f, 1.0f, 0.5f);
         else
         {
             Debug.LogWarning("Please insert a start point!");
 
             // ensure it's not stuck by moving it up 1 unit
-            GameManager.player.carInWorld.transform.position = new(GameManager.player.carInWorld.transform.position.x, 
-                GameManager.player.carInWorld.transform.position.y + 1.0f, 
-                GameManager.player.carInWorld.transform.position.z);
+            GameManager.player.carInWorld.gameObject.transform.position = new(GameManager.player.carInWorld.transform.position.x, 
+                GameManager.player.carInWorld.gameObject.transform.position.y + 1.0f, 
+                GameManager.player.carInWorld.gameObject.transform.position.z);
         }
     }
  

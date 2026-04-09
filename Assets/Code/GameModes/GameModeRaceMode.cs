@@ -50,14 +50,13 @@ internal class GameModeRaceMode : GameMode
         if (Input.GetKeyDown(KeyCode.F7))
         {
             ProgressionCoordinator.AdvanceNormal();
-            raceState = RaceState.Starting;
         }
 
         if (Input.GetKeyDown(KeyCode.F8))
         {
-            ProgressionCoordinator.AdvanceNormal();
-            raceState = RaceState.Starting;
+            ProgressionCoordinator.AdvanceSpecial();
         }
+       
     }
 
     internal override void OnFixedUpdate()

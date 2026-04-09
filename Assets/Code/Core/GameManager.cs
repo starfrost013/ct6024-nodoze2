@@ -58,7 +58,7 @@ internal static class GameManager
     private static bool initialised = false;
 
     /// <summary>
-    /// hack
+    /// hack - used for some debug feature
     /// </summary>
     internal static bool additiveSceneIsUnloading = false; 
 
