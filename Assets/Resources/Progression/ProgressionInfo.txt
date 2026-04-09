@@ -8,4 +8,8 @@ NumLevels = 2
 
 ; level id = scene name
 Level0 = Level1
+Level0CompleteNormal = Level2
+Level0CompleteSpecial = Level2
 Level1 = Level2
+Level1CompleteNormal = End
+Level1CompleteSpecial = End

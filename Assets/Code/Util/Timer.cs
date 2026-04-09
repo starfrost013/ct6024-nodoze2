@@ -9,6 +9,9 @@ internal class Timer
     private Stopwatch stopwatch;
     private bool isDone;
 
+    /// <summary>
+    /// Value used to tell a timer to never stop.
+    /// </summary>
     internal const Int64 TIMER_CONTINUE_FOREVER = -1;
 
     internal void Start(Int64 timerLength)

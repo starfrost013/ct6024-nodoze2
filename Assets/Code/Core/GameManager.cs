@@ -5,14 +5,12 @@ using System.Collections;
 
 internal static class GameManager
 {
-    // hacks so the gamemanager switches into the right state
-    // i think in the future everything will have to be done in one scene
-    internal const string SCENE_MAIN_MENU = "MenuMain";
-    internal const string SCENE_RACE_MODE = "Gameplay";
-    internal const string SCENE_RACE_FINISHED = "PostRace";
+    //
+    // STRUCTS & ENUMS
+    //
 
     // The game state enum. Tells us what to do
-    public enum GameModeEnum
+    internal enum GameModeEnum
     {
         Init = 0,
         Shutdown = 1,
@@ -21,6 +19,17 @@ internal static class GameManager
         RaceMode = 4,
         RaceFinished = 5,
     }
+
+    // hacks so the gamemanager switches into the right state
+    // i think in the future everything will have to be done in one scene
+    internal const string SCENE_MAIN_MENU = "MenuMain";
+    internal const string SCENE_RACE_MODE = "Gameplay";
+    internal const string SCENE_RACE_FINISHED = "PostRace";
+
+    /// <summary>
+    /// Maximum time an async operation can block (in ms).
+    /// </summary>
+    internal const int SCENE_LOAD_ASYNC_BLOCK_MAX_TIME = 30000;
 
     private static GameModeEnum state;
 
@@ -41,7 +50,7 @@ internal static class GameManager
         private set {  _managerObject = value; }
     }
 
-    private static Scene scene
+    private static Scene mainScene
     {
         get { return SceneManager.GetActiveScene(); }
     }
@@ -56,7 +65,7 @@ internal static class GameManager
         private set { _player = value; }
     }
 
-    public static void Start(GameManagerObject newManagerObject)
+    internal static void Start(GameManagerObject newManagerObject)
     {
         // only initialise once
         if (initialised)
@@ -73,12 +82,12 @@ internal static class GameManager
         // temp
     }
 
-    public static GameModeEnum GetGameState()
+    internal static GameModeEnum GetGameState()
     {
         return state;
     }
 
-    public static void SetGameState(GameModeEnum newState)
+    internal static void SetGameState(GameModeEnum newState)
     {
         state = newState;
 
@@ -92,18 +101,52 @@ internal static class GameManager
         mode.OnEnter();
     }
 
-    public static Scene GetCurrentScene()
+    //get rid of this
+
+    internal static Scene GetCurrentScene()
     {
-        return scene; 
+        return mainScene; 
     }
 
-    public static void SetCurrentScene(string name)
+    internal static void SetCurrentScene(string name)
     {
         // Sets scene field
         SceneManager.LoadScene(name);
     }
 
-    public static void OnFrame()
+    /// <summary>
+    /// Load an additive scene.
+    /// </summary>
+    /// <param name="name">The additive scene to load.</param>
+    internal static void AddSceneAdditive(string name)
+    {
+        SceneManager.LoadScene(name, LoadSceneMode.Additive);
+    }
+
+    /// <summary>
+    /// Unload an additive scene. THIS BLOCKS!
+    /// </summary>
+    /// <param name="name">The additive scene to unload</param>
+    internal static void RemoveSceneAdditive(string name)
+    {
+        // Our code sucks and isn't set up to do this, so, er, don't bother, and just block.
+        // no, you can't unload additive scenes async
+        AsyncOperation async = SceneManager.UnloadSceneAsync(name);
+
+        // set up a timer
+        Timer tmr = new();
+        tmr.Start(SCENE_LOAD_ASYNC_BLOCK_MAX_TIME);
+
+        while (!async.isDone)
+        {
+            if (tmr.GetElapsedTime() > SCENE_LOAD_ASYNC_BLOCK_MAX_TIME)
+            {
+                throw new TimeoutException("Asynchronous Scene Unload Operation for scene " + name + " took too long");
+            }
+        }
+    }
+
+    internal static void OnFrame()
     {
         if (Input.GetKey(KeyCode.R)
             && state == GameModeEnum.RaceMode)
@@ -116,12 +159,12 @@ internal static class GameManager
         mode.OnFrame();
     }
 
-    public static void OnFixedUpdate()
+    internal static void OnFixedUpdate()
     {
         mode.OnFixedUpdate();   
     }
 
-    public static void OnLegacyGUI()
+    internal static void OnLegacyGUI()
     {
         mode.OnLegacyGUI();
     }
