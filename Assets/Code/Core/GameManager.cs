@@ -171,7 +171,8 @@ internal static class GameManager
             && state == GameModeEnum.RaceMode)
         {
             initialised = false; // make everything get reinit'ed
-            GameManager.SetCurrentScene(GameManager.SCENE_RACE_MODE);
+            SetGameState(GameModeEnum.Init);
+
             return;
         }
 

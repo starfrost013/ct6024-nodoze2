@@ -145,7 +145,9 @@ internal class GameModeRaceMode : GameMode
 
                 raceGuiStyle.fontSize = 72;
                 GUI.color = Color.yellow;
-                GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);
+
+                if (remainingTime <= (RACE_START_TIME / 1000))
+                    GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);
 
                 // just hardcode this for now
                 if (remainingTime < 4

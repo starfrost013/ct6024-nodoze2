@@ -42,6 +42,12 @@ internal static class ProgressionCoordinator
 
     private static LevelReference _currentLevel; 
     // avoid state duplication with this
+
+    /// <summary>
+    /// The current level that is set.
+    /// 
+    /// NULL means that the game has not been satrted yet. I may change this later...
+    /// </summary>
     internal static LevelReference currentLevel
     {
         get
@@ -51,16 +57,18 @@ internal static class ProgressionCoordinator
 
         private set
         {
-            // Don't bother if there are no more levels for now
-            // Probably we will just go back to the main menu
-            if (value.scene == NO_MORE_LEVELS)
+            // special case null
+            if (value == null)
             {
-                Debug.Log("You beat the game! [ADD END SCREEN OR GO BACK TO FIRST LEVEL OR TITLE SCREEN OR ADD RUN THING OR WHATEVER HERE]");
+                _currentLevel = value;
                 return;
             }
 
-            // If progression was exited, we are assuming that a different scene was loaded since the game state changed.
+            // special case "no more levels" (we'll probably change the handling for this) 
+
+            // If progression was exited, we are assuming that a different scene was loaded since the game state changed. (check the old level for this)
             if ((_currentLevel != null) 
+                
                 && !progressionWasExited)
             {
                 GameManager.RemoveSceneAdditive(_currentLevel.scene);
@@ -69,10 +77,8 @@ internal static class ProgressionCoordinator
             progressionWasExited = false;
             _currentLevel = value;
 
- 
-            Debug.Log("ProgressionCoordinator::CurrentLevel::set: Level is now " + currentLevel.scene);
-
-            GameManager.AddSceneAdditive(currentLevel.scene);
+            Debug.Log("ProgressionCoordinator::CurrentLevel::set: Level is now " + _currentLevel.scene);
+            GameManager.AddSceneAdditive(_currentLevel.scene);
         }
     }
 
@@ -136,9 +142,8 @@ internal static class ProgressionCoordinator
             sceneOnSpecialCompletion = NO_MORE_LEVELS,
         });
 
-        // ensure we reset to level zero on reset (hack?)
-        if (currentLevel != null)
-            currentLevel = null;
+        currentLevel = null;
+
 
         Debug.Log("Progression coordinator initialised");
     }
