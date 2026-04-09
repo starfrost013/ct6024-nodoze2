@@ -57,6 +57,11 @@ internal static class GameManager
 
     private static bool initialised = false;
 
+    /// <summary>
+    /// hack
+    /// </summary>
+    internal static bool additiveSceneIsUnloading = false; 
+
     private static Player _player;
 
     internal static Player player
@@ -123,6 +128,12 @@ internal static class GameManager
         SceneManager.LoadScene(name, LoadSceneMode.Additive);
     }
 
+
+    private static void OnRemoveSceneAdditiveDone(AsyncOperation operation)
+    {
+        additiveSceneIsUnloading = false; 
+    }
+
     /// <summary>
     /// Unload an additive scene. THIS DOESN'T DO ANY SHIT!
     /// </summary>
@@ -143,21 +154,13 @@ internal static class GameManager
             return;
         }
 
-        // Our code sucks and isn't set up to do this, so, er, don't bother, and just block.
         // no, you can't unload additive scenes async
         AsyncOperation async = SceneManager.UnloadSceneAsync(name);
+        async.completed += OnRemoveSceneAdditiveDone;
+        // allow it to block (our code is NOT set up to do anything else)
+        additiveSceneIsUnloading = true; 
 
-        // set up a timer
-        Timer tmr = new();
-        tmr.Start(SCENE_LOAD_ASYNC_BLOCK_MAX_TIME);
-
-        while (!async.isDone)
-        {
-            if (tmr.GetElapsedTime() > SCENE_LOAD_ASYNC_BLOCK_MAX_TIME)
-            {
-                throw new TimeoutException("Asynchronous Scene Unload Operation for scene " + name + " took too long");
-            }
-        }
+        return;
     }
 
     internal static void OnFrame()

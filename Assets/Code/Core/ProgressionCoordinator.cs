@@ -53,7 +53,9 @@ internal static class ProgressionCoordinator
             // If progression was exited, we are assuming that a different scene was loaded since the game state changed.
             if ((_currentLevel != null) 
                 && !progressionWasExited)
+            {
                 GameManager.RemoveSceneAdditive(_currentLevel.scene);
+            }
 
             progressionWasExited = false; 
 

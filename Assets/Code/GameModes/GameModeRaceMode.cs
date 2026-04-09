@@ -45,11 +45,19 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFrame()
     {
+        // restart the race
+        // TODO: Less bad race state system
         if (Input.GetKeyDown(KeyCode.F7))
+        {
             ProgressionCoordinator.AdvanceNormal();
+            raceState = RaceState.Starting;
+        }
 
         if (Input.GetKeyDown(KeyCode.F8))
+        {
             ProgressionCoordinator.AdvanceNormal();
+            raceState = RaceState.Starting;
+        }
     }
 
     internal override void OnFixedUpdate()
