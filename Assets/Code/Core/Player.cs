@@ -40,13 +40,13 @@ internal class Player
     /// <returns>A boolean indicating the car status of the player</returns>
     internal bool HasCar()
     {
-        return car != null; 
+        return carInWorld != null; 
     }
 
     internal void DestroyCar()
     {
-        GameObject.Destroy(car);
-        car = null; 
+        GameObject.Destroy(carInWorld.gameObject);
+        carInWorld = null; 
     }
 }
 

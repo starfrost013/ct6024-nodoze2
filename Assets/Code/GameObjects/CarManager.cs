@@ -54,6 +54,12 @@ internal static class CarManager
     /// <param name="name">The name ofthe car in the car prefabs folder to load</param>
     internal static void SetPlayerCar(string name)
     {
+        if (GameManager.player.HasCar())
+        {
+            // get rid of the car that already exists
+            GameManager.player.DestroyCar();
+        }
+
         Car carPrefab;
 
         // don't reset car unless we are changing the car
@@ -64,11 +70,6 @@ internal static class CarManager
 
             if (carPrefab != null)
             {
-                if (GameManager.player.HasCar())
-                {
-                    // get rid of the car that already exists
-                    GameManager.player.DestroyCar();
-                }
 
                 // first set the palyer's car to the original prefab
                 GameManager.player.car = carPrefab;

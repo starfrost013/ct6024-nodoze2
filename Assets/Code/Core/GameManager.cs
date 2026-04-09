@@ -140,6 +140,8 @@ internal static class GameManager
     /// <param name="name">The additive scene to unload</param>
     internal static void RemoveSceneAdditive(string name)
     {
+        // THIS IS A REALLY BAD THING BECAUSE WE DON'T DO ANYTHING TO WAIT FOR THE SCENE TO FINISH LOADING
+
         Scene sceneWeWant = SceneManager.GetSceneByName(name);  
 
         if (!sceneWeWant.IsValid())
