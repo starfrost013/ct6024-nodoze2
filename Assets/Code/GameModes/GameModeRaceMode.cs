@@ -23,6 +23,16 @@ internal class GameModeRaceMode : GameMode
     Timer raceStartTimer = new();
     Timer gameTimer = new();
 
+    /// <summary>
+    /// Timer used to restart things
+    /// </summary>
+    Timer restartTimer = new(); 
+
+    /// <summary>
+    /// restart timer time when you run out o fuel
+    /// </summary>
+    internal const long RESTART_TIME_OUT_OF_FUEL = 5000; 
+
     internal string raceConfigFile;
 
     // THIS IS A TERRIBLE WAY OF DOING THIS!
@@ -60,6 +70,8 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFixedUpdate()
     {
+        if (restartTimer.GetElapsedTime() > RESTART_TIME_OUT_OF_FUEL)
+            ProgressionCoordinator.SetLevel(ProgressionCoordinator.currentLevel.scene);
     }
 
     internal override void OnLeave()
@@ -111,7 +123,6 @@ internal class GameModeRaceMode : GameMode
         float y = Screen.height - 90;
 
         GUI.Label(new Rect(x, y, 400, 100), "Money: $" + GameManager.player.stats.money, raceGuiStyle);
-
     }
 
     private void DrawFuelGauge(GUIStyle raceGuiStyle)
@@ -127,7 +138,10 @@ internal class GameModeRaceMode : GameMode
         if (fuelPercentage > 0)
             GUI.Label(new Rect(x, y, 400, 100), "Fuel: " + fuelPercentage.ToString("F1") + "%");
         else
+        {
             GUI.Label(new Rect(x, y, 400, 100), "Out of fuel!");
+            restartTimer.Start(RESTART_TIME_OUT_OF_FUEL);
+        }
     }
 
     internal override void OnLegacyGUI()
