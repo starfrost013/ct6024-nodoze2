@@ -29,6 +29,9 @@ internal class Timer
             stopwatch.Stop();
         }
 
+        if (!stopwatch.IsRunning)
+            return 0;
+
         return stopwatch.ElapsedMilliseconds;
     }
 
@@ -45,5 +48,23 @@ internal class Timer
     {
         _ = GetElapsedTime();
         return isDone;
+    }
+
+    /// <summary>
+    /// Restart the timer
+    /// </summary>
+    internal void Restart()
+    {
+        stopwatch.Restart();
+    }
+
+
+    /// <summary>
+    /// Stop the timer
+    /// </summary>
+    internal void Stop()
+    {
+        // stop the tier
+        stopwatch.Stop(); 
     }
 }

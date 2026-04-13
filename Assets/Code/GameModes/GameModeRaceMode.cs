@@ -12,9 +12,11 @@ internal class GameModeRaceMode : GameMode
 
     internal enum RaceState
     {
-        Starting = 0,
-        Active = 1,
-        Finished = 2,
+        Starting = 0,               // Race was started
+        Countdown = 1,              // Race countdown is active
+        Active = 2,                 // Race is active
+        Finished = 3,               // Race was finished successfully
+        Failed = 4,                 // Race was failed
     };
 
     // externally accessed property -- the subset of the race
@@ -43,7 +45,9 @@ internal class GameModeRaceMode : GameMode
         // ensure we are in the scene known as race mode
         GameManager.SetCurrentScene(GameManager.SCENE_RACE_MODE);   
 
-        ProgressionCoordinator.AdvanceNormal();
+        // don't advance level if we failed
+        if (raceState != RaceState.Failed)
+            ProgressionCoordinator.AdvanceNormal();
 
         Debug.Log("Entering race...");
         raceState = RaceState.Starting;
@@ -57,21 +61,17 @@ internal class GameModeRaceMode : GameMode
     {
         // TODO: This code is completely broken. The scene doesn't swtich in time for the new CarStart for instance.
         if (Input.GetKeyDown(KeyCode.F7))
-        {
             ProgressionCoordinator.AdvanceNormal();
-        }
 
         if (Input.GetKeyDown(KeyCode.F8))
-        {
             ProgressionCoordinator.AdvanceSpecial();
-        }
        
     }
 
     internal override void OnFixedUpdate()
     {
         if (restartTimer.GetElapsedTime() > RESTART_TIME_OUT_OF_FUEL)
-            ProgressionCoordinator.SetLevel(ProgressionCoordinator.currentLevel.scene);
+            raceState = RaceState.Failed;
     }
 
     internal override void OnLeave()
@@ -151,9 +151,13 @@ internal class GameModeRaceMode : GameMode
         switch (raceState)
         {
             case RaceState.Starting:
-                if (!raceStartTimer.HasStarted())
-                    raceStartTimer.Start(RACE_START_TIME);
+                raceStartTimer.Start(RACE_START_TIME);
 
+                raceState = RaceState.Countdown;
+
+                break;
+            // the countdown state
+            case RaceState.Countdown:
                 // remaining time in seconds
                 Int64 remainingTime = ((raceStartTimer.length - raceStartTimer.GetElapsedTime()) / 1000) + 1; // +1 for "3, 2, 1..."
 
@@ -190,7 +194,6 @@ internal class GameModeRaceMode : GameMode
                     CarManager.SetPlayerCar("CarBasic");
                     raceState = RaceState.Active;
                 }
-
                 break;
             // the race is active
             case RaceState.Active:
@@ -199,6 +202,12 @@ internal class GameModeRaceMode : GameMode
                 DrawFuelGauge(raceGuiStyle);
                 DrawMoneyAmount(raceGuiStyle);
                 break;
+            case RaceState.Failed:
+                //cheap way of resetting the current level 
+                raceState = RaceState.Starting;
+                raceStartTimer.Stop();
+                
+                break; 
             // the race is done
             case RaceState.Finished:
                 GameManager.player.stats.money += 100; // TEMP. There needs to be a *RACE CONFIGURATION* which will specify the scene to load, etc.
