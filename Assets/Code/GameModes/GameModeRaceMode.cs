@@ -65,13 +65,18 @@ internal class GameModeRaceMode : GameMode
 
         if (Input.GetKeyDown(KeyCode.F8))
             ProgressionCoordinator.AdvanceSpecial();
-       
+
     }
 
     internal override void OnFixedUpdate()
     {
-        if (restartTimer.GetElapsedTime() > RESTART_TIME_OUT_OF_FUEL)
+        Debug.Log("Restart Timer Time: " + restartTimer.GetElapsedTime());
+
+        if (restartTimer.GetElapsedTime() >= RESTART_TIME_OUT_OF_FUEL)
+        {
+            restartTimer.Reset();
             raceState = RaceState.Failed;
+        }
     }
 
     internal override void OnLeave()
@@ -140,7 +145,9 @@ internal class GameModeRaceMode : GameMode
         else
         {
             GUI.Label(new Rect(x, y, 400, 100), "Out of fuel!");
-            restartTimer.Start(RESTART_TIME_OUT_OF_FUEL);
+
+            if (!restartTimer.HasStarted())
+                restartTimer.Start(RESTART_TIME_OUT_OF_FUEL);
         }
     }
 
@@ -151,8 +158,15 @@ internal class GameModeRaceMode : GameMode
         switch (raceState)
         {
             case RaceState.Starting:
-                raceStartTimer.Start(RACE_START_TIME);
 
+                if (gameTimer.HasStarted())
+                    gameTimer.Restart();
+
+                if (raceStartTimer.HasStarted())
+                    raceStartTimer.Restart();
+                else
+                    raceStartTimer.Start(RACE_START_TIME);
+               
                 raceState = RaceState.Countdown;
 
                 break;
@@ -205,8 +219,7 @@ internal class GameModeRaceMode : GameMode
             case RaceState.Failed:
                 //cheap way of resetting the current level 
                 raceState = RaceState.Starting;
-                raceStartTimer.Stop();
-                
+
                 break; 
             // the race is done
             case RaceState.Finished:

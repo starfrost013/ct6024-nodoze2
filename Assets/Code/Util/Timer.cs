@@ -28,10 +28,7 @@ internal class Timer
             isDone = true;
             stopwatch.Stop();
         }
-
-        if (!stopwatch.IsRunning)
-            return 0;
-
+ 
         return stopwatch.ElapsedMilliseconds;
     }
 
@@ -48,6 +45,14 @@ internal class Timer
     {
         _ = GetElapsedTime();
         return isDone;
+    }
+
+    /// <summary>
+    /// Stops the timer and restarts it to zero.
+    /// </summary>
+    internal void Reset()
+    {
+        stopwatch.Reset();
     }
 
     /// <summary>

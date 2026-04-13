@@ -34,7 +34,7 @@ CameraRelativeZ = 5.0						; Relative camera Z (maximum, while turning) to car
 CameraTurnFactor = 5						; How intensively camera turns when you steer
 
 [Fuel]
-Max = 4000									; Maximum fuel count
+Max = 1 ;4000									; Maximum fuel count
 DepletionPerTick = 0.5						; Fuel depletion per 1/60 of a second
 RefuelGaragePercent = 25.0					; % of fuel refueled by the garage
 DecelerationFuelCutoff = true				; Turn off fuel 
