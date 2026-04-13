@@ -70,8 +70,6 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFixedUpdate()
     {
-        Debug.Log("Restart Timer Time: " + restartTimer.GetElapsedTime());
-
         if (restartTimer.GetElapsedTime() >= RESTART_TIME_OUT_OF_FUEL)
         {
             restartTimer.Reset();
