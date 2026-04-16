@@ -3,6 +3,7 @@ using UnityEngine;
 // The main race mode game mode.
 internal class GameModeMainMenu : GameMode
 {
+
     internal override void OnEnter()
     {
         Debug.Log("Entering the main menu...");

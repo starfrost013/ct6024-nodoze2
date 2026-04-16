@@ -10,8 +10,15 @@ internal class Player
 {
     internal struct PlayerStats
     {
-        // coolness used to buy things
-        internal float money; 
+        /// <summary>
+        /// coolness used to buy things
+        /// </summary>
+        internal float money;
+
+        /// <summary>
+        /// the style points that you have
+        /// </summary>
+        internal UInt64 stylePoints;
     };
 
     /// <summary>
@@ -42,7 +49,10 @@ internal class Player
     {
         return carInWorld != null; 
     }
-
+    
+    /// <summary>
+    /// Destroys the player's current car in the world.
+    /// </summary>
     internal void DestroyCar()
     {
         GameObject.Destroy(carInWorld.gameObject);

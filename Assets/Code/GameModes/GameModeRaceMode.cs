@@ -7,6 +7,17 @@ using static UnityEngine.Rendering.DebugUI.MessageBox;
 // The main race mode game mode/.
 internal class GameModeRaceMode : GameMode
 {
+
+    /// <summary>
+    /// restart timer time when you run out o fuel
+    /// </summary>
+    internal const long RESTART_TIME_OUT_OF_FUEL = 5000;
+
+    /// <summary>
+    /// prefix for race config path
+    /// </summary>
+    internal const string RACE_CONFIG_PATH = "Races/";
+
     /* At some point we need to put all this in a config file */
     const int RACE_START_TIME = 3000;
 
@@ -30,12 +41,6 @@ internal class GameModeRaceMode : GameMode
     /// </summary>
     Timer restartTimer = new(); 
 
-    /// <summary>
-    /// restart timer time when you run out o fuel
-    /// </summary>
-    internal const long RESTART_TIME_OUT_OF_FUEL = 5000; 
-
-    internal string raceConfigFile;
 
     // THIS IS A TERRIBLE WAY OF DOING THIS!
     private bool countdown3Done = false, countdown2Done = false, countdown1Done = false;
