@@ -46,7 +46,8 @@ internal class GameModeRaceMode : GameMode
     internal class RaceConfigData
     {
         internal long timeLimit;
-        internal long checkpointTimeGain; 
+        internal long checkpointTimeGain;
+        internal long completionReward;
 
         internal List<TimeBonusSet> timeBonuses = new(); // is this slow?   
     };
@@ -58,7 +59,7 @@ internal class GameModeRaceMode : GameMode
     internal RaceConfigData raceConfigData { get; private set; }
     
     Timer raceStartTimer = new();
-    Timer gameTimer = new();
+    Timer raceTimer = new();
 
     /// <summary>
     /// Timer used to restart things
@@ -89,11 +90,13 @@ internal class GameModeRaceMode : GameMode
         }
 
         bool success = long.TryParse(ConfigParser.GetValue("TimeLimit"), out raceConfigData.timeLimit)
-            | long.TryParse(ConfigParser.GetValue("CheckpointTimeGain"), out raceConfigData.checkpointTimeGain);
+            | long.TryParse(ConfigParser.GetValue("CheckpointTimeGain"), out raceConfigData.checkpointTimeGain)
+            | long.TryParse(ConfigParser.GetValue("CompletionReward"), out raceConfigData.completionReward)
+            ;
 
         // still at least try to load
         if (!success)
-            Debug.LogError("Event data for " + ProgressionCoordinator.currentLevel.scene + " must at least have a time limit and checkpoint time gain!");
+            Debug.LogError("Event data for " + ProgressionCoordinator.currentLevel.scene + " must at least have a time limit, completion reward! and checkpoint time gain!");
 
         int.TryParse(ConfigParser.GetValue("NumTimeBonus"), out int numTimeBonuses);
 
@@ -163,18 +166,36 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnLeave()
     {
-        // unload
-        
-       
         ProgressionCoordinator.OnExitRaceScene(); 
+    }
+
+    private void CalculateTimeBonus()
+    {
+        float elapsedTime = raceTimer.GetElapsedTime();
+
+        // appyl the specified time bonus
+        for (int i = 0; i < raceConfigData.timeBonuses.Count - 1; i++)     
+        {
+            TimeBonusSet thisTimeBonus = raceConfigData.timeBonuses[i]; 
+            TimeBonusSet nextTimeBonus = raceConfigData.timeBonuses[i + 1]; 
+
+            if (elapsedTime > thisTimeBonus.timerMax
+            && elapsedTime < nextTimeBonus.timerMax)
+            {
+                GameManager.player.stats.money += thisTimeBonus.moneyGranted;
+            }
+        }
+
+        //grant them the completion reward
+        GameManager.player.stats.money += raceConfigData.completionReward;
     }
 
     private void DrawTimer(GUIStyle raceGuiStyle)
     {
-        if (!gameTimer.HasStarted())
-            gameTimer.Start(Timer.TIMER_CONTINUE_FOREVER);
+        if (!raceTimer.HasStarted())
+            raceTimer.Start(Timer.TIMER_CONTINUE_FOREVER);
 
-        Int64 totalTime = gameTimer.GetElapsedTime();
+        Int64 totalTime = raceTimer.GetElapsedTime();
 
         // easier to use constants. 60000 seconds 
         Int64 milliseconds = totalTime % 1000;
@@ -234,8 +255,11 @@ internal class GameModeRaceMode : GameMode
             if (!restartTimer.HasStarted())
                 restartTimer.Start(RESTART_TIME_OUT_OF_FUEL);
         }
+
+
     }
 
+    // todo: This code is *HORRIBLE* 
     internal override void OnLegacyGUI()
     {
         GUIStyle raceGuiStyle = GUI.skin.label; 
@@ -244,8 +268,8 @@ internal class GameModeRaceMode : GameMode
         {
             case RaceState.Starting:
 
-                if (gameTimer.HasStarted())
-                    gameTimer.Restart();
+                if (raceTimer.HasStarted())
+                    raceTimer.Restart();
 
                 if (raceStartTimer.HasStarted())
                     raceStartTimer.Restart();
@@ -308,7 +332,8 @@ internal class GameModeRaceMode : GameMode
                 break; 
             // the race is done
             case RaceState.Finished:
-                GameManager.player.stats.money += 100; // TEMP. There needs to be a *RACE CONFIGURATION* which will specify the scene to load, etc.
+                CalculateTimeBonus();                   // calculate time bonus based on race configuration
+                // TEMP. There needs to be a *RACE CONFIGURATION* which will specify the scene to load, etc.
                 GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
                 break; 
         }
