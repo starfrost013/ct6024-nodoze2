@@ -261,23 +261,29 @@ internal class GameModeRaceMode : GameMode
     {
         Car car = GameManager.player.carInWorld;
         GUI.color = Color.green;
+        raceGuiStyle.alignment = TextAnchor.UpperRight;
 
         float fuelPercentage = (GameManager.player.stats.money) * 100;
 
-        float x = Screen.width - 205;
+        float x = Screen.width - 410;
         float y = Screen.height - 90;
 
         GUI.Label(new Rect(x, y, 400, 100), "Money: $" + GameManager.player.stats.money, raceGuiStyle);
+
+        //restore alignment (hack - but this code is going away soon anyway)
+        raceGuiStyle.alignment = TextAnchor.UpperLeft;
+
     }
 
     private void DrawFuelGauge(GUIStyle raceGuiStyle)
     {
         Car car = GameManager.player.carInWorld;  
         GUI.color = Color.blue;
+        raceGuiStyle.alignment = TextAnchor.UpperRight;
 
         float fuelPercentage = (car.physics.fuelCurrent / car.GetCarModifiers().fuelMax) * 100;
 
-        float x = Screen.width - 205;
+        float x = Screen.width - 410;
         float y = Screen.height - 50;
 
         if (fuelPercentage > 0)
@@ -290,7 +296,8 @@ internal class GameModeRaceMode : GameMode
                 restartTimer.Start(RESTART_TIME_OUT_OF_FUEL);
         }
 
-
+        //restore alignment (hack - but this code is going away soon anyway)
+        raceGuiStyle.alignment = TextAnchor.UpperLeft;
     }
 
     // todo: This code is *HORRIBLE* 
