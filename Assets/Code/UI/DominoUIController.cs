@@ -13,30 +13,28 @@ public class DominoUIController : MonoBehaviour
     const string DROPDOWN_NAME = "SelectDominoDropdown";
     const string DESCRIPTION_TEXT_NAME = "TextDominoDescription";
     const string COST_TEXT_NAME = "TextDominoCost";
+    const string PLAYER_MONEY_TEXT_NAME = "TextPlayerMoney";
 
     TMP_Dropdown selectDominoDropdown = null;
     TMP_Text descriptionText = null;
     TMP_Text costText = null;
+    TMP_Text playerMoneyText = null;
 
     public void Start()
     {
-        GameObject dropdownObject = transform.parent.transform.Find(DROPDOWN_NAME).gameObject;
-        selectDominoDropdown = dropdownObject.GetComponent<TMP_Dropdown>();
+        selectDominoDropdown = transform.parent.transform.Find(DROPDOWN_NAME).gameObject.GetComponent<TMP_Dropdown>();
+        descriptionText = transform.parent.transform.Find(DESCRIPTION_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
+        costText = transform.parent.transform.Find(COST_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
+        playerMoneyText = transform.parent.transform.Find(PLAYER_MONEY_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
 
         if (!selectDominoDropdown)
-            throw new MissingComponentException("PostRace: Couldn't find the SelectDominoDropdown TMP_Dropdown!");
-
-        GameObject textObject = transform.parent.transform.Find(DESCRIPTION_TEXT_NAME).gameObject;
-        descriptionText = textObject.GetComponent<TMP_Text>();
-
+            throw new MissingComponentException("PostRace::Start: Couldn't find the SelectDominoDropdown TMP_Dropdown!");
         if (!descriptionText)
-            throw new MissingComponentException("PostRace: Couldn't find the TextDominoDescription TMP_Text!");
-
-        GameObject costObject = transform.parent.transform.Find(COST_TEXT_NAME).gameObject;
-        costText = costObject.GetComponent<TMP_Text>();
-
+            throw new MissingComponentException("PostRace::Start: Couldn't find the TextDominoDescription TMP_Text!");
         if (!costText)
-            throw new MissingComponentException("PostRace: Couldn't find the TextDominoCost TMP_Text!");
+            throw new MissingComponentException("PostRace::Start: Couldn't find the TextDominoCost TMP_Text!");
+        if (!playerMoneyText)
+            throw new MissingComponentException("PostRace::Start: Couldn't find the TextPlayerMoney TMP_Text!");
 
         List<string> options = new(); 
 
@@ -64,6 +62,8 @@ public class DominoUIController : MonoBehaviour
         selectDominoDropdown.AddOptions(options);
         selectDominoDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
         OnDropdownValueChanged(selectDominoDropdown.value); // ensure a default item just in case
+
+        playerMoneyText.text = "Money: $" + GameManager.player.stats.money;
     }
 
     public void OnDropdownValueChanged(int index)
@@ -72,14 +72,17 @@ public class DominoUIController : MonoBehaviour
         costText.text = "Cost: $" + DominoManager.dominoes[index].cost.ToString(); 
     }
 
-    public void DoneClicked()
+    /// <summary>
+    /// Fired on the Buy button being clicked.
+    /// </summary>
+    public void BuyClicked()
     {
         Domino domino = DominoManager.GetDominoByName(selectDominoDropdown.options[selectDominoDropdown.value].text);
-        
+
         if (domino == null)
         {
             Debug.LogError("Obtained INVALID domino " + selectDominoDropdown.options[selectDominoDropdown.value].text);
-            return; 
+            return;
         }
 
         if (domino.cost > GameManager.player.stats.money)
@@ -88,9 +91,16 @@ public class DominoUIController : MonoBehaviour
             return;
         }
 
-        GameManager.player.stats.money -= domino.cost; 
+        GameManager.player.stats.money -= domino.cost;
 
-        CarManager.ApplyModifierSetToPlayerCar(domino.modifiers);   
+        CarManager.ApplyModifierSetToPlayerCar(domino.modifiers);
+    }
+
+    /// <summary>
+    /// Fired on the done button being clicked
+    /// </summary>
+    public void DoneClicked()
+    {
         GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
     }
 }
