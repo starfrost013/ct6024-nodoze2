@@ -24,6 +24,31 @@ public class GameManagerObject : MonoBehaviour
         GameManager.OnFixedUpdate();
     }
 
+    private void DrawDebugUIWindow(int windowId)
+    {
+        GUIStyle debugGuiStyleLabel = GUI.skin.label;
+        GUIStyle debugGuiStyleButton = GUI.skin.button;
+
+        debugGuiStyleLabel.fontSize = debugGuiStyleButton.fontSize = 12;
+
+        GUI.Label(new Rect(10, 30, 150, 25), "Game State = " + GameManager.GetGameState().ToString(), debugGuiStyleLabel);
+
+        if (GUI.Button(new Rect(10, 60, 150, 25), "Finish Current Level", debugGuiStyleButton))
+            GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
+
+        if (GUI.Button(new Rect(260, 30, 70, 25), "Close", debugGuiStyleButton))
+            GlobalSettings.debugMode = false;
+    }
+
+    private void DrawDebugUI()
+    {
+        float width = 350, height = 200;
+
+        // we don't need any extra id
+        GUI.Window(0, new Rect(10, Screen.height - height - 10, width, height),
+            DrawDebugUIWindow, "It's a Bug! (Debug Display)");
+;    }
+
     private void OnGUI()
     {
         string dateTime = "**** Alpha - Testing ****\n" + Application.version + " (Unity " + Application.unityVersion + ")\n" + DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
@@ -37,5 +62,8 @@ public class GameManagerObject : MonoBehaviour
         //maybe we need to update less...
 
         GameManager.OnLegacyGUI();
+
+        if (GlobalSettings.debugMode)
+            DrawDebugUI();
     }
 }

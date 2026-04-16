@@ -81,6 +81,8 @@ internal static class GameManager
         managerObject = newManagerObject;
         player = new();
 
+        GlobalSettings.Init();
+
         SetGameState(state);
 
         initialised = true; 

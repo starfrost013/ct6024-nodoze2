@@ -1,0 +1,5 @@
+ONLY use streamingassets folder for stuff you want the user to see.
+
+Currently, we use the very bad idea of Resources.Load (resources.assets) for everything. However, there is not enough time to convert it to Assetbundles. Oh well!
+
+--Connor (16 April 2026, 22:35) with some beer ;^)
