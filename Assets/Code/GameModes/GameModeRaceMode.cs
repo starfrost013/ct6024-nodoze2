@@ -17,7 +17,7 @@ internal class GameModeRaceMode : GameMode
     /// <summary>
     /// prefix for race config path
     /// </summary>
-    internal const string RACE_CONFIG_PATH = "Races";
+    internal const string RACE_CONFIG_PATH = "Races/";
 
     /* At some point we need to put all this in a config file */
     const int RACE_START_TIME = 3000;
@@ -48,7 +48,7 @@ internal class GameModeRaceMode : GameMode
         internal long timeLimit;
         internal long checkpointTimeGain; 
 
-        internal List<TimeBonusSet> timeBonuses; // is this slow?   
+        internal List<TimeBonusSet> timeBonuses = new(); // is this slow?   
     };
 
     
@@ -72,13 +72,14 @@ internal class GameModeRaceMode : GameMode
     private bool LoadEventData()
     {
         Debug.Log("Loading event data for level " + ProgressionCoordinator.currentLevel.scene);
-        string levelConfigDataPath = RACE_CONFIG_PATH + "/" + ProgressionCoordinator.currentLevel.scene + ".txt";
+        string levelConfigDataPath = RACE_CONFIG_PATH + ProgressionCoordinator.currentLevel.scene;
 
         // ensure that osmething happens
         raceConfigData = new();
 
         // load the race information
         raceConfigDataText = AssetManager.LoadAsset<TextAsset>(levelConfigDataPath);
+        ConfigParser.Parse(raceConfigDataText.text);
 
         // just log and continue
         if (!raceConfigDataText)
@@ -94,10 +95,13 @@ internal class GameModeRaceMode : GameMode
         if (!success)
             Debug.LogError("Event data for " + ProgressionCoordinator.currentLevel.scene + " must at least have a time limit and checkpoint time gain!");
 
-        success = int.TryParse(ConfigParser.GetValue("NumTimeBonuses"), out int numTimeBonuses);
+        int.TryParse(ConfigParser.GetValue("NumTimeBonus"), out int numTimeBonuses);
 
         if (numTimeBonuses == 0)
+        {
             Debug.LogError("Please specify the number of time bonuses for " + ProgressionCoordinator.currentLevel.scene + "!");
+            return false; 
+        }
 
         for (int i = 0; i < numTimeBonuses; i++)
         {
