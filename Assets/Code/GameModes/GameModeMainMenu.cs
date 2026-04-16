@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// The main race mode game mode.
+/// The main race mode game mode.
 internal class GameModeMainMenu : GameMode
 {
 

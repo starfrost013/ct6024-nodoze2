@@ -211,10 +211,15 @@ internal class GameModeRaceMode : GameMode
         for (int i = 0; i < raceConfigData.timeBonuses.Count - 1; i++)     
         {
             TimeBonusSet thisTimeBonus = raceConfigData.timeBonuses[i]; 
-            TimeBonusSet nextTimeBonus = raceConfigData.timeBonuses[i + 1]; 
+            TimeBonusSet nextTimeBonus = raceConfigData.timeBonuses[i + 1];
 
-            if (elapsedTime > thisTimeBonus.timerMax
-            && elapsedTime < nextTimeBonus.timerMax)
+            bool awardBonus = (elapsedTime > thisTimeBonus.timerMax
+            && elapsedTime < nextTimeBonus.timerMax);
+
+            if (i == 0)
+                awardBonus = (elapsedTime < thisTimeBonus.timerMax);
+
+            if (awardBonus)
             {
                 GameManager.player.stats.money += thisTimeBonus.moneyGranted;
             }

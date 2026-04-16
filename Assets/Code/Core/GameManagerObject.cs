@@ -31,7 +31,7 @@ public class GameManagerObject : MonoBehaviour
 
         debugGuiStyleLabel.fontSize = debugGuiStyleButton.fontSize = 12;
 
-        GUI.Label(new Rect(10, 30, 150, 25), "Game State = " + GameManager.GetGameState().ToString(), debugGuiStyleLabel);
+        GUI.Label(new Rect(10, 30, 250, 25), "Game State = " + GameManager.GetGameState().ToString(), debugGuiStyleLabel);
 
         if (GUI.Button(new Rect(10, 60, 150, 25), "Finish Current Level", debugGuiStyleButton))
         {
