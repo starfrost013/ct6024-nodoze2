@@ -12,9 +12,11 @@ public class DominoUIController : MonoBehaviour
 {
     const string DROPDOWN_NAME = "SelectDominoDropdown";
     const string DESCRIPTION_TEXT_NAME = "TextDominoDescription";
+    const string COST_TEXT_NAME = "TextDominoCost";
 
     TMP_Dropdown selectDominoDropdown = null;
     TMP_Text descriptionText = null;
+    TMP_Text costText = null;
 
     public void Start()
     {
@@ -22,9 +24,19 @@ public class DominoUIController : MonoBehaviour
         selectDominoDropdown = dropdownObject.GetComponent<TMP_Dropdown>();
 
         if (!selectDominoDropdown)
-            return;
+            throw new MissingComponentException("PostRace: Couldn't find the SelectDominoDropdown TMP_Dropdown!");
+
         GameObject textObject = transform.parent.transform.Find(DESCRIPTION_TEXT_NAME).gameObject;
-        descriptionText = textObject.GetComponent<TMP_Text>(); 
+        descriptionText = textObject.GetComponent<TMP_Text>();
+
+        if (!descriptionText)
+            throw new MissingComponentException("PostRace: Couldn't find the TextDominoDescription TMP_Text!");
+
+        GameObject costObject = transform.parent.transform.Find(COST_TEXT_NAME).gameObject;
+        costText = costObject.GetComponent<TMP_Text>();
+
+        if (!costText)
+            throw new MissingComponentException("PostRace: Couldn't find the TextDominoCost TMP_Text!");
 
         List<string> options = new(); 
 
@@ -56,7 +68,8 @@ public class DominoUIController : MonoBehaviour
 
     public void OnDropdownValueChanged(int index)
     {
-        descriptionText.text = DominoManager.dominoes[index].description;   
+        descriptionText.text = DominoManager.dominoes[index].description;
+        costText.text = "Cost: $" + DominoManager.dominoes[index].cost.ToString(); 
     }
 
     public void DoneClicked()
@@ -68,6 +81,14 @@ public class DominoUIController : MonoBehaviour
             Debug.LogError("Obtained INVALID domino " + selectDominoDropdown.options[selectDominoDropdown.value].text);
             return; 
         }
+
+        if (domino.cost > GameManager.player.stats.money)
+        {
+            costText.text = "Not enough money!";
+            return;
+        }
+
+        GameManager.player.stats.money -= domino.cost; 
 
         CarManager.ApplyModifierSetToPlayerCar(domino.modifiers);   
         GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
