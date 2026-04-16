@@ -92,6 +92,7 @@ public class DominoUIController : MonoBehaviour
         }
 
         GameManager.player.stats.money -= domino.cost;
+        playerMoneyText.text = "Money: $" + GameManager.player.stats.money;
 
         CarManager.ApplyModifierSetToPlayerCar(domino.modifiers);
     }
