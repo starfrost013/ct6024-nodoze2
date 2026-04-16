@@ -162,6 +162,40 @@ internal class GameModeRaceMode : GameMode
             restartTimer.Reset();
             raceState = RaceState.Failed;
         }
+
+        switch (raceState)
+        {
+            case RaceState.Starting:
+                if (raceTimer.HasStarted())
+                    raceTimer.Restart();
+
+                if (raceStartTimer.HasStarted())
+                    raceStartTimer.Restart();
+                else
+                    raceStartTimer.Start(RACE_START_TIME);
+
+                raceState = RaceState.Countdown;
+                break;
+            // the countdown state
+            case RaceState.Countdown:
+                break;
+            // the race is active
+            case RaceState.Active:
+                // all this does is draw the ui so this will be moved here
+                break;
+            case RaceState.Failed:
+                //cheap way of resetting the current level 
+                raceState = RaceState.Starting;
+
+                break;
+            // the race is done
+            case RaceState.Finished:
+                CalculateTimeBonus();                   // calculate time bonus based on race configuration
+                // TEMP. There needs to be a *RACE CONFIGURATION* which will specify the scene to load, etc.
+                GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
+                break;
+        }
+
     }
 
     internal override void OnLeave()
@@ -266,19 +300,6 @@ internal class GameModeRaceMode : GameMode
 
         switch (raceState)
         {
-            case RaceState.Starting:
-
-                if (raceTimer.HasStarted())
-                    raceTimer.Restart();
-
-                if (raceStartTimer.HasStarted())
-                    raceStartTimer.Restart();
-                else
-                    raceStartTimer.Start(RACE_START_TIME);
-               
-                raceState = RaceState.Countdown;
-
-                break;
             // the countdown state
             case RaceState.Countdown:
                 // remaining time in seconds
@@ -325,16 +346,8 @@ internal class GameModeRaceMode : GameMode
                 DrawFuelGauge(raceGuiStyle);
                 DrawMoneyAmount(raceGuiStyle);
                 break;
-            case RaceState.Failed:
-                //cheap way of resetting the current level 
-                raceState = RaceState.Starting;
-
-                break; 
             // the race is done
             case RaceState.Finished:
-                CalculateTimeBonus();                   // calculate time bonus based on race configuration
-                // TEMP. There needs to be a *RACE CONFIGURATION* which will specify the scene to load, etc.
-                GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
                 break; 
         }
     }
