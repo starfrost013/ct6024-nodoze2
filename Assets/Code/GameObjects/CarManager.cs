@@ -14,6 +14,9 @@ internal static class CarManager
     /* these basically get spawned into the world based on prototype objects stored here */
     internal static GameObject[] carArray;
 
+    /// <summary>
+    /// determines if the car manager is initilaised
+    /// </summary>
     private static bool initialised;
 
     internal static void Init()

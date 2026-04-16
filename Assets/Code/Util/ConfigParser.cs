@@ -20,8 +20,8 @@ internal static class ConfigParser
 
         // convert into a nicer representation. this also allows us to forgo sections since things go into a section
 
-        string currentSectionName = "Default Section";
-        string trimmedLine;
+        string currentSectionName = string.Empty;
+        string trimmedLine = string.Empty;
         bool sectionsExist = false;
 
         // try to write a fast loop
@@ -65,7 +65,7 @@ internal static class ConfigParser
 
         // create a default section
         if (!sectionsExist)
-            file[currentSectionName] = new NAryDictionary<string, string>();
+            throw new System.Exception("Please put at least one section in your INI file!");
     }
 
     // I hope it's trivial
