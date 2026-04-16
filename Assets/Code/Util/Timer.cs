@@ -22,6 +22,12 @@ internal class Timer
 
     internal Int64 GetElapsedTime()
     {
+        // it's cleaner api design if we don't allow this and have a constructor above,
+        // but you can't crearte a system.diagnostics.stopwatch without starnig it and then immediatelys topping it which takes time
+        // so, we just do this -- we don't realy care if the inner stopwatch exists.
+        if (stopwatch == null)
+            return 0;
+
         if (stopwatch.ElapsedMilliseconds > length
             && length != TIMER_CONTINUE_FOREVER)
         {

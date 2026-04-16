@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 // The main race mode game mode/.
 internal class GameModeRaceMode : GameMode
@@ -16,7 +17,7 @@ internal class GameModeRaceMode : GameMode
     /// <summary>
     /// prefix for race config path
     /// </summary>
-    internal const string RACE_CONFIG_PATH = "Races/";
+    internal const string RACE_CONFIG_PATH = "Races";
 
     /* At some point we need to put all this in a config file */
     const int RACE_START_TIME = 3000;
@@ -30,9 +31,32 @@ internal class GameModeRaceMode : GameMode
         Failed = 4,                 // Race was failed
     };
 
+    /// <summary>
+    /// A time bonus set.
+    /// </summary>
+    internal struct TimeBonusSet
+    {
+        internal long timerMax;
+        internal long moneyGranted;
+    };
+
+    /// <summary>
+    /// The configuration data of the race.
+    /// </summary>
+    internal class RaceConfigData
+    {
+        internal long timeLimit;
+        internal long checkpointTimeGain; 
+
+        internal List<TimeBonusSet> timeBonuses; // is this slow?   
+    };
+
+    
     // externally accessed property -- the subset of the race
     internal RaceState raceState { get; set; }
-
+    private TextAsset raceConfigDataText { get; set; }
+    internal RaceConfigData raceConfigData { get; private set; }
+    
     Timer raceStartTimer = new();
     Timer gameTimer = new();
 
@@ -45,6 +69,55 @@ internal class GameModeRaceMode : GameMode
     // THIS IS A TERRIBLE WAY OF DOING THIS!
     private bool countdown3Done = false, countdown2Done = false, countdown1Done = false;
 
+    private bool LoadEventData()
+    {
+        Debug.Log("Loading event data for level " + ProgressionCoordinator.currentLevel.scene);
+        string levelConfigDataPath = RACE_CONFIG_PATH + "/" + ProgressionCoordinator.currentLevel.scene + ".txt";
+
+        // ensure that osmething happens
+        raceConfigData = new();
+
+        // load the race information
+        raceConfigDataText = AssetManager.LoadAsset<TextAsset>(levelConfigDataPath);
+
+        // just log and continue
+        if (!raceConfigDataText)
+        {
+            Debug.LogError("Failed to load race configuration data for level " + ProgressionCoordinator.currentLevel.scene + " (path " + levelConfigDataPath + ")");
+            return false; // don't bother
+        }
+
+        bool success = long.TryParse(ConfigParser.GetValue("TimeLimit"), out raceConfigData.timeLimit)
+            | long.TryParse(ConfigParser.GetValue("CheckpointTimeGain"), out raceConfigData.checkpointTimeGain);
+
+        // still at least try to load
+        if (!success)
+            Debug.LogError("Event data for " + ProgressionCoordinator.currentLevel.scene + " must at least have a time limit and checkpoint time gain!");
+
+        success = int.TryParse(ConfigParser.GetValue("NumTimeBonuses"), out int numTimeBonuses);
+
+        if (numTimeBonuses == 0)
+            Debug.LogError("Please specify the number of time bonuses for " + ProgressionCoordinator.currentLevel.scene + "!");
+
+        for (int i = 0; i < numTimeBonuses; i++)
+        {
+            success = long.TryParse(ConfigParser.GetValue("TimeBonus" + i), out long currentTimerMax)
+            | long.TryParse(ConfigParser.GetValue("TimeBonus" + i + "Money"), out long currentTimerMoney);
+
+            if (!success)
+                Debug.LogWarning("Data for time bonus " + i + " of level " + ProgressionCoordinator.currentLevel.scene + "is malformed. Please fix...");
+
+            raceConfigData.timeBonuses.Add(new TimeBonusSet
+            { 
+                timerMax = currentTimerMax,
+                moneyGranted = currentTimerMoney,   
+            });
+        }
+
+        success = true; 
+        return success; 
+    }
+
     internal override void OnEnter()
     {
         // ensure we are in the scene known as race mode
@@ -56,6 +129,8 @@ internal class GameModeRaceMode : GameMode
 
         Debug.Log("Entering race...");
         raceState = RaceState.Starting;
+
+        LoadEventData();    
 
         // wrost hack ever
         if (raceStartTimer.HasStarted())
@@ -84,6 +159,9 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnLeave()
     {
+        // unload
+        
+       
         ProgressionCoordinator.OnExitRaceScene(); 
     }
 
