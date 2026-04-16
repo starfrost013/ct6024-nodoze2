@@ -34,7 +34,19 @@ public class GameManagerObject : MonoBehaviour
         GUI.Label(new Rect(10, 30, 150, 25), "Game State = " + GameManager.GetGameState().ToString(), debugGuiStyleLabel);
 
         if (GUI.Button(new Rect(10, 60, 150, 25), "Finish Current Level", debugGuiStyleButton))
-            GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
+        {
+            // do a proper transition
+            if (GameManager.GetGameState() == GameManager.GameModeEnum.RaceMode)
+            {
+                GameModeRaceMode raceMode = (GameModeRaceMode)GameManager.mode;
+                raceMode.raceState = GameModeRaceMode.RaceState.Finished;
+            }
+            else
+            {
+                GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
+
+            }
+        }
 
         if (GUI.Button(new Rect(260, 30, 70, 25), "Close", debugGuiStyleButton))
             GlobalSettings.debugMode = false;
