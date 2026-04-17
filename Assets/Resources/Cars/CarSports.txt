@@ -1,0 +1,43 @@
+; Sports car 
+
+[Handling]
+
+MaxForwardTorque = 3.0						; Top speed
+MaxForwardTorqueBoost =	5.0					; Top speed during boost
+AccelerationForward = 5.0					; Acceleration of car (needs to ramp up in accordance with a curve)
+AccelerationSteering = 3.5					; Acceleration to apply in lateral direction
+MinimumSteeringAmount = 0.15				; Magnitude of the minimum steering
+MaximumSteeringAmount = 1.0					; Magnitude of the minimum steering
+MaximumSteeringVelocity = 10.0				; Magnitude at which the maximum steering velocity is applied
+AccelerationForwardAir = 3.0				; Acceleration to apply in forward direction while in the air
+AccelerationSteeringAir = 2.5				; Acceleration to apply in lateral direction while in the air
+Deceleration = 0.965						; Deceleration while idle (must be below 1) 
+DecelerationSteering = 0.95					; Deceleration while steering (must be below 1)
+DecelerationChangeDirection = 9.0			; Deceleration while changing direction
+DecelerationChangeDirectionSteering = 7.0	; Deceleration while steering and changing direction
+
+DecelerationAir = 0.999						; Deceleration in the air
+MaxSteeringTorque = 9.0						; Maximum torque
+BoostAccelerationForward = 30.0				; Acceleration of car on TOP of regular acceleration 
+BoostAccelerationSteering = 5.0				; Acceleration of car on TOP of regular acceleration steering
+BoostAccelerationForwardAir = 3.0			; Acceleration of car on TOP of regular acceleration in the air
+BoostAccelerationSteeringAir = 2.0			; Acceleration of car on TOP of regular acceleration steering in the air
+	
+BoostAmount = 3000							; Amount of boost
+BoostDepletionPerTick = 10					; Boost depletion per 1/60 of a second
+BoostRegenPerTick = 6						; Boost depletion per 1/60 of a second
+SteeringType = Manual 						; 0 = Automatic, 1 = Manual, you can use numbers or the names 
+
+[Camera]
+MaximumTurnCameraAngle = 19.0				; Maximum camera turn angle
+MaximumTurnCameraAmount = 0.1				; Maximum amount the camera can tunr
+CameraRelativeX = 0.1						; Relative camera X (maximum, while turning) to car
+CameraRelativeY = 1.4						; Relative camera Y (maximum, while turning) to car
+CameraRelativeZ = 5.0						; Relative camera Z (maximum, while turning) to car
+CameraTurnFactor = 5						; How intensively camera turns when you steer
+
+[Fuel]
+Max = 3600									; Maximum fuel count
+DepletionPerTick = 0.7						; Fuel depletion per 1/60 of a second
+RefuelGaragePercent = 25.0					; % of fuel refueled by the garage
+DecelerationFuelCutoff = false				; Turn off fuel 

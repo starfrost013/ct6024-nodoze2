@@ -21,9 +21,14 @@ internal static class CarManager
 
     internal static void Init()
     {
+        Debug.Log("Loading cars...");
+
         // don't reinit on e.g. race restart
         if (!initialised)
             carObjects = AssetManager.LoadAssetsInFolder<GameObject>(CAR_PATH);
+
+        if (carObjects == null)
+            Debug.LogError("Failed to load cars!");
 
         initialised = true;
 

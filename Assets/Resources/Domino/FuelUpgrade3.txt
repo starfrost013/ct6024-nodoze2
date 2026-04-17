@@ -7,4 +7,4 @@ ExpiryTime = 0
 Requires = FuelUpgrade2						; Use the ****FILE NAME****
 
 [Fuel]
-Max = 5000									; Maximum fuel count
+Max = 1700									; Maximum fuel count

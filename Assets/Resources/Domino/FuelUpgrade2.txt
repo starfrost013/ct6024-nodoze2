@@ -7,4 +7,4 @@ ExpiryTime = 0
 Requires =FuelUpgrade1
 
 [Fuel]
-Max = 5000									; Maximum fuel count
+Max = 1000									; Maximum fuel count

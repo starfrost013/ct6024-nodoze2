@@ -30,10 +30,6 @@ static class UIManager
             Debug.LogError("Failed to load menus!");
             return;
         }
-
-        // no need, we may not have any menus in early builds
-        if (menus.Length == 0)
-            return; 
     }
 
     internal static GameObject GetMenuByName(string name)
