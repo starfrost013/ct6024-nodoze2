@@ -6,6 +6,7 @@ TopSpeed = 2.0								; Top speed
 TopSpeedBoost =	4.0							; Top speed during boost
 AccelerationForward = 5.0					; Acceleration of car (needs to ramp up in accordance with a curve)
 AccelerationSteering = 4.0					; Acceleration to apply in lateral direction
+MaximumSteeringVelocity = 10.0				; Magnitude at which the maximum steering velocity is applied
 AccelerationForwardAir = 1.0				; Acceleration to apply in forward direction while in the air
 AccelerationSteeringAir = 5.0				; Acceleration to apply in lateral direction while in the air
 Deceleration = 0.965						; Deceleration while idle (must be below 1) 

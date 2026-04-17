@@ -24,7 +24,7 @@ internal class CarModifier
     internal float decelerationChangeDirection;                 // deceleration when the car changes direction [W/S]
     internal float decelerationChangeDirectionSteering;         // deceleration when the car changes direction [A/D]
     internal float maxSteeringTorque;                           // maximum torque
-    internal float steeringRampUpTicks;                         // torque multiplier 
+    internal float maxSteeringVelocity;                         // maximum velocity magnitude
 
     // Boosting characteristics of the car
     internal float boostMax;                                    // total boost amount per 1/60 of a second
@@ -69,7 +69,7 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationChangeDirection"), out decelerationChangeDirection)
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationChangeDirectionSteering"), out decelerationChangeDirectionSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "MaxSteeringTorque"), out maxSteeringTorque)
-        | float.TryParse(ConfigParser.GetValue("Handling", "SteeringRampUpTicks"), out steeringRampUpTicks)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaximumSteeringVelocity"), out maxSteeringVelocity)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAmount"), out boostMax)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostDepletionPerTick"), out boostDepletionPerTick)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForward"), out boostAccelerationForward)

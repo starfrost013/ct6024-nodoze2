@@ -210,6 +210,8 @@ internal class Car : BasePhysicsObject
         // use for fuel checks
         bool anyInput = (moveInput || steerInput);
 
+        Debug.Log("Vel = " + physRigidbody.linearVelocity.magnitude);
+
         if (!anyInput)
             return;
 
@@ -247,6 +249,7 @@ internal class Car : BasePhysicsObject
         }
         else if (physics.boostEnding)
             forwardAccelHandlingForThisFrame = steeringAccelHandlingForThisFrame = 0.0f;  // only apply natural deceleration of boost is ending
+        
 
         // New code does this calculation automatically - Jan 28, 2025 
 
@@ -370,10 +373,13 @@ internal class Car : BasePhysicsObject
 
         // car rotation 
 
+        float steeringRampFactor = Math.Clamp(physRigidbody.linearVelocity.magnitude / physics.data.maxSteeringVelocity, 0.1f, 1.0f);
+
+
         transform.localEulerAngles = new Vector3(
             transform.localEulerAngles.x,
             // always divide by 60 as fixedupdate updates 60 times per second
-            transform.localEulerAngles.y + (physics.rotationTorque / 20.0f) * 360.0f * Time.fixedDeltaTime,
+            transform.localEulerAngles.y + (physics.rotationTorque / 20.0f) * steeringRampFactor * 360.0f * Time.fixedDeltaTime,
             transform.localEulerAngles.z);
 
         // rotate the wheels (todo: move3 everything into an array)
@@ -500,7 +506,7 @@ internal class Car : BasePhysicsObject
         physics.data.decelerationChangeDirectionSteering += info.decelerationChangeDirectionSteering;
         physics.data.decelerationSteering += info.decelerationSteering;
         physics.data.maxSteeringTorque += info.maxSteeringTorque;
-        physics.data.steeringRampUpTicks += info.steeringRampUpTicks;
+        physics.data.maxSteeringVelocity += info.maxSteeringVelocity;
         physics.data.topSpeed += info.topSpeed;
         physics.data.topSpeedBoost += info.topSpeedBoost;
 
