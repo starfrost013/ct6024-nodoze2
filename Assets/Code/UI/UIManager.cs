@@ -34,17 +34,6 @@ static class UIManager
         // no need, we may not have any menus in early builds
         if (menus.Length == 0)
             return; 
-
-        // in retail mode, assume it works (user can't do anything about it anyway)
-        if (GlobalSettings.debugMode)
-        {
-            foreach (GameObject menu in menus)
-            {
-                // check that each menu has a canvas component
-                if (menu.GetComponent<Canvas>() == null)
-                    Debug.LogWarning("Menu " + menu.name + " doesn't have a canvas! Please add one....");
-            }
-        }
     }
 
     internal static GameObject GetMenuByName(string name)
