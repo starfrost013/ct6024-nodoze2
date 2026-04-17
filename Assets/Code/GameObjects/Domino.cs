@@ -18,7 +18,7 @@ internal class Domino
     internal string name;               // name
     internal string description;        // description     
     internal string internalName;       // the itnernal name
-    internal string required;           // optional - domino required 
+    internal string requires;           // optional - domino required 
     internal float cost;                // cost of the domino
     internal float expiryTime;          // 0 =none, for temporary powerups
     internal CarModifier modifiers = new();
@@ -41,7 +41,7 @@ internal class Domino
         internalName = config.name;
         cost = float.Parse(ConfigParser.GetValue("Info", "Cost"));
         expiryTime = float.Parse(ConfigParser.GetValue("Info", "ExpiryTime"));
-        required = ConfigParser.GetValue("Info", "Required");
+        requires = ConfigParser.GetValue("Info", "Requires");
         modifiers.Load();
 
         // duplicated for use in various other places 

@@ -4,7 +4,7 @@ Name = Speed Upgrade 3
 Description = Drunk Driver!
 Cost = 100
 ExpiryTime = 0
-Required = SpeedUpgrade2
+Requires = SpeedUpgrade2
 
 [Handling]
 Acceleration = 15.0
