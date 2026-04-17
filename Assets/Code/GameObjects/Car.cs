@@ -186,51 +186,32 @@ internal class Car : BasePhysicsObject
         Debug.Assert(physics.wheelLeftBackCollider && physics.wheelLeftFrontCollider && physics.wheelRightBackCollider && physics.wheelRightFrontCollider, "All car wheels must have WheelColliders!");
     }
 
-    // FixedUpdate contains our controls so they feel decent regardless of fraemrate
-    // I don't have time to use ISP sorry!
-    private void FixedUpdate()
+    private void RunInputFlip()
     {
-        // Check if the race is active so we can move (using temporary UI)
-        GameMode mode = GameManager.mode;
-
-        // HACK (avoids us doing a second call
-        if (mode is GameModeRaceMode)
-        {
-            GameModeRaceMode raceMode = (GameModeRaceMode)mode;
-
-            if (raceMode.raceState != GameModeRaceMode.RaceState.Active)
-                return;
-        }
-
-        if (physics.fuelCurrent <= 0)
-        {
-            physics.fuelCurrent = 0;
-            return; 
-        }
-
-        // Start by reading inputs 
-
-        // first, check with the flip input (temporary input for debug)
         bool flipInput = Input.GetKey(KeyCode.F);
 
-        // handle on its own
-        if (flipInput)
-        {
-            transform.localEulerAngles = (new(transform.localEulerAngles.x, transform.localEulerAngles.y, 0.0f));
-            transform.position = new(transform.position.x, transform.position.y + 0.2f, transform.position.z);
-            return; 
-        }
+        if (!flipInput)
+            return;
 
+        transform.localEulerAngles = (new(transform.localEulerAngles.x, transform.localEulerAngles.y, 0.0f));
+        transform.position = new(transform.position.x, transform.position.y + 0.2f, transform.position.z);
+    }
+
+    private void RunInputMove()
+    {
         bool accelerateInput = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
         bool decelerateInput = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
         bool steerLeftInput = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
         bool steerRightInput = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
-        
+
         bool moveInput = (accelerateInput || decelerateInput);
         bool steerInput = (steerLeftInput || steerRightInput);
 
         // use for fuel checks
-        bool anyInput = (moveInput || steerInput);  
+        bool anyInput = (moveInput || steerInput);
+
+        if (!anyInput)
+            return;
 
         // check if we stopped boosting
         bool didWeStopBoosting = physics.boosting;
@@ -406,27 +387,6 @@ internal class Car : BasePhysicsObject
         physics.wheelRightFrontCollider.GetWorldPose(out Vector3 _, out wheelRotation);
         wheelRightFront.transform.rotation = wheelRotation;
 
-        //
-        // CAMERA
-        //
-
-        // car was incorrectly exported and bad bad artists won't re-export
-        // Fix when model correctly imported
-        Vector3 carRot = transform.rotation.eulerAngles;
-        float newEulerY = ((carRot.y + 180.0f) % 360) + (physics.data.maximumTurnCameraAngle * cameraTurnPercentage);         
-
-        Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x,
-                newEulerY,
-                Camera.main.transform.localEulerAngles.z
-                );
-
-       // Debug.Log("Maximum Camera Turn Angle = " + physics.data.maximumTurnCameraAngle + " % Factor = " + cameraTurnPercentage);
-
-        /* also move a bit forward depending on our overall speed */ 
-        Camera.main.transform.position = transform.position + (transform.forward * physics.data.cameraRelativeZ);
-        /* Dumb ass way of doing it - there's a better way. */
-        Camera.main.transform.position += physics.data.cameraRelativeX * (transform.right * cameraTurnPercentage);
-        Camera.main.transform.position += new Vector3(0.0f, physics.data.cameraRelativeY, 0.0f);
 
         //
         // Fuel handling 
@@ -446,6 +406,63 @@ internal class Car : BasePhysicsObject
 
             physics.fuelCurrent -= (physics.data.fuelDepletionPerTick * fuelUseMultiplier);
         }
+    }
+
+    private void UpdateCamera()
+    {
+        // car was incorrectly exported and bad bad artists won't re-export
+        // Fix when model correctly imported
+        Vector3 carRot = transform.rotation.eulerAngles;
+        float newEulerY = ((carRot.y + 180.0f) % 360) + (physics.data.maximumTurnCameraAngle * cameraTurnPercentage);
+
+        Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x,
+                newEulerY,
+                Camera.main.transform.localEulerAngles.z
+                );
+
+        // Debug.Log("Maximum Camera Turn Angle = " + physics.data.maximumTurnCameraAngle + " % Factor = " + cameraTurnPercentage);
+
+        /* also move a bit forward depending on our overall speed */
+        Camera.main.transform.position = transform.position + (transform.forward * physics.data.cameraRelativeZ);
+        /* Dumb ass way of doing it - there's a better way. */
+        Camera.main.transform.position += physics.data.cameraRelativeX * (transform.right * cameraTurnPercentage);
+        Camera.main.transform.position += new Vector3(0.0f, physics.data.cameraRelativeY, 0.0f);
+    }
+
+    // FixedUpdate contains our controls so they feel decent regardless of fraemrate
+    // I don't have time to use ISP sorry!
+    private void FixedUpdate()
+    {
+        // Check if the race is active so we can move (using temporary UI)
+        GameMode mode = GameManager.mode;
+
+        // HACK (avoids us doing a second call
+        if (GameManager.GetGameState() == GameManager.GameModeEnum.RaceMode)
+        {
+            GameModeRaceMode raceMode = (GameModeRaceMode)mode;
+
+            if (raceMode.raceState != GameModeRaceMode.RaceState.Active)
+                return;
+        }
+
+        bool disableInputs = false;
+
+        if (physics.fuelCurrent <= 0)
+        {
+            physics.fuelCurrent = 0;
+            disableInputs = true; 
+        }
+
+        // run code to check all our inputs
+
+        if (!disableInputs)
+        {
+            RunInputFlip(); // this is separate so make it its own tihng
+            RunInputMove(); // the main input stuff
+        }
+
+        //always update the camera
+        UpdateCamera();
     }
 
     /// <summary>
