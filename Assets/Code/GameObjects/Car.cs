@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using System.Runtime.ConstrainedExecution;
-using Unity.VisualScripting;
 
 using UnityEngine;
 
@@ -231,7 +228,7 @@ internal class Car : BasePhysicsObject
 
         // boost isn't finished until we slow down after boost is done
         if (physics.boostEnding
-            && (Mathf.Abs(physics.forwardTorque) < physics.data.topSpeed))
+            && (Mathf.Abs(physics.forwardTorque) < physics.data.maxForwardTorque))
         {
             physics.boostEnding = false;
         }
@@ -250,11 +247,10 @@ internal class Car : BasePhysicsObject
         else if (physics.boostEnding)
             forwardAccelHandlingForThisFrame = steeringAccelHandlingForThisFrame = 0.0f;  // only apply natural deceleration of boost is ending
         
-
         // New code does this calculation automatically - Jan 28, 2025 
 
-        float forwardAccelerationForThisFrame = forwardAccelHandlingForThisFrame * Time.fixedDeltaTime;
-        float steeringAccelerationForThisFrame = steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
+        float forwardAccelerationForThisTick = forwardAccelHandlingForThisFrame * Time.fixedDeltaTime;
+        float steeringAccelerationForThisTick = steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
 
         // if the boost is ending - we want to decelerate
         // we also want to rapidly change direction if we are steering
@@ -264,7 +260,7 @@ internal class Car : BasePhysicsObject
             if (physics.forwardTorque > 0)
                 physics.forwardTorque -= physics.data.decelerationChangeDirection * Time.fixedDeltaTime;
 
-            physics.forwardTorque += -forwardAccelerationForThisFrame;
+            physics.forwardTorque += -forwardAccelerationForThisTick;
         }
 
         if (decelerateInput)
@@ -272,14 +268,11 @@ internal class Car : BasePhysicsObject
             if (physics.forwardTorque < 0)
                 physics.forwardTorque += physics.data.decelerationChangeDirection * Time.fixedDeltaTime;
 
-            physics.forwardTorque += forwardAccelerationForThisFrame;
+            physics.forwardTorque += forwardAccelerationForThisTick;
         }
 
         // multiply so the car can have a smaller turning circle as it gets faster
-        float steeringChangeFactor = steeringAccelerationForThisFrame;
-
-        if (Math.Abs(physics.forwardTorque) > 1.0f)
-            steeringChangeFactor *= Math.Abs(physics.forwardTorque) / 3.0f;
+        float steeringChangeFactor = steeringAccelerationForThisTick;
 
         if (steerLeftInput
             && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
@@ -339,12 +332,12 @@ internal class Car : BasePhysicsObject
         if (!steerInput)
             physics.rotationTorque *= physics.data.decelerationSteering;
 
-        float topSpeed = physics.data.topSpeed;
+        float topSpeed = physics.data.maxForwardTorque;
 
         // test
         // if the player is boosting we don't want them 
         if (physics.boosting || physics.boostEnding)
-            topSpeed = physics.data.topSpeedBoost;
+            topSpeed = physics.data.maxForwardTorqueBoost;
 
         // anti-big rigs (apply this one at a time)
         if (physics.forwardTorque > topSpeed)
@@ -373,8 +366,9 @@ internal class Car : BasePhysicsObject
 
         // car rotation 
 
-        float steeringRampFactor = Math.Clamp(physRigidbody.linearVelocity.magnitude / physics.data.maxSteeringVelocity, 0.1f, 1.0f);
-
+        // apply a final factor baseed on the linear velocity
+        float steeringRampFactor = Math.Clamp(physRigidbody.linearVelocity.magnitude / physics.data.maxSteeringVelocity, 
+            physics.data.minSteeringAmount, physics.data.maxSteeringAmount);
 
         transform.localEulerAngles = new Vector3(
             transform.localEulerAngles.x,
@@ -506,9 +500,11 @@ internal class Car : BasePhysicsObject
         physics.data.decelerationChangeDirectionSteering += info.decelerationChangeDirectionSteering;
         physics.data.decelerationSteering += info.decelerationSteering;
         physics.data.maxSteeringTorque += info.maxSteeringTorque;
+        physics.data.minSteeringAmount += info.minSteeringAmount;
+        physics.data.maxSteeringAmount += info.maxSteeringAmount;   
         physics.data.maxSteeringVelocity += info.maxSteeringVelocity;
-        physics.data.topSpeed += info.topSpeed;
-        physics.data.topSpeedBoost += info.topSpeedBoost;
+        physics.data.maxForwardTorque += info.maxForwardTorque;
+        physics.data.maxForwardTorqueBoost += info.maxForwardTorqueBoost;
 
         physics.data.maximumTurnCameraAngle += info.maximumTurnCameraAngle;
         physics.data.maximumTurnCameraAmount += info.maximumTurnCameraAmount;

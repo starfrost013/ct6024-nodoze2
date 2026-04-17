@@ -7,7 +7,7 @@ ExpiryTime = 0
 
 [Handling]
 
-TopSpeed = -1.9999								; Top speed
+TopSpeed = -1.9999							; Top speed
 TopSpeedBoost =	-3.9999						; Top speed during boost
 AccelerationForward = -5.0					; Acceleration of car (needs to ramp up in accordance with a curve)
 AccelerationSteering = -4.0					; Acceleration to apply in lateral direction

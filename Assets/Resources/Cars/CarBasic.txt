@@ -2,17 +2,19 @@
 
 [Handling]
 
-TopSpeed = 2.0								; Top speed
-TopSpeedBoost =	4.0							; Top speed during boost
+MaxForwardTorque = 2.0						; Top speed
+MaxForwardTorqueBoost =	4.0					; Top speed during boost
 AccelerationForward = 5.0					; Acceleration of car (needs to ramp up in accordance with a curve)
-AccelerationSteering = 4.0					; Acceleration to apply in lateral direction
+AccelerationSteering = 3.5					; Acceleration to apply in lateral direction
+MinimumSteeringAmount = 0.15				; Magnitude of the minimum steering
+MaximumSteeringAmount = 1.0					; Magnitude of the minimum steering
 MaximumSteeringVelocity = 10.0				; Magnitude at which the maximum steering velocity is applied
-AccelerationForwardAir = 1.0				; Acceleration to apply in forward direction while in the air
-AccelerationSteeringAir = 5.0				; Acceleration to apply in lateral direction while in the air
+AccelerationForwardAir = 3.0				; Acceleration to apply in forward direction while in the air
+AccelerationSteeringAir = 2.5				; Acceleration to apply in lateral direction while in the air
 Deceleration = 0.965						; Deceleration while idle (must be below 1) 
 DecelerationSteering = 0.95					; Deceleration while steering (must be below 1)
-DecelerationChangeDirection = 8.0			; Deceleration while changing direction
-DecelerationChangeDirectionSteering = 6.0	; Deceleration while steering and changing direction
+DecelerationChangeDirection = 9.0			; Deceleration while changing direction
+DecelerationChangeDirectionSteering = 7.0	; Deceleration while steering and changing direction
 
 DecelerationAir = 0.999						; Deceleration in the air
 MaxSteeringTorque = 9.0						; Maximum torque

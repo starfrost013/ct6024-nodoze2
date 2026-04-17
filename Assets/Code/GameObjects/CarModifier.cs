@@ -12,8 +12,8 @@ using UnityEngine;
 internal class CarModifier
 {
     // Characteristics of the car
-    internal float topSpeed;
-    internal float topSpeedBoost;
+    internal float maxForwardTorque;
+    internal float maxForwardTorqueBoost;
     internal float accelerationForward;                         // acceleration while moving forward
     internal float accelerationSteering;
     internal float accelerationForwardAir;
@@ -24,6 +24,8 @@ internal class CarModifier
     internal float decelerationChangeDirection;                 // deceleration when the car changes direction [W/S]
     internal float decelerationChangeDirectionSteering;         // deceleration when the car changes direction [A/D]
     internal float maxSteeringTorque;                           // maximum torque
+    internal float minSteeringAmount;                           // minimum speed steering magnitude at 0 speed while stopped
+    internal float maxSteeringAmount;                           // maximum speed steering magnitude at maxSteeringVelocity
     internal float maxSteeringVelocity;                         // maximum velocity magnitude
 
     // Boosting characteristics of the car
@@ -54,11 +56,10 @@ internal class CarModifier
 
     internal void Load()
     {
-        bool success = false;
-
         // this is horrible but seemed to be the best way to determine if at least one parse failed
-        success = float.TryParse(ConfigParser.GetValue("Handling", "TopSpeed"), out topSpeed)
-        | float.TryParse(ConfigParser.GetValue("Handling", "TopSpeedBoost"), out topSpeedBoost)
+        bool success = float.TryParse(ConfigParser.GetValue("Handling", "MaxForwardTorque"), out maxForwardTorque)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaxForwardTorqueBoost"), out maxForwardTorqueBoost)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaxSteeringTorque"), out maxSteeringTorque)
         | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationForward"), out accelerationForward)
         | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationSteering"), out accelerationSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationForwardAir"), out accelerationForwardAir)
@@ -68,7 +69,8 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationAir"), out decelerationAir)
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationChangeDirection"), out decelerationChangeDirection)
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationChangeDirectionSteering"), out decelerationChangeDirectionSteering)
-        | float.TryParse(ConfigParser.GetValue("Handling", "MaxSteeringTorque"), out maxSteeringTorque)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MinimumSteeringAmount"), out minSteeringAmount)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaximumSteeringAmount"), out maxSteeringAmount)
         | float.TryParse(ConfigParser.GetValue("Handling", "MaximumSteeringVelocity"), out maxSteeringVelocity)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAmount"), out boostMax)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostDepletionPerTick"), out boostDepletionPerTick)
