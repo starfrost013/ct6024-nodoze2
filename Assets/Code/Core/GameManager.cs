@@ -170,7 +170,8 @@ internal static class GameManager
     internal static void OnFrame()
     {
         if (Input.GetKey(KeyCode.R)
-            && state == GameModeEnum.RaceMode)
+            && state == GameModeEnum.RaceMode
+            && GlobalSettings.debugMode)
         {
             initialised = false; // make everything get reinit'ed
             SetGameState(GameModeEnum.Init);
