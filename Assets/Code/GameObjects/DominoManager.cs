@@ -38,4 +38,20 @@ internal static class DominoManager
 
         return null; // no matching domino
     }
+
+    internal static Domino GetDominoByInternalName(string internalName)
+    {
+        if (dominoes.Count == 0)
+            return null;
+
+        foreach (Domino domino in dominoes)
+        {
+            if (domino.internalName == internalName)
+                return domino;
+        }
+
+        return null; // no matching domino
+    }
+
+
 }

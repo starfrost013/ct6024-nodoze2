@@ -7,12 +7,12 @@ CompletionReward = 200				; Completion reward, awarded regardless of time
 NumTimeBonus = 5					; number of time bonuses
 
 TimeBonus0 = 25000					; time for first time bonus
-TimeBonus0Money = 10000				; money gained for first time bonus
+TimeBonus0Money = 4000				; money gained for first time bonus
 TimeBonus1 = 35000					; ditto
-TimeBonus1Money = 2500
+TimeBonus1Money = 1500
 TimeBonus2 = 44000
-TimeBonus2Money = 1000
+TimeBonus2Money = 700
 TimeBonus3 = 50000
-TimeBonus3Money = 500
+TimeBonus3Money = 150
 TimeBonus4 = 70000
 TimeBonus4Money = 0

@@ -46,7 +46,7 @@ public class DominoUIController : MonoBehaviour
                 // - not enough money but don't do that here 
             bool skip = false;
             
-            if (GameManager.player.car.HasModifierSet(domino.name))
+            if (GameManager.player.car.HasModifierSet(domino.internalName))
                 skip = true;
 
             if (!string.IsNullOrWhiteSpace(domino.required)

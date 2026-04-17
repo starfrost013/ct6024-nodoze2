@@ -6,5 +6,5 @@ Cost = 20
 ExpiryTime = 0
 
 [Handling]
-TopSpeed = 0.3
+MaxForwardTorque = 0.3
 

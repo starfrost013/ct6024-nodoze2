@@ -1,0 +1,10 @@
+[Info]
+
+Name = Super Heterodyne 9000 9.99 Litre Engine
+Description = Increases the amount of fuel that you have even more.
+Cost = 2500
+ExpiryTime = 0
+Requires = Fuel Up
+
+[Fuel]
+Max = 5000									; Maximum fuel count

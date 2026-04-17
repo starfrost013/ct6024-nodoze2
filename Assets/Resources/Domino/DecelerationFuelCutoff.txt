@@ -8,3 +8,5 @@ ExpiryTime = 0
 [Handling]
 
 DecelerationFuelCutoff = true 
+DepletionPerTick = -0.05
+RefuelGaragePercent = 3.0

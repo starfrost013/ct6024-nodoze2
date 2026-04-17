@@ -3,6 +3,7 @@ using UnityEngine;
 
 //
 // Domino base definitions
+// TODO: Require stuff using the *** INTERNAL NAME ***
 //
 internal class Domino
 {
@@ -14,10 +15,11 @@ internal class Domino
     // FIELDS
     //
 
-    internal string name;
-    internal string description;
+    internal string name;               // name
+    internal string description;        // description     
+    internal string internalName;       // the itnernal name
     internal string required;           // optional - domino required 
-    internal float cost;
+    internal float cost;                // cost of the domino
     internal float expiryTime;          // 0 =none, for temporary powerups
     internal CarModifier modifiers = new();
 
@@ -36,6 +38,7 @@ internal class Domino
 
         name = ConfigParser.GetValue("Info", "Name");
         description = ConfigParser.GetValue("Info", "Description");
+        internalName = config.name;
         cost = float.Parse(ConfigParser.GetValue("Info", "Cost"));
         expiryTime = float.Parse(ConfigParser.GetValue("Info", "ExpiryTime"));
         required = ConfigParser.GetValue("Info", "Required");
@@ -44,5 +47,6 @@ internal class Domino
         // duplicated for use in various other places 
 
         modifiers.name = name;
+        modifiers.internalName = internalName;
     }
 }

@@ -1,0 +1,9 @@
+[Info]
+
+Name = Fuel Up
+Description = Increases the amount of fuel that you have.,
+Cost = 1000
+ExpiryTime = 0
+
+[Fuel]
+Max = 4400									; Maximum fuel count

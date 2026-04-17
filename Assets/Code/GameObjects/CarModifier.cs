@@ -46,13 +46,14 @@ internal class CarModifier
     internal float cameraTurnFactor;                            // turn factor of the camera
     
     // Fueling characteristics of the car
-    internal float fuelMax;
+    internal float fuelMax;                                     // maximum fuel amount
     internal float fuelDepletionPerTick;
     internal float refuelGaragePercent;
 
     internal bool decelerationFuelCutoff;
 
     internal string name;
+    internal string internalName;                               // same as domino.internalName
 
     internal void Load()
     {

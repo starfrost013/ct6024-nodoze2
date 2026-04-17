@@ -522,9 +522,25 @@ internal class Car : BasePhysicsObject
     /// <summary>
     /// Returns true if the car has the modifier set "name"
     /// </summary>
-    /// <param name="name">The modifier set to look for</param>
+    /// <param name="name">The internal name (file name) modifier set to look for</param>
     /// <returns>A boolean indicating if the car has the modifier set set.</returns>
     internal bool HasModifierSet(string name)
+    {
+        foreach (CarModifier modifier in modifiers)
+        {
+            if (modifier.internalName == name)
+                return true;
+        }
+
+        return false; 
+    }
+
+    /// <summary>
+    /// Returns true if the car has the modifier set with the user visible name "name"
+    /// </summary>
+    /// <param name="name">The internal name (file name) modifier set to look for</param>
+    /// <returns>A boolean indicating if the car has the modifier set set.</returns>
+    internal bool HasModifierSetUserVisibleName(string name)
     {
         foreach (CarModifier modifier in modifiers)
         {
@@ -532,7 +548,7 @@ internal class Car : BasePhysicsObject
                 return true;
         }
 
-        return false; 
+        return false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -543,9 +559,7 @@ internal class Car : BasePhysicsObject
     private void OnCollisionExit(Collision collision)
     {
         physics.numCollisions--;
-
         physics.inAir = (physics.numCollisions == 0);
-
         if (physics.inAir)
             Debug.Log("In Air");
     }
