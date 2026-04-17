@@ -12,7 +12,7 @@ internal class GameModeRaceMode : GameMode
     /// <summary>
     /// restart timer time when you run out o fuel
     /// </summary>
-    internal const long RESTART_TIME_OUT_OF_FUEL = 5000;
+    internal const long RESTART_TIME_FAIL = 5000;
 
     /// <summary>
     /// prefix for race config path
@@ -146,18 +146,12 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFrame()
     {
-        // TODO: This code is completely broken. The scene doesn't swtich in time for the new CarStart for instance.
-        if (Input.GetKeyDown(KeyCode.F7))
-            ProgressionCoordinator.AdvanceNormal();
-
-        if (Input.GetKeyDown(KeyCode.F8))
-            ProgressionCoordinator.AdvanceSpecial();
 
     }
 
     internal override void OnFixedUpdate()
     {
-        if (restartTimer.GetElapsedTime() >= RESTART_TIME_OUT_OF_FUEL)
+        if (restartTimer.GetElapsedTime() >= RESTART_TIME_FAIL)
         {
             restartTimer.Reset();
             raceState = RaceState.Failed;
@@ -298,7 +292,7 @@ internal class GameModeRaceMode : GameMode
             GUI.Label(new Rect(x, y, 400, 100), "Out of fuel!");
 
             if (!restartTimer.HasStarted())
-                restartTimer.Start(RESTART_TIME_OUT_OF_FUEL);
+                restartTimer.Start(RESTART_TIME_FAIL);
         }
 
         //restore alignment (hack - but this code is going away soon anyway)

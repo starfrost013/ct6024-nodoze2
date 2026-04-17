@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
-using System.Collections;
 
 internal static class GameManager
 {
@@ -15,9 +14,8 @@ internal static class GameManager
         Init = 0,
         Shutdown = 1,
         MainMenu = 2,
-        BuildMode = 3,
-        RaceMode = 4,
-        RaceFinished = 5,
+        RaceMode = 3,
+        RaceFinished = 4,
     }
 
     // hacks so the gamemanager switches into the right state
@@ -33,22 +31,10 @@ internal static class GameManager
 
     private static GameModeEnum state;
 
-    private static GameMode _mode;
-
-    internal static GameMode mode
-    {
-        get { return _mode; }
-        private set { _mode = value; }
-    }
+    internal static GameMode mode { get; private set; }
 
     // links the engine and gamemanager
-    private static GameManagerObject _managerObject; 
-
-    internal static GameManagerObject managerObject
-    {
-        get { return _managerObject; }
-        private set {  _managerObject = value; }
-    }
+    internal static GameManagerObject managerObject { get; private set; }
 
     private static Scene mainScene
     {
@@ -206,8 +192,8 @@ internal static class GameManager
             case GameModeEnum.RaceFinished:
                 return new GameModeRaceFinished();
             default:
-                Debug.Log("GameManager::GetModeFromState selected invalid game state (Entering race mode...)");
-                return new GameModeRaceMode();
+                Debug.Log("GameManager::GetModeFromState selected invalid game state (Restarting the game...)");
+                return new GameModeInit();
         }
      }
 }

@@ -1,7 +1,7 @@
 [Info]
 
 Name = Deceleration Fuel Cutoff
-Description = Decreases fuel usage by only draining fuel if it is accelerating.
+Description = Decreases fuel usage by only draining fuel if the car is accelerating.
 Cost = 100
 ExpiryTime = 0
 

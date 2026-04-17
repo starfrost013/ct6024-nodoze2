@@ -11,6 +11,7 @@ internal class GameModeInit : GameMode
         AudioManager.Init();
         CarManager.Init();
         DominoManager.Init();
+        UIManager.Init();
 
         GameManager.SetGameState(GameManager.GameModeEnum.MainMenu);
     }

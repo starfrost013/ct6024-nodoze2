@@ -15,4 +15,4 @@ Deceleration = 0.98							; Deceleration (must be below 1)
 DecelerationSteering = 0.97					; Deceleration while steering (must be below 1)
 DecelerationChangeDirection = 8.0			; Deceleration while changing direction
 DecelerationChangeDirectionSteering = 6.0	; Deceleration while steering and changing direction
-MaxSteeringTorque = 14.0
+MaxSteeringTorque = 14.0					; Maximum steering torque

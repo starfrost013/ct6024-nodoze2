@@ -40,4 +40,4 @@ CameraTurnFactor = 5						; How intensively camera turns when you steer
 Max = 4000									; Maximum fuel count
 DepletionPerTick = 0.5						; Fuel depletion per 1/60 of a second
 RefuelGaragePercent = 25.0					; % of fuel refueled by the garage
-DecelerationFuelCutoff = true				; Turn off fuel 
+DecelerationFuelCutoff = false				; Turn off fuel 

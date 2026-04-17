@@ -3,7 +3,6 @@ using UnityEngine;
 
 //
 // Domino base definitions
-// TODO: Require stuff using the *** INTERNAL NAME ***
 //
 internal class Domino
 {

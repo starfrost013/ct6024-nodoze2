@@ -12,7 +12,7 @@ internal static class CarManager
     internal const string CAR_PATH = "Cars/";
 
     /* these basically get spawned into the world based on prototype objects stored here */
-    internal static GameObject[] carArray;
+    internal static GameObject[] carObjects;
 
     /// <summary>
     /// determines if the car manager is initilaised
@@ -23,7 +23,7 @@ internal static class CarManager
     {
         // don't reinit on e.g. race restart
         if (!initialised)
-            carArray = AssetManager.LoadAssetsInFolder<GameObject>(CAR_PATH);
+            carObjects = AssetManager.LoadAssetsInFolder<GameObject>(CAR_PATH);
 
         initialised = true;
 
@@ -32,7 +32,7 @@ internal static class CarManager
 
     internal static Car GetCarPrefabByName(string name)
     {
-        foreach (GameObject carObject in carArray)
+        foreach (GameObject carObject in carObjects)
         {
             Car carPrefab = carObject.GetComponent<Car>();
 

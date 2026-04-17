@@ -44,7 +44,6 @@ public class GameManagerObject : MonoBehaviour
             else
             {
                 GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
-
             }
         }
 
