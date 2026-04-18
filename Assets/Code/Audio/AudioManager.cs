@@ -51,7 +51,7 @@ internal static class AudioManager
     /// Play an audio at the main camera position
     /// </summary>
     /// <param name="clip">The audio clip to play</param>
-    internal static void PlayAudioAtCameraPosition(AudioClip clip)
+    internal static void PlayAudioAtCameraPosition(AudioClip clip, float volume = 1.0f)
     {
         if (!clip)
         {
@@ -60,14 +60,14 @@ internal static class AudioManager
         }
 
         // this will explode if we ever have multiple cameras
-        AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position);
+        AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position, volume);
     }
 
     /// <summary>
     /// Play an audio at the current main camera position
     /// </summary>
     /// <param name="name">The name of the audio clip to play</param>
-    internal static void PlayAudioAtCameraPosition(string name)
+    internal static void PlayAudioAtCameraPosition(string name, float volume = 1.0f)
     {
         PlayAudioAtCameraPosition(GetAudioByName(name));
     }

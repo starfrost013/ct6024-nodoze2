@@ -322,24 +322,24 @@ internal class GameModeRaceMode : GameMode
                     && !countdown3Done)
                 {
                     countdown3Done = true;
-                    AudioManager.PlayAudioAtPoint("Announcer_Countdown3", Camera.main.transform.position, 1.0f);
+                    AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown3", 1.0f);
                 }
                 else if (remainingTime < 3
                     && !countdown2Done)
                 {
                     countdown2Done = true;
-                    AudioManager.PlayAudioAtPoint("Announcer_Countdown2", Camera.main.transform.position, 1.0f);
+                    AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown2", 1.0f);
                 }
                 else if (remainingTime < 2
                     && !countdown1Done)
                 {
                     countdown1Done = true;
-                    AudioManager.PlayAudioAtPoint("Announcer_Countdown1", Camera.main.transform.position, 1.0f);
+                    AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown1", 1.0f);
                 }
 
                 if (raceStartTimer.IsDone())
                 {
-                    AudioManager.PlayAudioAtPoint("Announcer_CountdownGO", Camera.main.transform.position, 1.0f);
+                    AudioManager.PlayAudioAtCameraPosition("Announcer_CountdownGO", 1.0f);
                     // since there is no car selection menu
                     CarManager.SetPlayerCar("CarBasic");
                     raceState = RaceState.Active;
