@@ -3,11 +3,24 @@
 using System;
 using System.Diagnostics;
 
+// Delegate type for starting the timer.
+internal delegate void onStartFunc();
+
 internal class Timer
 {
     internal Int64 length { get; private set; } 
     private Stopwatch stopwatch;
     private bool isDone;
+
+    /// <summary>
+    /// Tell the timer to restart when done.
+    /// </summary>
+    internal bool restartOnDone;
+
+    /// <summary>
+    /// Function to call on starting the timer. Only really useful when <see cref="restartOnDone"/> is set.
+    /// </summary>
+    internal onStartFunc startFunc;
 
     /// <summary>
     /// Value used to tell a timer to never stop.
@@ -18,6 +31,8 @@ internal class Timer
     {
         length = timerLength;
         stopwatch = Stopwatch.StartNew();
+
+        startFunc?.Invoke();
     }
 
     internal Int64 GetElapsedTime()
@@ -32,7 +47,11 @@ internal class Timer
             && length != TIMER_CONTINUE_FOREVER)
         {
             isDone = true;
-            stopwatch.Stop();
+
+            if (restartOnDone)
+                Restart();
+            else
+                Stop();
         }
  
         return stopwatch.ElapsedMilliseconds;
@@ -67,6 +86,7 @@ internal class Timer
     internal void Restart()
     {
         stopwatch.Restart();
+        startFunc?.Invoke(); 
     }
 
 
