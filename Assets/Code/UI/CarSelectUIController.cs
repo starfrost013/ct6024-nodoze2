@@ -4,14 +4,15 @@ using TMPro;
 
 public class CarSelectUIController : MonoBehaviour
 {
-    private int selectedCarId = 0;
-
     private const string NAME_TEXT_NAME = "TextCarName";
     private const string DESCRIPTION_TEXT_NAME = "TextCarDescription";
 
     // stuff we need
     private TMP_Text carNameText = null;
     private TMP_Text carDescriptionText = null;
+
+    // todo: there are multiple instances of this script. so the state is duplicated...bleh, just make it static 
+    private static int selectedCarId = 0;
 
     public void Start()
     {
