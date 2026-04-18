@@ -13,7 +13,6 @@ internal class GameModeMainMenu : GameMode
         None = 0,   
         StartScreen = 1,
         SelectCar = 2,
-        StartRace = 3,
     };
 
     private MenuState _currentMenuState = MenuState.None; 
@@ -33,9 +32,6 @@ internal class GameModeMainMenu : GameMode
                 case MenuState.SelectCar:
                     UIManager.SetCurrentMenu(MENU_NAME_SELECT_CAR);
                     break;
-                case MenuState.StartRace:
-                    GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
-                    return;
             }
 
         }
@@ -71,8 +67,9 @@ internal class GameModeMainMenu : GameMode
                 currentMenuState = MenuState.StartScreen;   
         }
 
-
-        if (Input.GetKey(KeyCode.Return))
+        // VERY temporary hack that is going away soon as soon as there is a StartScreenUIController
+        if (Input.GetKey(KeyCode.Return)
+            && currentMenuState == MenuState.StartScreen)
             currentMenuState++;
     }
 

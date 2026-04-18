@@ -45,7 +45,7 @@ internal class Domino
 
         // duplicated for use in various other places 
 
-        modifiers.name = name;
-        modifiers.internalName = internalName;
+        modifiers.modifierName = name;
+        modifiers.internalModifierName = internalName;
     }
 }

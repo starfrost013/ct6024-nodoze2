@@ -1,5 +1,9 @@
 ; Sports car 
 
+[Info]
+Name = Python Xtreme Super Sport 3
+Description = Devastating. If you can keep control of it, it won't fail you in the field.
+
 [Handling]
 
 MaxForwardTorque = 3.0						; Top speed

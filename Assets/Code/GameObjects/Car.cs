@@ -116,7 +116,19 @@ internal class Car : BasePhysicsObject
     /// <summary>
     /// Percentage of the camera angle. -1 < x < 1, applied as soon as there is an input
     /// </summary>
-    float cameraTurnPercentage; 
+    float cameraTurnPercentage;
+
+    // car select screen stuff
+    
+    /// <summary>
+    /// The user-visible name of the car. (renamed to avoid collisions)
+    /// </summary>
+    internal string friendlyName { get; private set; }
+
+    /// <summary>
+    /// A description of the car.
+    /// </summary>
+    internal string description { get; private set; }
 
     //
     // METHODS
@@ -131,6 +143,8 @@ internal class Car : BasePhysicsObject
 
         // additional data needed for cars only
         steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
+        friendlyName = ConfigParser.GetValue("Info", "Name");
+        description = ConfigParser.GetValue("Info", "Description");
 
         Debug.Assert(configText, "You didn't load a configuration for this car!!!");
 
@@ -528,7 +542,7 @@ internal class Car : BasePhysicsObject
     {
         foreach (CarModifier modifier in modifiers)
         {
-            if (modifier.internalName == name)
+            if (modifier.internalModifierName == name)
                 return true;
         }
 
@@ -544,7 +558,7 @@ internal class Car : BasePhysicsObject
     {
         foreach (CarModifier modifier in modifiers)
         {
-            if (modifier.name == name)
+            if (modifier.modifierName == name)
                 return true;
         }
 

@@ -1,5 +1,9 @@
 ; Basic car
 
+[Info]
+Name = Dynamo GTS 5.1
+Description = A pretty basic car
+
 [Handling]
 
 MaxForwardTorque = 2.0						; Top speed

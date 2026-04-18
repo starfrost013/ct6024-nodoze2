@@ -30,6 +30,13 @@ internal static class CarManager
         if (carObjects == null)
             Debug.LogError("Failed to load cars!");
 
+        // load the car configurations
+        foreach (GameObject carObject in CarManager.carObjects)
+        {
+            Car car = carObject.GetComponent<Car>();    
+            car.LoadConfig();
+        }
+
         initialised = true;
 
         // in the future we'll have a car selection but just load the first car for now
@@ -56,11 +63,24 @@ internal static class CarManager
         return null;
     }
 
+    internal static void SetPlayerCar(string name)
+    {
+        // don't reset car unless we are changing the car
+        if (GameManager.player.car == null
+            || GameManager.player.car.name != name)
+        {
+            Car carPrefab = GetCarPrefabByName(name);
+
+            if (carPrefab != null)
+                GameManager.player.car = carPrefab;
+        }
+
+    }
     /// <summary>
     /// Set the player car
     /// </summary>
     /// <param name="name">The name ofthe car in the car prefabs folder to load</param>
-    internal static void SetPlayerCar(string name)
+    internal static void SpawnPlayerCar()
     {
         if (GameManager.player.HasCar())
         {
@@ -68,27 +88,9 @@ internal static class CarManager
             GameManager.player.DestroyCar();
         }
 
-        Car carPrefab;
-
-        // don't reset car unless we are changing the car
-        if (GameManager.player.car == null
-            || GameManager.player.car.name != name)
-        {
-            carPrefab = GetCarPrefabByName(name);
-
-            if (carPrefab != null)
-            {
-                // first set the palyer's car to the original prefab
-                GameManager.player.car = carPrefab;
-                GameManager.player.car.LoadConfig();
-            }
-        }
-        else
-            carPrefab = GameManager.player.car;
-
         // instantiate the gameobject for the same copy that will be in the world
         // we don't care about this car anymore. it will control itself and will be destroyed when we set the scene
-        GameManager.player.carInWorld = MonoBehaviour.Instantiate(carPrefab);
+        GameManager.player.carInWorld = MonoBehaviour.Instantiate(GameManager.player.car);
         GameManager.player.carInWorld.LoadConfigFromString(GameManager.player.car.configText.text); // we need to load the config again so load it from a string
 
         // apply all the modifiers to the car

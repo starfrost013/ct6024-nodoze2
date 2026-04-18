@@ -52,8 +52,9 @@ internal class CarModifier
 
     internal bool decelerationFuelCutoff;
 
-    internal string name;
-    internal string internalName;                               // same as domino.internalName
+    // renamed to avoid confusion with car names e.g. car select screen
+    internal string modifierName;
+    internal string internalModifierName;                       // same as domino.internalName
 
     internal void Load()
     {
