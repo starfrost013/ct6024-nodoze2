@@ -42,4 +42,9 @@ class AnimatedSpriteSet : MonoBehaviour
                 currentId = 0;
         }
     }
+
+    private void Update()
+    {
+        
+    }
 }

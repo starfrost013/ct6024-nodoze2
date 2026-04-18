@@ -19,7 +19,7 @@ static class UIManager
 
     internal static GameObject[] menus;
 
-    private static GameObject currentMenu;
+    internal static GameObject currentMenu { get; private set; }
 
     internal static void Init()
     {

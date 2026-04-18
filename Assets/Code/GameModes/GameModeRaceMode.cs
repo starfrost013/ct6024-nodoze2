@@ -341,7 +341,7 @@ internal class GameModeRaceMode : GameMode
                 {
                     AudioManager.PlayAudioAtPoint("Announcer_CountdownGO", Camera.main.transform.position, 1.0f);
                     // since there is no car selection menu
-                    CarManager.SetPlayerCar("CarSports");
+                    CarManager.SetPlayerCar("CarBasic");
                     raceState = RaceState.Active;
                 }
                 break;
