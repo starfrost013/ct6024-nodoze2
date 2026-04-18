@@ -3,13 +3,18 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// This thingy is a connector between unity and our fancy stuff
-
+/// <summary>
+/// This thingy is a connector between unity and our fancy stuff
+/// Also it has the debug stuff, as the root monobehaviour of the game.
+/// </summary>
 public class GameManagerObject : MonoBehaviour
 {
+    private TextAsset buildDate; 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
+    {            
+        buildDate = AssetManager.LoadAsset<TextAsset>(BuildDate.BUILD_DATE_PATH);
         GameManager.Start(this);
     }
 
@@ -53,6 +58,21 @@ public class GameManagerObject : MonoBehaviour
 
     private void DrawDebugUI()
     {
+        if (!GlobalSettings.debugMode)
+            return;
+
+        // first draw the version information
+        string dateTime = Application.version + " (Unity " + Application.unityVersion + ")\n" + 
+            "Build Date: " + buildDate.text + "\nTest Date: " + DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
+
+        // make the font a bit larger
+        GUIStyle style = GUI.skin.label;
+        style.fontSize = 20;
+        GUI.color = Color.white; 
+
+        GUI.Label(new Rect(5, 5, 400, 100), dateTime, style);
+
+        //maybe we need to update less...
         float width = 350, height = 200;
 
         // we don't need any extra id
@@ -62,16 +82,6 @@ public class GameManagerObject : MonoBehaviour
 
     private void OnGUI()
     {
-        string dateTime = "**** Alpha - Testing ****\n" + Application.version + " (Unity " + Application.unityVersion + ")\n" + DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
-
-        // make the font a bit larger
-        GUIStyle style = GUI.skin.label;
-        style.fontSize = 20;
-        
-        GUI.Label(new Rect(5, 5, 400, 100), dateTime, style);
-
-        //maybe we need to update less...
-
         GameManager.OnLegacyGUI();
 
         if (GlobalSettings.debugMode)

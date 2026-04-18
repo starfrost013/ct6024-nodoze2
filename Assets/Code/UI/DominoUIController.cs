@@ -68,8 +68,11 @@ public class DominoUIController : MonoBehaviour
 
     public void OnDropdownValueChanged(int index)
     {
-        descriptionText.text = DominoManager.dominoes[index].description;
-        costText.text = "Cost: $" + DominoManager.dominoes[index].cost.ToString(); 
+        // get the domino with the name
+        Domino selectedDomino = DominoManager.GetDominoByName(selectDominoDropdown.options[index].text);
+
+        descriptionText.text = selectedDomino.description;
+        costText.text = "Cost: $" + selectedDomino.cost.ToString(); 
     }
 
     /// <summary>
