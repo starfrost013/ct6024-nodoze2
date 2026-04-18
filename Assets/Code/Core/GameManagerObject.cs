@@ -63,14 +63,14 @@ public class GameManagerObject : MonoBehaviour
 
         // first draw the version information
         string dateTime = Application.version + " (Unity " + Application.unityVersion + ")\n" + 
-            "Build Date: " + buildDate.text + "\nTest Date: " + DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
+            "Build Date:\t" + buildDate.text + "\nTest Date:\t" + DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
 
         // make the font a bit larger
         GUIStyle style = GUI.skin.label;
         style.fontSize = 20;
         GUI.color = Color.white; 
 
-        GUI.Label(new Rect(5, 5, 400, 100), dateTime, style);
+        GUI.Label(new Rect(5, 5, 600, 100), dateTime, style);
 
         //maybe we need to update less...
         float width = 350, height = 200;
