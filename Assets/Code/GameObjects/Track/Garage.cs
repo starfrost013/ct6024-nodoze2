@@ -15,7 +15,8 @@ class Garage : MonoBehaviour
         if (GameManager.GetGameState() != GameManager.GameModeEnum.RaceMode)
             return;
 
-        Car car = other.gameObject.GetComponent<Car>();
+        // Put *ALL* colliders on CarBody!
+        Car car = other.gameObject.transform.parent.gameObject.GetComponent<Car>();
 
         if (car != null)
         {

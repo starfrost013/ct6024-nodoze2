@@ -43,6 +43,6 @@ ModelFixCameraAdjY = 180.0					; It's hard to export models
 
 [Fuel]
 Max = 3600									; Maximum fuel count
-DepletionPerTick = 0.7						; Fuel depletion per 1/60 of a second
-RefuelGaragePercent = 25.0					; % of fuel refueled by the garage
+DepletionPerTick = 0.625					; Fuel depletion per 1/60 of a second
+RefuelGaragePercent = 30.0					; % of fuel refueled by the garage
 DecelerationFuelCutoff = false				; Turn off fuel 

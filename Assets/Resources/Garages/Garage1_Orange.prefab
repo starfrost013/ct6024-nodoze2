@@ -133,6 +133,8 @@ GameObject:
   - component: {fileID: -4354412919415673921}
   - component: {fileID: 8851695249078742386}
   - component: {fileID: 7259842067123647880}
+  - component: {fileID: 1891490385809638907}
+  - component: {fileID: -8313182324106348859}
   m_Layer: 0
   m_Name: Garage1_Orange
   m_TagString: Untagged
@@ -219,3 +221,36 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.8663082, y: 0.19059245, z: 3.9701724}
   m_Center: {x: -0.0568031, y: 1.743756, z: -0.48793596}
+--- !u!114 &1891490385809638907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4592565446075395594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c4d61f33019ca4da0ae3f2ae731ec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &-8313182324106348859
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4592565446075395594}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.1351254, y: 1.65252, z: 3.3296664}
+  m_Center: {x: -0.03673045, y: 0.67374104, z: -0.66524535}
