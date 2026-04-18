@@ -2,7 +2,7 @@
 
 [Info]
 Name = Dynamo GTS 5.1
-Description = A pretty basic car
+Description = Actually a pretty boring and cheap car. If your definition of cheap is a spare family inheritance...
 
 [Handling]
 
@@ -39,6 +39,7 @@ CameraRelativeX = 0.1						; Relative camera X (maximum, while turning) to car
 CameraRelativeY = 1.4						; Relative camera Y (maximum, while turning) to car
 CameraRelativeZ = 5.0						; Relative camera Z (maximum, while turning) to car
 CameraTurnFactor = 5						; How intensively camera turns when you steer
+ModelFixCameraAdjY = 0.0					; It's hard to export models
 
 [Fuel]
 Max = 4000									; Maximum fuel count

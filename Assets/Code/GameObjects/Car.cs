@@ -112,7 +112,16 @@ internal class Car : BasePhysicsObject
     /// Holds the physics information.
     /// </summary>
     internal PhysicsInfo physics;
-    
+
+    //
+    // Misc car-only stuff that the modifiers don't need
+    //
+
+    /// <summary>
+    /// EXPORT THE DAMN MODEL PROPERLY
+    /// </summary>
+    private float modelFixCameraAdjY;
+
     /// <summary>
     /// Percentage of the camera angle. -1 < x < 1, applied as soon as there is an input
     /// </summary>
@@ -146,6 +155,9 @@ internal class Car : BasePhysicsObject
         friendlyName = ConfigParser.GetValue("Info", "Name");
         description = ConfigParser.GetValue("Info", "Description");
 
+        // If we need X and Z i'm taking matters into my own hands
+        float.TryParse(ConfigParser.GetValue("Camera", "ModelFixCameraAdjY"), out modelFixCameraAdjY);
+   
         Debug.Assert(configText, "You didn't load a configuration for this car!!!");
 
         // modifiers are always loaded later 
@@ -191,7 +203,6 @@ internal class Car : BasePhysicsObject
         physics.wheelLeftFrontCollider = wheelLeftFront.GetComponent<WheelCollider>();
         physics.wheelRightBackCollider = wheelRightBack.GetComponent<WheelCollider>();
         physics.wheelRightFrontCollider = wheelRightFront.GetComponent<WheelCollider>();
-
 
         Debug.Assert(wheelLeftBack && wheelLeftFront && wheelRightBack && wheelRightFront, "Please set the wheels up in the editor!!");
         Debug.Assert(physics.wheelLeftBackCollider && physics.wheelLeftFrontCollider && physics.wheelRightBackCollider && physics.wheelRightFrontCollider, "All car wheels must have WheelColliders!");
@@ -427,7 +438,7 @@ internal class Car : BasePhysicsObject
         // car was incorrectly exported and bad bad artists won't re-export
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
-        float newEulerY = ((carRot.y + 180.0f) % 360) + (physics.data.maximumTurnCameraAngle * cameraTurnPercentage);
+        float newEulerY = ((carRot.y + modelFixCameraAdjY) % 360) + (physics.data.maximumTurnCameraAngle * cameraTurnPercentage);
 
         Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x,
                 newEulerY,

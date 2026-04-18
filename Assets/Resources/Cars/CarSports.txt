@@ -2,7 +2,7 @@
 
 [Info]
 Name = Python Xtreme Super Sport 3
-Description = Devastating. If you can keep control of it, it won't fail you in the field.
+Description = Devastating. If it doesn't overcome you with its pure understeer, it won't fail you on the road.
 
 [Handling]
 
@@ -39,6 +39,7 @@ CameraRelativeX = 0.1						; Relative camera X (maximum, while turning) to car
 CameraRelativeY = 1.4						; Relative camera Y (maximum, while turning) to car
 CameraRelativeZ = 5.0						; Relative camera Z (maximum, while turning) to car
 CameraTurnFactor = 5						; How intensively camera turns when you steer
+ModelFixCameraAdjY = 180.0					; It's hard to export models
 
 [Fuel]
 Max = 3600									; Maximum fuel count
