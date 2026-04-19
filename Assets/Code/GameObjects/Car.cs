@@ -232,112 +232,110 @@ internal class Car : BasePhysicsObject
         // use for fuel checks
         bool anyInput = (moveInput || steerInput);
 
-        Debug.Log("Vel = " + physRigidbody.linearVelocity.magnitude);
-
-        if (!anyInput)
-            return;
-
-        // check if we stopped boosting
-        bool didWeStopBoosting = physics.boosting;
-        physics.boosting = Input.GetKey(KeyCode.LeftShift);
-        physics.boostEnding = (didWeStopBoosting && !physics.boosting); // keyup is only true for a single frame and isn't reliable in fixedupdate
-
-        // handle boost shutdown
-        if (physics.boosting)
+        if (anyInput)
         {
-            physics.boostCurrent -= physics.data.boostDepletionPerTick;
+            // check if we stopped boosting
+            bool didWeStopBoosting = physics.boosting;
+            physics.boosting = Input.GetKey(KeyCode.LeftShift);
+            physics.boostEnding = (didWeStopBoosting && !physics.boosting); // keyup is only true for a single frame and isn't reliable in fixedupdate
 
-            if (physics.boostCurrent < (physics.data.boostMax - physics.data.boostRegenPerTick))
-                physics.boostCurrent += physics.data.boostRegenPerTick;
+            // handle boost shutdown
+            if (physics.boosting)
+            {
+                physics.boostCurrent -= physics.data.boostDepletionPerTick;
+
+                if (physics.boostCurrent < (physics.data.boostMax - physics.data.boostRegenPerTick))
+                    physics.boostCurrent += physics.data.boostRegenPerTick;
+            }
+
+            // boost isn't finished until we slow down after boost is done
+            if (physics.boostEnding
+                && (Mathf.Abs(physics.forwardTorque) < physics.data.maxForwardTorque))
+            {
+                physics.boostEnding = false;
+            }
+
+            float forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.data.accelerationForwardAir : physics.data.accelerationForward;
+            float steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.data.accelerationSteeringAir : physics.data.accelerationSteering;
+
+            // if we ARE boosting, apply boost accel.
+            // if we RECENTLY STOPPED boosting, apply zero accel.
+            // otherwise, apply 
+            if (physics.boosting)
+            {
+                forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.data.boostAccelerationForwardAir : physics.data.boostAccelerationForward;
+                steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.data.boostAccelerationSteeringAir : physics.data.boostAccelerationSteering;
+            }
+            else if (physics.boostEnding)
+                forwardAccelHandlingForThisFrame = steeringAccelHandlingForThisFrame = 0.0f;  // only apply natural deceleration of boost is ending
+
+            // New code does this calculation automatically - Jan 28, 2025 
+
+            float forwardAccelerationForThisTick = forwardAccelHandlingForThisFrame * Time.fixedDeltaTime;
+            float steeringAccelerationForThisTick = steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
+
+            // if the boost is ending - we want to decelerate
+            // we also want to rapidly change direction if we are steering
+
+            if (accelerateInput)
+            {
+                if (physics.forwardTorque > 0)
+                    physics.forwardTorque -= physics.data.decelerationChangeDirection * Time.fixedDeltaTime;
+
+                physics.forwardTorque += -forwardAccelerationForThisTick;
+            }
+
+            if (decelerateInput)
+            {
+                if (physics.forwardTorque < 0)
+                    physics.forwardTorque += physics.data.decelerationChangeDirection * Time.fixedDeltaTime;
+
+                physics.forwardTorque += forwardAccelerationForThisTick;
+            }
+
+            // multiply so the car can have a smaller turning circle as it gets faster
+            float steeringChangeFactor = steeringAccelerationForThisTick;
+
+            if (steerLeftInput
+                && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
+            {
+                if (physics.rotationTorque > 0)
+                    physics.rotationTorque -= physics.data.decelerationChangeDirectionSteering;
+                else if (Math.Abs(physics.rotationTorque) < physics.data.maxSteeringTorque)
+                    physics.rotationTorque -= steeringChangeFactor; // normalised?
+
+                // camera angle handling
+                cameraTurnPercentage -= 0.001f * ((1.0f - 0.001f) * physics.data.cameraTurnFactor);
+
+                if (cameraTurnPercentage < -1.0f)
+                    cameraTurnPercentage = -1.0f;
+            }
+
+            if (steerRightInput
+                && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
+            {
+                if (physics.rotationTorque < 0)
+                    physics.rotationTorque += physics.data.decelerationChangeDirectionSteering;
+                else if (Math.Abs(physics.rotationTorque) < physics.data.maxSteeringTorque)
+                    physics.rotationTorque += steeringChangeFactor; // normalised?
+
+                // camera angle handling
+                cameraTurnPercentage += 0.001f * ((1.0f - 0.001f) * physics.data.cameraTurnFactor);
+
+                if (cameraTurnPercentage > 1.0f)
+                    cameraTurnPercentage = 1.0f;
+            }
+
+            // decay camera angle towards zero
+            if (!steerLeftInput && !steerRightInput)
+            {
+                cameraTurnPercentage *= 0.95f;
+
+                if (Math.Abs(cameraTurnPercentage) < float.Epsilon)
+                    cameraTurnPercentage = 0;
+            }
         }
-
-        // boost isn't finished until we slow down after boost is done
-        if (physics.boostEnding
-            && (Mathf.Abs(physics.forwardTorque) < physics.data.maxForwardTorque))
-        {
-            physics.boostEnding = false;
-        }
-
-        float forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.data.accelerationForwardAir : physics.data.accelerationForward;
-        float steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.data.accelerationSteeringAir : physics.data.accelerationSteering;
-
-        // if we ARE boosting, apply boost accel.
-        // if we RECENTLY STOPPED boosting, apply zero accel.
-        // otherwise, apply 
-        if (physics.boosting)
-        {
-            forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.data.boostAccelerationForwardAir : physics.data.boostAccelerationForward;
-            steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.data.boostAccelerationSteeringAir : physics.data.boostAccelerationSteering;
-        }
-        else if (physics.boostEnding)
-            forwardAccelHandlingForThisFrame = steeringAccelHandlingForThisFrame = 0.0f;  // only apply natural deceleration of boost is ending
         
-        // New code does this calculation automatically - Jan 28, 2025 
-
-        float forwardAccelerationForThisTick = forwardAccelHandlingForThisFrame * Time.fixedDeltaTime;
-        float steeringAccelerationForThisTick = steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
-
-        // if the boost is ending - we want to decelerate
-        // we also want to rapidly change direction if we are steering
-
-        if (accelerateInput)
-        {
-            if (physics.forwardTorque > 0)
-                physics.forwardTorque -= physics.data.decelerationChangeDirection * Time.fixedDeltaTime;
-
-            physics.forwardTorque += -forwardAccelerationForThisTick;
-        }
-
-        if (decelerateInput)
-        {
-            if (physics.forwardTorque < 0)
-                physics.forwardTorque += physics.data.decelerationChangeDirection * Time.fixedDeltaTime;
-
-            physics.forwardTorque += forwardAccelerationForThisTick;
-        }
-
-        // multiply so the car can have a smaller turning circle as it gets faster
-        float steeringChangeFactor = steeringAccelerationForThisTick;
-
-        if (steerLeftInput
-            && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
-        {
-            if (physics.rotationTorque > 0)
-                physics.rotationTorque -= physics.data.decelerationChangeDirectionSteering;
-            else if (Math.Abs(physics.rotationTorque) < physics.data.maxSteeringTorque)
-                physics.rotationTorque -= steeringChangeFactor; // normalised?
-
-            // camera angle handling
-            cameraTurnPercentage -= 0.001f * ((1.0f - 0.001f) * physics.data.cameraTurnFactor);
-
-            if (cameraTurnPercentage < -1.0f)
-                cameraTurnPercentage = -1.0f;
-        }
-
-        if (steerRightInput
-            && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
-        {
-            if (physics.rotationTorque < 0)
-                physics.rotationTorque += physics.data.decelerationChangeDirectionSteering;
-            else if (Math.Abs(physics.rotationTorque) < physics.data.maxSteeringTorque)
-                physics.rotationTorque += steeringChangeFactor; // normalised?
-
-            // camera angle handling
-            cameraTurnPercentage += 0.001f * ((1.0f - 0.001f) * physics.data.cameraTurnFactor);
-
-            if (cameraTurnPercentage > 1.0f)
-                cameraTurnPercentage = 1.0f;
-        }
-
-        // decay camera angle towards zero
-        if (!steerLeftInput && !steerRightInput)
-        {
-            cameraTurnPercentage *= 0.95f;
-
-            if (Math.Abs(cameraTurnPercentage) < float.Epsilon)
-                cameraTurnPercentage = 0;
-        }
-
         //
         // APPLICATION OF THE MOMENTUM OF THE CAR
         //
@@ -418,6 +416,8 @@ internal class Car : BasePhysicsObject
 
         float fuelUseMultiplier = Math.Clamp(physRigidbody.linearVelocity.magnitude / physics.data.maxFuelUseVelocity,
         physics.data.minFuelUseAmount, physics.data.maxFuelUseAmount);
+
+        Debug.Log("Fuel Use Multiplier: " + fuelUseMultiplier);
 
         if (physics.data.decelerationFuelCutoff
             && !anyInput)

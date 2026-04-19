@@ -43,9 +43,9 @@ ModelFixCameraAdjY = -180.0					; It's hard to export models
 
 [Fuel]
 Max = 4000									; Maximum fuel count
-DepletionPerTick = 0.5						; Fuel depletion per 1/60 of a second
+DepletionPerTick = 1.0						; Fuel depletion per 1/60 of a second
 RefuelGaragePercent = 25.0					; % of fuel refueled by the garage
 DecelerationFuelCutoff = false				; Turn off fuel 
-MinFuelUseAmount = 0.15						; Fuel use at EPSILON velocity
+MinFuelUseAmount = 0.2						; Fuel use at EPSILON velocity
 MaxFuelUseAmount = 1.0						; Fuel use at the maximum velocity
 MaxFuelUseVelocity = 10.0					; Velocity (magnitude) at which the maximum fuel use is applied
