@@ -419,9 +419,8 @@ internal class Car : BasePhysicsObject
 
         if (Math.Abs(physics.forwardTorque) > EPSILON_MIN)
         {
-            float fuelUseMultiplier = Math.Abs(physics.forwardTorque);
-            if (Math.Abs(physics.forwardTorque) < 0.1) // TODO: MAKE THIS PHYSICS INFO AND INCORPROATE STEERING
-                fuelUseMultiplier = 0.1f;
+            float fuelUseMultiplier = Math.Clamp(physRigidbody.linearVelocity.magnitude / physics.data.maxFuelUseVelocity,
+            physics.data.minFuelUseAmount, physics.data.maxFuelUseAmount);
 
             if (physics.data.decelerationFuelCutoff
                 && !anyInput)
@@ -438,14 +437,12 @@ internal class Car : BasePhysicsObject
         // car was incorrectly exported and bad bad artists won't re-export
         // Fix when model correctly imported
         Vector3 carRot = transform.rotation.eulerAngles;
-        float newEulerY = ((carRot.y + modelFixCameraAdjY) % 360) + (physics.data.maximumTurnCameraAngle * cameraTurnPercentage);
+        float newEulerY = ((carRot.y + modelFixCameraAdjY) % 360) + (physics.data.maxTurnCameraAngle * cameraTurnPercentage);
 
         Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x,
                 newEulerY,
                 Camera.main.transform.localEulerAngles.z
                 );
-
-        // Debug.Log("Maximum Camera Turn Angle = " + physics.data.maximumTurnCameraAngle + " % Factor = " + cameraTurnPercentage);
 
         /* also move a bit forward depending on our overall speed */
         Camera.main.transform.position = transform.position + (transform.forward * physics.data.cameraRelativeZ);
@@ -531,8 +528,8 @@ internal class Car : BasePhysicsObject
         physics.data.maxForwardTorque += info.maxForwardTorque;
         physics.data.maxForwardTorqueBoost += info.maxForwardTorqueBoost;
 
-        physics.data.maximumTurnCameraAngle += info.maximumTurnCameraAngle;
-        physics.data.maximumTurnCameraAmount += info.maximumTurnCameraAmount;
+        physics.data.maxTurnCameraAngle += info.maxTurnCameraAngle;
+        physics.data.maxTurnCameraAmount += info.maxTurnCameraAmount;
         physics.data.cameraRelativeX += info.cameraRelativeX;
         physics.data.cameraRelativeY += info.cameraRelativeY;
         physics.data.cameraRelativeZ += info.cameraRelativeZ;
@@ -541,7 +538,10 @@ internal class Car : BasePhysicsObject
         physics.data.fuelMax += info.fuelMax;   
         physics.data.fuelDepletionPerTick += info.fuelDepletionPerTick;
         physics.data.decelerationFuelCutoff = info.decelerationFuelCutoff; 
-        physics.data.refuelGaragePercent += info.refuelGaragePercent;   
+        physics.data.refuelGaragePercent += info.refuelGaragePercent;
+        physics.data.minFuelUseAmount += info.minFuelUseAmount;
+        physics.data.maxFuelUseAmount += info.maxFuelUseAmount;
+        physics.data.maxFuelUseVelocity += info.maxFuelUseVelocity;
     }
 
     /// <summary>
@@ -585,7 +585,7 @@ internal class Car : BasePhysicsObject
     {
         physics.numCollisions--;
         physics.inAir = (physics.numCollisions == 0);
-        if (physics.inAir)
-            Debug.Log("In Air");
+        //if (physics.inAir)
+           //Debug.Log("In Air");
     }
 }

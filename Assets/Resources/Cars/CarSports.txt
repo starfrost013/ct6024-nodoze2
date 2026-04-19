@@ -33,8 +33,8 @@ BoostRegenPerTick = 6						; Boost depletion per 1/60 of a second
 SteeringType = Manual 						; 0 = Automatic, 1 = Manual, you can use numbers or the names 
 
 [Camera]
-MaximumTurnCameraAngle = 19.0				; Maximum camera turn angle
-MaximumTurnCameraAmount = 0.1				; Maximum amount the camera can tunr
+MaxTurnCameraAngle = 19.0					; Maximum camera turn angle
+MaxTurnCameraAmount = 0.1					; Maximum amount the camera can tunr
 CameraRelativeX = 0.1						; Relative camera X (maximum, while turning) to car
 CameraRelativeY = 1.4						; Relative camera Y (maximum, while turning) to car
 CameraRelativeZ = 5.0						; Relative camera Z (maximum, while turning) to car
@@ -46,6 +46,6 @@ Max = 3600									; Maximum fuel count
 DepletionPerTick = 0.625					; Fuel depletion per 1/60 of a second
 RefuelGaragePercent = 30.0					; % of fuel refueled by the garage
 DecelerationFuelCutoff = false				; Turn off fuel
-MinimumFuelUseAmount = 0.15					; Fuel use at EPSILON velocity
-MaximumFuelUseAmount = 1.0					; Fuel use at the maximum velocity
-MaximumFuelUseVelocity = 12.0				; Velocity (magnitude) at which the maximum fuel use is applied
+MinFuelUseAmount = 0.15						; Fuel use at EPSILON velocity
+MaxFuelUseAmount = 1.0						; Fuel use at the maximum velocity
+MaxFuelUseVelocity = 12.0					; Velocity (magnitude) at which the maximum fuel use is applied
