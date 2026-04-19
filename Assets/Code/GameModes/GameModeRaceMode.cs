@@ -48,6 +48,7 @@ internal class GameModeRaceMode : GameMode
         internal long timeLimit;                            // time limit, adjusted by checkpoints
         internal long checkpointTimeGain;
         internal long completionReward;
+        internal float killFloorY;                          // kill floor positon
 
         internal List<TimeBonusSet> timeBonuses = new(); // is this slow?   
     };
@@ -61,9 +62,19 @@ internal class GameModeRaceMode : GameMode
     private TextAsset raceConfigDataText { get; set; }
     internal RaceConfigData raceConfigData { get; private set; }
     
+    //
+    // various timers
+    //
+
+    /// <summary>
+    /// Timer used during the countdown
+    /// </summary>
     Timer raceStartTimer = new();
 
     // yeah i modify this directly but i have to demo this in less than 24 hours
+    /// <summary>
+    /// Timer used to actually play the game.
+    /// </summary>
     internal Timer raceTimer = new(); 
 
     /// <summary>
@@ -97,11 +108,12 @@ internal class GameModeRaceMode : GameMode
         bool success = long.TryParse(ConfigParser.GetValue("TimeLimit"), out raceConfigData.timeLimit)
             | long.TryParse(ConfigParser.GetValue("CheckpointTimeGain"), out raceConfigData.checkpointTimeGain)
             | long.TryParse(ConfigParser.GetValue("CompletionReward"), out raceConfigData.completionReward)
+            | float.TryParse(ConfigParser.GetValue("KillFloorY"), out raceConfigData.killFloorY)
             ;
 
         // still at least try to load
         if (!success)
-            Debug.LogError("Event data for " + ProgressionCoordinator.currentLevel.scene + " must at least have a time limit, completion reward! and checkpoint time gain!");
+            Debug.LogError("Event data for " + ProgressionCoordinator.currentLevel.scene + " must at least have a time limit, completion reward, kill floor Y and checkpoint time gain!");
 
         int.TryParse(ConfigParser.GetValue("NumTimeBonus"), out int numTimeBonuses);
 
@@ -162,6 +174,7 @@ internal class GameModeRaceMode : GameMode
             raceState = RaceState.Failed;
         }
 
+
         switch (raceState)
         {
             case RaceState.Starting:
@@ -187,10 +200,7 @@ internal class GameModeRaceMode : GameMode
                     if (raceTimer.GetElapsedTime() > raceConfigData.timeLimit
                         && !raceFailTimer.HasStarted())
                     {
-                        // turn off the car's inputs
-                        GameManager.player.carInWorld.disableInputs = true; 
-                        raceFailTimer.Start(RESTART_TIME_FAIL);
-
+                        StartRaceFailTimer();
                     }
                 }
 
@@ -201,7 +211,7 @@ internal class GameModeRaceMode : GameMode
                 break;
             // the race is done
             case RaceState.Finished:
-                CalculateTimeBonus();                                                // calculate time bonus based on race configuration
+                OnFinishCalculateTimeBonus();                                        // calculate time bonus based on race configuration
                 GameManager.player.carInWorld.disableInputs = false;                 //just in case
                 GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
                 break;
@@ -209,12 +219,7 @@ internal class GameModeRaceMode : GameMode
 
     }
 
-    internal override void OnLeave()
-    {
-        ProgressionCoordinator.OnExitRaceScene(); 
-    }
-
-    private void CalculateTimeBonus()
+    private void OnFinishCalculateTimeBonus()
     {
         float elapsedTime = raceTimer.GetElapsedTime();
 
@@ -328,7 +333,7 @@ internal class GameModeRaceMode : GameMode
 
             // temp - move code to failedl* states
             if (!raceFailTimer.HasStarted())
-                raceFailTimer.Start(RESTART_TIME_FAIL);
+                StartRaceFailTimer();
         }
 
             //restore alignment (hack - but this code is going away soon anyway)
@@ -373,6 +378,21 @@ internal class GameModeRaceMode : GameMode
             CarManager.SpawnPlayerCar();
             raceState = RaceState.Active;
         }
+    }
+
+    internal void StartRaceFailTimer()
+    {
+        if (raceFailTimer.HasStarted())
+            return;
+
+        // turn off the car's inputs
+        GameManager.player.carInWorld.disableInputs = true;
+        raceFailTimer.Start(RESTART_TIME_FAIL);
+    }
+
+    internal override void OnLeave()
+    {
+        ProgressionCoordinator.OnExitRaceScene();
     }
 
     // todo: This code is *HORRIBLE* 

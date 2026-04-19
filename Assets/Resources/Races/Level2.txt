@@ -3,6 +3,7 @@
 TimeLimit = 75000					; Maximum time limit
 CheckpointTimeGain = 20000			; Checkpoint time gain
 CompletionReward = 200				; Completion reward, awarded regardless of time
+KillFloorY = -100					; Kill floor Y
 
 NumTimeBonus = 5					; number of time bonuses
 

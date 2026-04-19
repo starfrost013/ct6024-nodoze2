@@ -239,6 +239,22 @@ internal class Car : BasePhysicsObject
         Debug.Assert(physics.wheelLeftBackCollider && physics.wheelLeftFrontCollider && physics.wheelRightBackCollider && physics.wheelRightFrontCollider, "All car wheels must have WheelColliders!");
     }
 
+    private void CheckAboveKillFloor()
+    {
+        if (GameManager.GetGameState() != GameManager.GameModeEnum.RaceMode)
+            return;
+
+        //TODO: Split gamemoderacemode into gamemoderacemode and GameManager.race ?
+        //TODO: Failtypes
+                // - Refactor gamestate.afiled to immediately put us in to fail with the known state
+                // - Refactor onlegacygui
+
+        GameModeRaceMode raceMode = GameManager.mode as GameModeRaceMode;
+
+        if (transform.position.y < raceMode.raceConfigData.killFloorY)
+            raceMode.StartRaceFailTimer();
+    }
+
     private void RunInputFlip()
     {
         bool flipInput = Input.GetKey(KeyCode.F);
@@ -499,6 +515,8 @@ internal class Car : BasePhysicsObject
             physics.fuelCurrent = 0;
             disableInputs = true; 
         }
+
+        CheckAboveKillFloor();
 
         // run code to check all our inputs
 
