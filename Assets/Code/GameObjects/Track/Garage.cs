@@ -27,7 +27,12 @@ class Garage : MonoBehaviour
             car.physics.fuelCurrent += (modifier.fuelMax * (modifier.refuelGaragePercent / 100.0f));
         
             if (car.physics.fuelCurrent > modifier.fuelMax)
-                car.physics.fuelCurrent = modifier.fuelMax; 
+                car.physics.fuelCurrent = modifier.fuelMax;
+            
+            // le sigh
+            GameModeRaceMode raceMode = GameManager.mode as GameModeRaceMode;
+
+            raceMode.raceConfigData.timeLimit += raceMode.raceConfigData.checkpointTimeGain;
         }
     }
 

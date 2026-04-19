@@ -10,7 +10,7 @@ class FinishLine : MonoBehaviour
         if (GameManager.GetGameState() != GameManager.GameModeEnum.RaceMode)
             return; 
     
-        // the collision is the CarBody
+        // the collision is the CarBody`
         if (other.gameObject.transform.parent.gameObject.GetComponent<Car>())
         {
             Debug.Log("You got to the end of the race!");

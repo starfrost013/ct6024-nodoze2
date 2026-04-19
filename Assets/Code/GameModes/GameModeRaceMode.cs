@@ -43,9 +43,9 @@ internal class GameModeRaceMode : GameMode
     /// </summary>
     internal class RaceConfigData
     {
-        internal const int TIME_LIMIT_NONE = -1;             // no time limit
+        internal const int TIME_LIMIT_NONE = -1;            // no time limit
 
-        internal long timeLimit;
+        internal long timeLimit;                            // time limit, adjusted by checkpoints
         internal long checkpointTimeGain;
         internal long completionReward;
 
@@ -53,13 +53,18 @@ internal class GameModeRaceMode : GameMode
     };
 
     
-    // externally accessed property -- the subset of the race
+    /// <summary>
+    /// externally accessed property -- the substate of the race
+    /// </summary>
     internal RaceState raceState { get; set; }
+
     private TextAsset raceConfigDataText { get; set; }
     internal RaceConfigData raceConfigData { get; private set; }
     
     Timer raceStartTimer = new();
-    Timer raceTimer = new();
+
+    // yeah i modify this directly but i have to demo this in less than 24 hours
+    internal Timer raceTimer = new(); 
 
     /// <summary>
     /// Timer used to restart things

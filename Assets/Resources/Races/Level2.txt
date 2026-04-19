@@ -1,7 +1,7 @@
 [Race]
 
-TimeLimit = 120						; Maximum time limit
-CheckpointTimeGain = 15				; Checkpoint time gain
+TimeLimit = 75000					; Maximum time limit
+CheckpointTimeGain = 20000			; Checkpoint time gain
 CompletionReward = 200				; Completion reward, awarded regardless of time
 
 NumTimeBonus = 5					; number of time bonuses
