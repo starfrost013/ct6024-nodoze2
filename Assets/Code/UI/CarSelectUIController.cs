@@ -77,6 +77,7 @@ public class CarSelectUIController : MonoBehaviour
         if (selectedCarId >= CarManager.carObjects.Length)
             selectedCarId = 0;
 
+        Debug.Log("car id is now " + selectedCarId);
         SetupSelectedCar();
     }
 

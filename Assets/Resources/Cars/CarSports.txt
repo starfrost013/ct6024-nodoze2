@@ -1,11 +1,11 @@
 ; Sports car 
 
 [Info]
-Name = Renope LeBaguette Coupe 7000S
+Name = Python Xtreme Super Sport 3
 Description = Devastating. If it doesn't overcome you with its pure understeer, it won't fail you on the road.
-HandlingText = Oh god, that's a harsh fucker
-SpeedText = Not really that fast but its always gets there
-ReliabilityText = Can cross Mount Everest
+HandlingText = Kind of like ice-skating
+SpeedText = Very fast
+ReliabilityText = Yea...good luck...
 
 [Handling]
 
