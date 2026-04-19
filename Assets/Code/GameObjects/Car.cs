@@ -412,24 +412,20 @@ internal class Car : BasePhysicsObject
         physics.wheelRightFrontCollider.GetWorldPose(out Vector3 _, out wheelRotation);
         wheelRightFront.transform.rotation = wheelRotation;
 
-
         //
         // Fuel handling 
         //
 
-        if (Math.Abs(physics.forwardTorque) > EPSILON_MIN)
+        float fuelUseMultiplier = Math.Clamp(physRigidbody.linearVelocity.magnitude / physics.data.maxFuelUseVelocity,
+        physics.data.minFuelUseAmount, physics.data.maxFuelUseAmount);
+
+        if (physics.data.decelerationFuelCutoff
+            && !anyInput)
         {
-            float fuelUseMultiplier = Math.Clamp(physRigidbody.linearVelocity.magnitude / physics.data.maxFuelUseVelocity,
-            physics.data.minFuelUseAmount, physics.data.maxFuelUseAmount);
-
-            if (physics.data.decelerationFuelCutoff
-                && !anyInput)
-            {
-                fuelUseMultiplier = 0f;
-            }
-
-            physics.fuelCurrent -= (physics.data.fuelDepletionPerTick * fuelUseMultiplier);
+            fuelUseMultiplier = 0f;
         }
+
+        physics.fuelCurrent -= (physics.data.fuelDepletionPerTick * fuelUseMultiplier);
     }
 
     private void UpdateCamera()
