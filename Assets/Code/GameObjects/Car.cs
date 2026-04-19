@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using static GameModeRaceMode;
 
 /// <summary>
 /// Implements the car
@@ -252,7 +253,7 @@ internal class Car : BasePhysicsObject
         GameModeRaceMode raceMode = GameManager.mode as GameModeRaceMode;
 
         if (transform.position.y < raceMode.raceConfigData.killFloorY)
-            raceMode.StartRaceFailTimer();
+            raceMode.FailRace(RaceFailReason.OutOfMap, 0);
     }
 
     private void RunInputFlip()
@@ -500,11 +501,11 @@ internal class Car : BasePhysicsObject
     {
         // Check if the race is active so we can move (using temporary UI)
         GameMode mode = GameManager.mode;
+        GameModeRaceMode raceMode = (GameModeRaceMode)mode;
 
         // HACK (avoids us doing a second call
         if (GameManager.GetGameState() == GameManager.GameModeEnum.RaceMode)
         {
-            GameModeRaceMode raceMode = (GameModeRaceMode)mode;
 
             if (raceMode.raceState != GameModeRaceMode.RaceState.Active)
                 return;
@@ -513,6 +514,7 @@ internal class Car : BasePhysicsObject
         if (physics.fuelCurrent <= 0)
         {
             physics.fuelCurrent = 0;
+            raceMode.FailRace(RaceFailReason.OutOfFuel); // we still need to split this out
             disableInputs = true; 
         }
 

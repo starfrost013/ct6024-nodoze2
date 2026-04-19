@@ -44,7 +44,7 @@ public class GameManagerObject : MonoBehaviour
             if (GameManager.GetGameState() == GameManager.GameModeEnum.RaceMode)
             {
                 GameModeRaceMode raceMode = (GameModeRaceMode)GameManager.mode;
-                raceMode.raceState = GameModeRaceMode.RaceState.Finished;
+                raceMode.raceState = GameModeRaceMode.RaceState.FinishedNormal;
             }
             else
             {

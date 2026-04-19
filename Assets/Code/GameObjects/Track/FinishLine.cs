@@ -18,7 +18,7 @@ class FinishLine : MonoBehaviour
             // tell racemode we are finished
             GameModeRaceMode mode = (GameModeRaceMode)GameManager.mode;
 
-            mode.raceState = GameModeRaceMode.RaceState.Finished;
+            mode.raceState = GameModeRaceMode.RaceState.FinishedNormal;
         
         }
     }

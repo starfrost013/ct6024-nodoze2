@@ -8,7 +8,7 @@ internal class GameModeRaceMode : GameMode
 {
 
     /// <summary>
-    /// restart timer time when you run out o fuel
+    /// restart timer time when you fail the race
     /// </summary>
     internal const long RESTART_TIME_FAIL = 5000;
 
@@ -25,9 +25,19 @@ internal class GameModeRaceMode : GameMode
         Starting = 0,               // Race was started
         Countdown = 1,              // Race countdown is active
         Active = 2,                 // Race is active
-        Finished = 3,               // Race was finished successfully
-        Failed = 4,                 // Race was failed
+        FinishedNormal = 3,         // Race was finished successfully
+        FinishedSpecial = 4,        // Race was finished using a special exit
+        Failed = 5,                 // Race was failed
     };
+
+    internal enum RaceFailReason
+    { 
+        OutOfFuel = 0,              // Ran out of fuel
+        OutOfTime = 1,              // Ran out of time
+        OutOfMap = 2,               // Ran out of the map
+    };
+
+    private RaceFailReason raceFailReason;  // the reason that we failed. only valid if racestate == racestate::failed
 
     /// <summary>
     /// A time bonus set.
@@ -168,11 +178,6 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFixedUpdate()
     {
-        if (raceFailTimer.GetElapsedTime() >= RESTART_TIME_FAIL)
-        {
-            raceFailTimer.Reset();
-            raceState = RaceState.Failed;
-        }
 
 
         switch (raceState)
@@ -197,20 +202,24 @@ internal class GameModeRaceMode : GameMode
 
                 if (raceConfigData.timeLimit != RaceConfigData.TIME_LIMIT_NONE)
                 {
-                    if (raceTimer.GetElapsedTime() > raceConfigData.timeLimit
-                        && !raceFailTimer.HasStarted())
-                    {
-                        StartRaceFailTimer();
-                    }
+                    long totalTime = raceConfigData.timeLimit - raceTimer.GetElapsedTime();
+
+                    if (totalTime < 0)
+                        FailRace(RaceFailReason.OutOfTime); 
                 }
 
                 break;
             case RaceState.Failed:
                 //cheap way of resetting the current level 
-                raceState = RaceState.Starting;
+                if (raceFailTimer.GetElapsedTime() >= RESTART_TIME_FAIL)
+                {
+                    raceFailTimer.Reset();
+                    raceState = RaceState.Starting;
+                }
+
                 break;
             // the race is done
-            case RaceState.Finished:
+            case RaceState.FinishedNormal:
                 OnFinishCalculateTimeBonus();                                        // calculate time bonus based on race configuration
                 GameManager.player.carInWorld.disableInputs = false;                 //just in case
                 GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
@@ -259,7 +268,9 @@ internal class GameModeRaceMode : GameMode
 
         string timerString = string.Empty;
 
-        if (totalTime >= 0)
+        bool displayOutOfTime = (raceState == RaceState.Failed && raceFailReason == RaceFailReason.OutOfTime);
+        
+        if (!displayOutOfTime)
         {
             // easier to use constants. 60000 seconds 
             long milliseconds = totalTime % 1000;
@@ -286,7 +297,7 @@ internal class GameModeRaceMode : GameMode
         else
             timerString = "Out of time!";
 
-        Color newColor = new Color(1.0f, 0.1f, 0.1f, 255);
+        Color newColor = new(1.0f, 0.1f, 0.1f, 255);
         GUI.color = newColor;
         raceGuiStyle.fontSize = 48;
 
@@ -324,17 +335,12 @@ internal class GameModeRaceMode : GameMode
         float x = Screen.width - 410;
         float y = Screen.height - 50;
 
+        bool dispOutOfFuel = (raceState == RaceState.Failed && raceFailReason == RaceFailReason.OutOfFuel);
 
-        if (fuelPercentage > 0)
+        if (!dispOutOfFuel)
             GUI.Label(new Rect(x, y, 400, 100), "Fuel: " + fuelPercentage.ToString("F1") + "%");
         else
-        {
             GUI.Label(new Rect(x, y, 400, 100), "Out of fuel!");
-
-            // temp - move code to failedl* states
-            if (!raceFailTimer.HasStarted())
-                StartRaceFailTimer();
-        }
 
             //restore alignment (hack - but this code is going away soon anyway)
         raceGuiStyle.alignment = TextAnchor.UpperLeft;
@@ -380,14 +386,17 @@ internal class GameModeRaceMode : GameMode
         }
     }
 
-    internal void StartRaceFailTimer()
+    internal void FailRace(RaceFailReason failReason, long time = RESTART_TIME_FAIL)
     {
-        if (raceFailTimer.HasStarted())
+        if (raceState == RaceState.Failed)
             return;
+
+        raceFailReason = failReason;
+        raceState = RaceState.Failed;
 
         // turn off the car's inputs
         GameManager.player.carInWorld.disableInputs = true;
-        raceFailTimer.Start(RESTART_TIME_FAIL);
+        raceFailTimer.Start(time);
     }
 
     internal override void OnLeave()
@@ -408,14 +417,15 @@ internal class GameModeRaceMode : GameMode
                 break;
             // the race is active
             case RaceState.Active:
+            case RaceState.Failed:
+            case RaceState.FinishedNormal:
+            case RaceState.FinishedSpecial:
                 // draw various uis here
                 DrawTimer(raceGuiStyle);
                 DrawFuelGauge(raceGuiStyle);
                 DrawMoneyAmount(raceGuiStyle);
                 break;
             // the race is done
-            case RaceState.Finished:
-                break; 
         }
     }
 }
