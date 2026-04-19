@@ -420,19 +420,22 @@ internal class Car : BasePhysicsObject
         // APPLY MOTION
         //
 
-        bool needFrontWheelDrive = (driveType == (CarDriveType.FrontWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
-        bool needRearWheelDrive = (driveType == (CarDriveType.RearWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
-
-        if (needFrontWheelDrive)
+        if (physRigidbody.linearVelocity.magnitude < physics.data.maxVelocity)
         {
-            physics.wheelLeftFrontCollider.motorTorque = (moveInput) ? (physics.wheelLeftFrontCollider.motorTorque + physics.forwardTorque) : 0;
-            physics.wheelRightFrontCollider.motorTorque = (moveInput) ? (physics.wheelRightFrontCollider.motorTorque + physics.forwardTorque) : 0;
-        }
+            bool needFrontWheelDrive = (driveType == (CarDriveType.FrontWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
+            bool needRearWheelDrive = (driveType == (CarDriveType.RearWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
 
-        if (needRearWheelDrive)
-        {
-            physics.wheelLeftBackCollider.motorTorque = (moveInput) ? (physics.wheelLeftBackCollider.motorTorque + physics.forwardTorque) : 0;
-            physics.wheelRightBackCollider.motorTorque = (moveInput) ? (physics.wheelRightBackCollider.motorTorque + physics.forwardTorque) : 0;
+            if (needFrontWheelDrive)
+            {
+                physics.wheelLeftFrontCollider.motorTorque = (moveInput) ? (physics.wheelLeftFrontCollider.motorTorque + physics.forwardTorque) : 0;
+                physics.wheelRightFrontCollider.motorTorque = (moveInput) ? (physics.wheelRightFrontCollider.motorTorque + physics.forwardTorque) : 0;
+            }
+
+            if (needRearWheelDrive)
+            {
+                physics.wheelLeftBackCollider.motorTorque = (moveInput) ? (physics.wheelLeftBackCollider.motorTorque + physics.forwardTorque) : 0;
+                physics.wheelRightBackCollider.motorTorque = (moveInput) ? (physics.wheelRightBackCollider.motorTorque + physics.forwardTorque) : 0;
+            }
         }
 
         // car rotation 
@@ -552,6 +555,7 @@ internal class Car : BasePhysicsObject
 
         // The worst code ever
         // TODO: turn into an operator...
+        physics.data.maxVelocity += info.maxVelocity;
         physics.data.accelerationForward += info.accelerationForward;
         physics.data.accelerationForwardAir += info.accelerationForwardAir;
         physics.data.accelerationSteering += info.accelerationSteering;

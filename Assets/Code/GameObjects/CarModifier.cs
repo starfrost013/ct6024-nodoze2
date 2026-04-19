@@ -6,12 +6,12 @@
  * For dominoes, these are RELATIVE values (i.e. -0.5 to remove 0.5 from it)
  */
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 internal class CarModifier
 {
     // Characteristics of the car
+    internal float maxVelocity;                                 // maximum velocity
     internal float maxForwardTorque;
     internal float maxForwardTorqueBoost;
     internal float accelerationForward;                         // acceleration while moving forward
@@ -63,6 +63,7 @@ internal class CarModifier
     {
         // this is horrible but seemed to be the best way to determine if at least one parse failed
         bool success = float.TryParse(ConfigParser.GetValue("Handling", "MaxForwardTorque"), out maxForwardTorque)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaxVelocity"), out maxVelocity)
         | float.TryParse(ConfigParser.GetValue("Handling", "MaxForwardTorqueBoost"), out maxForwardTorqueBoost)
         | float.TryParse(ConfigParser.GetValue("Handling", "MaxSteeringTorque"), out maxSteeringTorque)
         | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationForward"), out accelerationForward)

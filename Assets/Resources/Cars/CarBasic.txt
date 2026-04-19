@@ -9,8 +9,9 @@ ReliabilityText = As long as you don't T-Bone a school bus...
 
 [Handling]
 
-MaxForwardTorque = 2.0						; Top speed
-MaxForwardTorqueBoost =	4.0					; Top speed during boost
+MaxVelocity = 10.0							; Max speed
+MaxForwardTorque = 2.0						; Max forward torque
+MaxForwardTorqueBoost =	4.0					; Max forward torque during boost
 AccelerationForward = 5.0					; Acceleration of car (needs to ramp up in accordance with a curve)
 AccelerationSteering = 3.5					; Acceleration to apply in lateral direction
 MinimumSteeringAmount = 0.15				; Magnitude of the minimum steering
