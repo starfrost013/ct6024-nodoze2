@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
 
 // The main race mode game mode/.
 internal class GameModeRaceMode : GameMode
@@ -45,6 +43,8 @@ internal class GameModeRaceMode : GameMode
     /// </summary>
     internal class RaceConfigData
     {
+        internal const int TIME_LIMIT_NONE = -1;             // no time limit
+
         internal long timeLimit;
         internal long checkpointTimeGain;
         internal long completionReward;
@@ -64,7 +64,7 @@ internal class GameModeRaceMode : GameMode
     /// <summary>
     /// Timer used to restart things
     /// </summary>
-    Timer restartTimer = new(); 
+    Timer raceFailTimer = new(); 
 
 
     // THIS IS A TERRIBLE WAY OF DOING THIS!
@@ -151,9 +151,9 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFixedUpdate()
     {
-        if (restartTimer.GetElapsedTime() >= RESTART_TIME_FAIL)
+        if (raceFailTimer.GetElapsedTime() >= RESTART_TIME_FAIL)
         {
-            restartTimer.Reset();
+            raceFailTimer.Reset();
             raceState = RaceState.Failed;
         }
 
@@ -175,17 +175,29 @@ internal class GameModeRaceMode : GameMode
                 break;
             // the race is active
             case RaceState.Active:
-                // all this does is draw the ui so this will be moved here
+                // check if we are out of time
+
+                if (raceConfigData.timeLimit != RaceConfigData.TIME_LIMIT_NONE)
+                {
+                    if (raceTimer.GetElapsedTime() > raceConfigData.timeLimit
+                        && !raceFailTimer.HasStarted())
+                    {
+                        // turn off the car's inputs
+                        GameManager.player.carInWorld.disableInputs = true; 
+                        raceFailTimer.Start(RESTART_TIME_FAIL);
+
+                    }
+                }
+
                 break;
             case RaceState.Failed:
                 //cheap way of resetting the current level 
                 raceState = RaceState.Starting;
-
                 break;
             // the race is done
             case RaceState.Finished:
-                CalculateTimeBonus();                   // calculate time bonus based on race configuration
-                // TEMP. There needs to be a *RACE CONFIGURATION* which will specify the scene to load, etc.
+                CalculateTimeBonus();                                                // calculate time bonus based on race configuration
+                GameManager.player.carInWorld.disableInputs = false;                 //just in case
                 GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
                 break;
         }
@@ -228,32 +240,49 @@ internal class GameModeRaceMode : GameMode
         if (!raceTimer.HasStarted())
             raceTimer.Start(Timer.TIMER_CONTINUE_FOREVER);
 
-        Int64 totalTime = raceTimer.GetElapsedTime();
+        long totalTime = 0;
 
-        // easier to use constants. 60000 seconds 
-        Int64 milliseconds = totalTime % 1000;
-        Int64 seconds = (totalTime / 1000) % 60;
-        Int64 minutes = ((totalTime / 1000) / 60) % 60;
+        if (raceConfigData.timeLimit == RaceConfigData.TIME_LIMIT_NONE)
+            totalTime = raceTimer.GetElapsedTime();
+        else
+            totalTime = raceConfigData.timeLimit - raceTimer.GetElapsedTime();
 
-        string millisecondsString = milliseconds.ToString(), secondsString = seconds.ToString(), minutesString = minutes.ToString();
+        string timerString = string.Empty;
 
-        // this might be a slow operation
-        if (milliseconds < 10)
-            millisecondsString = "00" + millisecondsString;
-        else if (milliseconds < 100)
-            millisecondsString = "0" + millisecondsString;
+        if (totalTime >= 0)
+        {
+            // easier to use constants. 60000 seconds 
+            long milliseconds = totalTime % 1000;
+            long seconds = (totalTime / 1000) % 60;
+            long minutes = ((totalTime / 1000) / 60) % 60;
 
-        if (seconds < 10)
-            secondsString = '0' + secondsString;
+            string millisecondsString = milliseconds.ToString(), secondsString = seconds.ToString(), minutesString = minutes.ToString();
 
-        if (minutes < 10)
-            minutesString = '0' + minutesString;
+            // this might be a slow operation
+            if (milliseconds < 10)
+                millisecondsString = "00" + millisecondsString;
+            else if (milliseconds < 100)
+                millisecondsString = "0" + millisecondsString;
 
-        raceGuiStyle.fontSize = 36;
+            if (seconds < 10)
+                secondsString = '0' + secondsString;
 
-        string timerString = minutesString + ":" + secondsString + "." + millisecondsString;
-        GUI.color = Color.red;
-        GUI.Label(new Rect(Screen.width - 170, 0, 400, 100), timerString, raceGuiStyle);
+            if (minutes < 10)
+                minutesString = '0' + minutesString;
+
+
+            timerString = minutesString + ":" + secondsString + "." + millisecondsString;
+        }
+        else
+            timerString = "Out of time!";
+
+        Color newColor = new Color(1.0f, 0.1f, 0.1f, 255);
+        GUI.color = newColor;
+        raceGuiStyle.fontSize = 48;
+
+        int width = 250, height = 100;
+
+        GUI.Label(new Rect(Screen.width / 2 - (width / 2), 0, width, height), timerString, raceGuiStyle);
     }
 
     private void DrawMoneyAmount(GUIStyle raceGuiStyle)
@@ -262,13 +291,12 @@ internal class GameModeRaceMode : GameMode
         GUI.color = Color.green;
         raceGuiStyle.alignment = TextAnchor.UpperRight;
 
-        float fuelPercentage = (GameManager.player.stats.money) * 100;
-
         float x = Screen.width - 410;
         float y = Screen.height - 90;
 
-        GUI.Label(new Rect(x, y, 400, 100), "Money: $" + GameManager.player.stats.money, raceGuiStyle);
+        raceGuiStyle.fontSize = 36;
 
+        GUI.Label(new Rect(x, y, 400, 100), "Money: $" + GameManager.player.stats.money, raceGuiStyle);
         //restore alignment (hack - but this code is going away soon anyway)
         raceGuiStyle.alignment = TextAnchor.UpperLeft;
 
@@ -279,11 +307,13 @@ internal class GameModeRaceMode : GameMode
         Car car = GameManager.player.carInWorld;  
         GUI.color = Color.blue;
         raceGuiStyle.alignment = TextAnchor.UpperRight;
+        raceGuiStyle.fontSize = 36;
 
         float fuelPercentage = (car.physics.fuelCurrent / car.GetCarModifiers().fuelMax) * 100;
 
         float x = Screen.width - 410;
         float y = Screen.height - 50;
+
 
         if (fuelPercentage > 0)
             GUI.Label(new Rect(x, y, 400, 100), "Fuel: " + fuelPercentage.ToString("F1") + "%");
@@ -291,12 +321,53 @@ internal class GameModeRaceMode : GameMode
         {
             GUI.Label(new Rect(x, y, 400, 100), "Out of fuel!");
 
-            if (!restartTimer.HasStarted())
-                restartTimer.Start(RESTART_TIME_FAIL);
+            // temp - move code to failedl* states
+            if (!raceFailTimer.HasStarted())
+                raceFailTimer.Start(RESTART_TIME_FAIL);
         }
 
-        //restore alignment (hack - but this code is going away soon anyway)
+            //restore alignment (hack - but this code is going away soon anyway)
         raceGuiStyle.alignment = TextAnchor.UpperLeft;
+    }
+
+    private void DrawCountdownUI(GUIStyle raceGuiStyle)
+    {
+        // remaining time in seconds
+        Int64 remainingTime = ((raceStartTimer.length - raceStartTimer.GetElapsedTime()) / 1000) + 1; // +1 for "3, 2, 1..."
+
+        raceGuiStyle.fontSize = 72;
+        GUI.color = Color.yellow;
+
+        if (remainingTime <= (RACE_START_TIME / 1000))
+            GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);
+
+        // just hardcode this for now
+        if (remainingTime < 4
+            && !countdown3Done)
+        {
+            countdown3Done = true;
+            AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown3", 1.0f);
+        }
+        else if (remainingTime < 3
+            && !countdown2Done)
+        {
+            countdown2Done = true;
+            AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown2", 1.0f);
+        }
+        else if (remainingTime < 2
+            && !countdown1Done)
+        {
+            countdown1Done = true;
+            AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown1", 1.0f);
+        }
+
+        if (raceStartTimer.IsDone())
+        {
+            AudioManager.PlayAudioAtCameraPosition("Announcer_CountdownGO", 1.0f);
+            // since there is no car selection menu
+            CarManager.SpawnPlayerCar();
+            raceState = RaceState.Active;
+        }
     }
 
     // todo: This code is *HORRIBLE* 
@@ -308,42 +379,7 @@ internal class GameModeRaceMode : GameMode
         {
             // the countdown state
             case RaceState.Countdown:
-                // remaining time in seconds
-                Int64 remainingTime = ((raceStartTimer.length - raceStartTimer.GetElapsedTime()) / 1000) + 1; // +1 for "3, 2, 1..."
-
-                raceGuiStyle.fontSize = 72;
-                GUI.color = Color.yellow;
-
-                if (remainingTime <= (RACE_START_TIME / 1000))
-                    GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);
-
-                // just hardcode this for now
-                if (remainingTime < 4
-                    && !countdown3Done)
-                {
-                    countdown3Done = true;
-                    AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown3", 1.0f);
-                }
-                else if (remainingTime < 3
-                    && !countdown2Done)
-                {
-                    countdown2Done = true;
-                    AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown2", 1.0f);
-                }
-                else if (remainingTime < 2
-                    && !countdown1Done)
-                {
-                    countdown1Done = true;
-                    AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown1", 1.0f);
-                }
-
-                if (raceStartTimer.IsDone())
-                {
-                    AudioManager.PlayAudioAtCameraPosition("Announcer_CountdownGO", 1.0f);
-                    // since there is no car selection menu
-                    CarManager.SpawnPlayerCar();
-                    raceState = RaceState.Active;
-                }
+                DrawCountdownUI(raceGuiStyle);
                 break;
             // the race is active
             case RaceState.Active:

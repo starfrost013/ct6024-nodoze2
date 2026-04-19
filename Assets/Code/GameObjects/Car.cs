@@ -139,6 +139,11 @@ internal class Car : BasePhysicsObject
     /// </summary>
     internal string description { get; private set; }
 
+    /// <summary>
+    /// The race has ended, disable the inputs
+    /// </summary>
+    internal bool disableInputs { get; set; }
+
     //
     // METHODS
     //
@@ -462,8 +467,6 @@ internal class Car : BasePhysicsObject
             if (raceMode.raceState != GameModeRaceMode.RaceState.Active)
                 return;
         }
-
-        bool disableInputs = false;
 
         if (physics.fuelCurrent <= 0)
         {
