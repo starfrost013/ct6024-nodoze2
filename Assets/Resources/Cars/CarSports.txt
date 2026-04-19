@@ -1,11 +1,11 @@
 ; Sports car 
 
 [Info]
-Name = Python Xtreme Super Sport 3
+Name = Renope LeBaguette Coupé 7000S
 Description = Devastating. If it doesn't overcome you with its pure understeer, it won't fail you on the road.
-HandlingText = Kind of like ice-skating
-SpeedText = Very fast
-ReliabilityText = Yea...good luck...
+HandlingText = Oh god, that's a harsh fucker
+SpeedText = Not really that fast but it's good at getting there
+ReliabilityText = Can cross Mount Everest
 
 [Handling]
 
@@ -23,9 +23,9 @@ DecelerationSteering = 0.95					; Deceleration while steering (must be below 1)
 DecelerationChangeDirection = 9.0			; Deceleration while changing direction
 DecelerationChangeDirectionSteering = 7.0	; Deceleration while steering and changing direction
 
-DecelerationAir = 0.999						; Deceleration in the air
-MaxSteeringTorque = 9.0						; Maximum torque
-BoostAccelerationForward = 30.0				; Acceleration of car on TOP of regular acceleration 
+DecelerationAir = 0.9985					; Deceleration in the air
+MaxSteeringTorque = 12.0					; Maximum torque
+BoostAccelerationForward = 35.0				; Acceleration of car on TOP of regular acceleration 
 BoostAccelerationSteering = 5.0				; Acceleration of car on TOP of regular acceleration steering
 BoostAccelerationForwardAir = 3.0			; Acceleration of car on TOP of regular acceleration in the air
 BoostAccelerationSteeringAir = 2.0			; Acceleration of car on TOP of regular acceleration steering in the air
@@ -36,17 +36,17 @@ BoostRegenPerTick = 6						; Boost depletion per 1/60 of a second
 SteeringType = Manual 						; 0 = Automatic, 1 = Manual, you can use numbers or the names 
 
 [Camera]
-MaxTurnCameraAngle = 19.0					; Maximum camera turn angle
-MaxTurnCameraAmount = 0.1					; Maximum amount the camera can tunr
+MaxTurnCameraAngle = 25.0					; Maximum camera turn angle
+MaxTurnCameraAmount = 0.3					; Maximum amount the camera can tunr
 CameraRelativeX = 0.1						; Relative camera X (maximum, while turning) to car
-CameraRelativeY = 1.4						; Relative camera Y (maximum, while turning) to car
+CameraRelativeY = 1.5						; Relative camera Y (maximum, while turning) to car
 CameraRelativeZ = 5.0						; Relative camera Z (maximum, while turning) to car
 CameraTurnFactor = 5						; How intensively camera turns when you steer
 ModelFixCameraAdjY = 180.0					; It's hard to export models
 
 [Fuel]
-Max = 3600									; Maximum fuel count
-DepletionPerTick = 1.15						; Fuel depletion per 1/60 of a second
+Max = 4500									; Maximum fuel count
+DepletionPerTick = 1.03						; Fuel depletion per 1/60 of a second
 RefuelGaragePercent = 30.0					; % of fuel refueled by the garage
 DecelerationFuelCutoff = false				; Turn off fuel
 MinFuelUseAmount = 0.2						; Fuel use at EPSILON velocity

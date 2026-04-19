@@ -1,27 +1,27 @@
-; Basic car
+; Sports car 
 
 [Info]
-Name = Dynamo GTS 5.1
-Description = Actually a pretty boring and cheap car. If your definition of cheap is a spare family inheritance...
-HandlingText = Pretty cool
-SpeedText = Fast
-ReliabilityText = As long as you don't T-Bone a school bus...
+Name = Python Xtreme Super Sport 3
+Description = Devastating. If it doesn't overcome you with its pure understeer, it won't fail you on the road.
+HandlingText = Kind of like ice-skating
+SpeedText = Very fast
+ReliabilityText = Yea...good luck...
 
 [Handling]
 
-MaxForwardTorque = 2.0						; Top speed
-MaxForwardTorqueBoost =	4.0					; Top speed during boost
-AccelerationForward = 5.0					; Acceleration of car (needs to ramp up in accordance with a curve)
-AccelerationSteering = 3.5					; Acceleration to apply in lateral direction
-MinimumSteeringAmount = 0.15				; Magnitude of the minimum steering
+MaxForwardTorque = 2.2						; Top speed
+MaxForwardTorqueBoost =	7.0					; Top speed during boost
+AccelerationForward = 7.0					; Acceleration of car (needs to ramp up in accordance with a curve)
+AccelerationSteering = 6.0					; Acceleration to apply in lateral direction
+MinimumSteeringAmount = 0.25				; Magnitude of the minimum steering
 MaximumSteeringAmount = 1.0					; Magnitude of the minimum steering
-MaximumSteeringVelocity = 10.0				; Magnitude at which the maximum steering velocity is applied
+MaximumSteeringVelocity = 8.0				; Magnitude at which the maximum steering velocity is applied
 AccelerationForwardAir = 3.0				; Acceleration to apply in forward direction while in the air
 AccelerationSteeringAir = 2.5				; Acceleration to apply in lateral direction while in the air
-Deceleration = 0.965						; Deceleration while idle (must be below 1) 
-DecelerationSteering = 0.95					; Deceleration while steering (must be below 1)
-DecelerationChangeDirection = 6.0			; Deceleration while changing direction
-DecelerationChangeDirectionSteering = 5.0	; Deceleration while steering and changing direction
+Deceleration = 0.935						; Deceleration while idle (must be below 1) 
+DecelerationSteering = 0.945					; Deceleration while steering (must be below 1)
+DecelerationChangeDirection = 8.0			; Deceleration while changing direction
+DecelerationChangeDirectionSteering = 9.0	; Deceleration while steering and changing direction
 
 DecelerationAir = 0.999						; Deceleration in the air
 MaxSteeringTorque = 9.0						; Maximum torque
@@ -37,18 +37,18 @@ SteeringType = Manual 						; 0 = Automatic, 1 = Manual, you can use numbers or 
 
 [Camera]
 MaxTurnCameraAngle = 19.0					; Maximum camera turn angle
-MaxTurnCameraAmount = 0.1					; Maximum distance the camera can turn
+MaxTurnCameraAmount = 0.1					; Maximum amount the camera can tunr
 CameraRelativeX = 0.1						; Relative camera X (maximum, while turning) to car
 CameraRelativeY = 1.4						; Relative camera Y (maximum, while turning) to car
 CameraRelativeZ = 5.0						; Relative camera Z (maximum, while turning) to car
 CameraTurnFactor = 5						; How intensively camera turns when you steer
-ModelFixCameraAdjY = -180.0					; It's hard to export models
+ModelFixCameraAdjY = 180.0					; It's hard to export models
 
 [Fuel]
-Max = 4000									; Maximum fuel count
-DepletionPerTick = 1.0						; Fuel depletion per 1/60 of a second
-RefuelGaragePercent = 25.0					; % of fuel refueled by the garage
-DecelerationFuelCutoff = false				; Turn off fuel 
+Max = 3600									; Maximum fuel count
+DepletionPerTick = 1.15						; Fuel depletion per 1/60 of a second
+RefuelGaragePercent = 30.0					; % of fuel refueled by the garage
+DecelerationFuelCutoff = false				; Turn off fuel
 MinFuelUseAmount = 0.2						; Fuel use at EPSILON velocity
 MaxFuelUseAmount = 1.0						; Fuel use at the maximum velocity
-MaxFuelUseVelocity = 10.0					; Velocity (magnitude) at which the maximum fuel use is applied
+MaxFuelUseVelocity = 12.0					; Velocity (magnitude) at which the maximum fuel use is applied
