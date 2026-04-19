@@ -1,10 +1,10 @@
 ; Sports car 
 
 [Info]
-Name = Renope LeBaguette Coupé 7000S
+Name = Renope LeBaguette Coupe 7000S
 Description = Devastating. If it doesn't overcome you with its pure understeer, it won't fail you on the road.
 HandlingText = Oh god, that's a harsh fucker
-SpeedText = Not really that fast but it's good at getting there
+SpeedText = Not really that fast but its always gets there
 ReliabilityText = Can cross Mount Everest
 
 [Handling]
