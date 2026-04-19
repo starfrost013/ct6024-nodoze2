@@ -103,7 +103,7 @@ internal static class CarManager
         GameObject start = GameObject.Find("CarStart");
 
         if (start != null)
-            GameManager.player.carInWorld.gameObject.transform.position = start.transform.position + new Vector3(0.5f, 1.0f, 0.5f);
+            GameManager.player.carInWorld.gameObject.transform.position = start.transform.position + new Vector3(0.0f, 0.1f, 0.0f);
         else
         {
             Debug.LogWarning("Please insert a start point!");
