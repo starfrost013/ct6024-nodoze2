@@ -16,6 +16,7 @@ public class CarSelectUIController : MonoBehaviour
 
     public void Start()
     {
+       
         carNameText = transform.parent.transform.Find(NAME_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
         carDescriptionText = transform.parent.transform.Find(DESCRIPTION_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
 
@@ -38,6 +39,8 @@ public class CarSelectUIController : MonoBehaviour
 
     public void PrevClicked()
     {
+        AudioManagerGlobalSounds.PlayUIClickSound();
+
         // don't put it in the setter because we need to do a bounds check
         selectedCarId--;
 
@@ -49,6 +52,8 @@ public class CarSelectUIController : MonoBehaviour
 
     public void NextClicked()
     {
+        AudioManagerGlobalSounds.PlayUIClickSound();
+
         // don't put it in the setter because we need to do a bounds check
         selectedCarId++;
 
@@ -60,6 +65,8 @@ public class CarSelectUIController : MonoBehaviour
 
     public void DoneClicked()
     {
+        AudioManagerGlobalSounds.PlayUIClickSound();
+
         // set the player car
         CarManager.SetPlayerCar(CarManager.carObjects[selectedCarId].name);
         GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);

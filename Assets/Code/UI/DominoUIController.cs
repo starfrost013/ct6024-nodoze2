@@ -80,6 +80,8 @@ public class DominoUIController : MonoBehaviour
     /// </summary>
     public void BuyClicked()
     {
+        AudioManagerGlobalSounds.PlayUIClickSound();
+
         Domino domino = DominoManager.GetDominoByName(selectDominoDropdown.options[selectDominoDropdown.value].text);
 
         if (domino == null)
@@ -91,8 +93,11 @@ public class DominoUIController : MonoBehaviour
         if (domino.cost > GameManager.player.stats.money)
         {
             costText.text = "Not enough money!";
+            AudioManagerGlobalSounds.PlayUIWrongSound();
             return;
         }
+
+        AudioManagerGlobalSounds.PlayUIClickSound();
 
         GameManager.player.stats.money -= domino.cost;
         playerMoneyText.text = "Money: $" + GameManager.player.stats.money;
@@ -105,6 +110,8 @@ public class DominoUIController : MonoBehaviour
     /// </summary>
     public void DoneClicked()
     {
+        AudioManagerGlobalSounds.PlayUIClickSound();
+
         GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
     }
 }
