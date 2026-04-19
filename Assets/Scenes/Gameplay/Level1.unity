@@ -4007,6 +4007,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 568608104}
     m_Modifications:
     - target: {fileID: 4657177000940813454, guid: ff3dfee0c6ec2094b938afed61142c76, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5.7641
+      objectReference: {fileID: 0}
+    - target: {fileID: 4657177000940813454, guid: ff3dfee0c6ec2094b938afed61142c76, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5.7641
+      objectReference: {fileID: 0}
+    - target: {fileID: 4657177000940813454, guid: ff3dfee0c6ec2094b938afed61142c76, type: 3}
       propertyPath: m_LocalScale.z
       value: 5.7640996
       objectReference: {fileID: 0}
@@ -6690,6 +6698,10 @@ PrefabInstance:
       value: 5.7640996
       objectReference: {fileID: 0}
     - target: {fileID: 8698623209072616493, guid: 127cff7c75d41be49b2651d7367f441f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 5.7641
+      objectReference: {fileID: 0}
+    - target: {fileID: 8698623209072616493, guid: 127cff7c75d41be49b2651d7367f441f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -179.05
       objectReference: {fileID: 0}
@@ -7428,6 +7440,14 @@ PrefabInstance:
     - target: {fileID: 8357668344912789143, guid: 127cff7c75d41be49b2651d7367f441f, type: 3}
       propertyPath: m_Name
       value: Brick House 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8698623209072616493, guid: 127cff7c75d41be49b2651d7367f441f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5.7641
+      objectReference: {fileID: 0}
+    - target: {fileID: 8698623209072616493, guid: 127cff7c75d41be49b2651d7367f441f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5.7641
       objectReference: {fileID: 0}
     - target: {fileID: 8698623209072616493, guid: 127cff7c75d41be49b2651d7367f441f, type: 3}
       propertyPath: m_LocalScale.z

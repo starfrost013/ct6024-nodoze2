@@ -42,6 +42,39 @@ internal class Car : BasePhysicsObject
         internal WheelCollider wheelRightFrontCollider;
     };
 
+    /// <summary>
+    /// User-visible car metadata
+    /// </summary>
+    internal struct CarMetadata
+    {
+        /// <summary>
+        /// The user-visible name of the car. (renamed to avoid collisions)
+        /// </summary>
+        internal string friendlyName;
+
+        /// <summary>
+        /// A description of the car.
+        /// </summary>
+        internal string description;
+
+        /// <summary>
+        /// The text to show on the handling field of the car seleciton screen.
+        /// </summary>
+        internal string handlingText;
+
+        /// <summary>
+        /// The text to show on the speed field of the car selection screen.
+        /// </summary>
+        internal string speedText;
+
+        /// <summary>
+        /// The text to show on the reliability field of the car selection screen.
+        /// </summary>
+        internal string reliabilityText;
+    };
+
+    internal CarMetadata metadata; 
+
     //
     // ENUMS
     //
@@ -128,17 +161,6 @@ internal class Car : BasePhysicsObject
     float cameraTurnPercentage;
 
     // car select screen stuff
-    
-    /// <summary>
-    /// The user-visible name of the car. (renamed to avoid collisions)
-    /// </summary>
-    internal string friendlyName { get; private set; }
-
-    /// <summary>
-    /// A description of the car.
-    /// </summary>
-    internal string description { get; private set; }
-
     /// <summary>
     /// The race has ended, disable the inputs
     /// </summary>
@@ -157,8 +179,12 @@ internal class Car : BasePhysicsObject
 
         // additional data needed for cars only
         steeringType = (CarSteeringType)Enum.Parse(typeof(CarSteeringType), ConfigParser.GetValue("Handling", "SteeringType"));
-        friendlyName = ConfigParser.GetValue("Info", "Name");
-        description = ConfigParser.GetValue("Info", "Description");
+        
+        metadata.friendlyName = ConfigParser.GetValue("Info", "Name");
+        metadata.description = ConfigParser.GetValue("Info", "Description");
+        metadata.handlingText = ConfigParser.GetValue("Info", "HandlingText");
+        metadata.speedText = ConfigParser.GetValue("Info", "SpeedText");
+        metadata.reliabilityText = ConfigParser.GetValue("Info", "ReliabilityText");
 
         // If we need X and Z i'm taking matters into my own hands
         float.TryParse(ConfigParser.GetValue("Camera", "ModelFixCameraAdjY"), out modelFixCameraAdjY);

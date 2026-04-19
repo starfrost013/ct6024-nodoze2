@@ -3,6 +3,9 @@
 [Info]
 Name = Dynamo GTS 5.1
 Description = Actually a pretty boring and cheap car. If your definition of cheap is a spare family inheritance...
+HandlingText = Pretty cool
+SpeedText = Fast
+ReliabilityText = As long as you don't T-Bone a school bus...
 
 [Handling]
 
