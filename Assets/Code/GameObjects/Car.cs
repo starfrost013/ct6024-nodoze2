@@ -502,17 +502,12 @@ internal class Car : BasePhysicsObject
     // I don't have time to use ISP sorry!
     private void FixedUpdate()
     {
-        // Check if the race is active so we can move (using temporary UI)
+        if (GameManager.GetGameState() != GameManager.GameModeEnum.RaceMode)
+            return;
+
+            // Check if the race is active so we can move (using temporary UI)
         GameMode mode = GameManager.mode;
-        GameModeRaceMode raceMode = (GameModeRaceMode)mode;
-
-        // HACK (avoids us doing a second call
-        if (GameManager.GetGameState() == GameManager.GameModeEnum.RaceMode)
-        {
-
-            if (raceMode.raceState != GameModeRaceMode.RaceState.Active)
-                return;
-        }
+        GameModeRaceMode raceMode = GameManager.mode as GameModeRaceMode;
 
         if (physics.fuelCurrent <= 0)
         {
