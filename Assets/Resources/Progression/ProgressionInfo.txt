@@ -7,9 +7,15 @@
 NumLevels = 3
 
 ; level id = scene name
-Level0 = Level1
-Level0CompleteNormal = Level2
-Level0CompleteSpecial = Level2
-Level1 = Level2
-Level1CompleteNormal = End
-Level1CompleteSpecial = End
+Level0 = Level0
+Level0CompleteNormal = Level1
+Level0CompleteSpecial = Level1
+Level1 = Level1
+Level1CompleteNormal = Level2
+Level1CompleteSpecial = Level2
+Level2 = Level2
+Level2CompleteNormal = Level3
+Level2CompleteSpecial = Level3
+Level3 = Level3
+Level3CompleteNormal = End
+Level3CompleteSpecial = End
