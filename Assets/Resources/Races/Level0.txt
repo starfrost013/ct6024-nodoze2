@@ -1,6 +1,6 @@
 [Race]
 
-TimeLimit = 75000					; Maximum time limit in milliseconds (-1 to disable)
+TimeLimit = 25000					; Maximum time limit in milliseconds (-1 to disable)
 CheckpointTimeGain = 20000			; Checkpoint time gain
 CompletionReward = 1000				; Completion reward, awarded regardless of time
 KillFloorY = -100					; Kill floor Y
