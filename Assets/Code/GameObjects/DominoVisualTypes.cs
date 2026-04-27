@@ -1,5 +1,7 @@
 
 
+using UnityEngine;
+
 /// <summary>
 /// DominoVisualTypes
 /// 
@@ -12,7 +14,7 @@ static class DominoVisualTypes
     private const int BETWEEN_DOMINO_LINES = 257;
 
     // used for calculating indices
-    public const int DOMINO_NUMCOLUMNS = 6, DOMINO_NUMROWS = 6, DOMINO_TOTAL = 36;
+    internal const int DOMINO_NUMCOLUMNS = 6, DOMINO_NUMROWS = 6, DOMINO_TOTAL = 36;
 
     // these are a pain so let's just do these manually
     private const int DOMINO_COLUMN0 = 44, DOMINO_COLUMN1 = 300,
@@ -25,7 +27,7 @@ static class DominoVisualTypes
     /// </summary>
     internal struct TextureExtents
     {
-        int dominoTop, dominoBotom;
+        int dominoTop, dominoBottom;
         int x, y;
         int width, height;
 
@@ -35,7 +37,7 @@ static class DominoVisualTypes
         public TextureExtents(int domino1, int domino2, int x, int y, int width, int height, bool flipVert = false)
         {
             this.dominoTop = domino1;
-            this.dominoBotom = domino2;
+            this.dominoBottom = domino2;
             this.x = x;
             this.y = y;
             this.width = width;
@@ -106,8 +108,17 @@ static class DominoVisualTypes
         new(6, 6, DOMINO_COLUMN2, BETWEEN_DOMINO_LINES * 5, DOMINO_WIDTH, DOMINO_HEIGHT),
     };
 
-    internal static void GetDominoByType(int x, int y)
+    internal static TextureExtents GetDominoByType(int top, int bottom)
     {
+        int index = top * DOMINO_NUMCOLUMNS + bottom;
+
+        if (index >= DOMINO_TOTAL)
+        {
+            Debug.LogWarning("Tried to obtain invalid Domino texture atlas index " + index + " (" + top + ", " + bottom + "). Returning the first one...");
+            return dominoTextures[0];
+        }
+
+        return dominoTextures[index];
 
     }
 

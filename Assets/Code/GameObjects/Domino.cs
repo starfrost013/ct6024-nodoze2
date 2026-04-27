@@ -20,6 +20,12 @@ internal class Domino
     internal string requires;           // optional - domino required 
     internal float cost;                // cost of the domino
     internal float expiryTime;          // 0 =none, for temporary powerups
+
+    internal int dominoValueTop;        // "most common" top value
+    internal int dominoValueBottom;     // "most common" bottom value
+
+    internal int maxMultiplier;         // maximum multiplier if the domino is 6 
+
     internal CarModifier modifiers = new();
 
     internal TextAsset config;
@@ -41,6 +47,11 @@ internal class Domino
         cost = float.Parse(ConfigParser.GetValue("Info", "Cost"));
         expiryTime = float.Parse(ConfigParser.GetValue("Info", "ExpiryTime"));
         requires = ConfigParser.GetValue("Info", "Requires");
+        // for these ones we don't care
+        int.TryParse(ConfigParser.GetValue("Info", "DominoValueTop"), out dominoValueTop);
+        int.TryParse(ConfigParser.GetValue("Info", "DominoValueBottom"), out dominoValueBottom);
+        int.TryParse(ConfigParser.GetValue("Info", "MaxMultiplier"), out maxMultiplier);
+
         modifiers.Load();
 
         // duplicated for use in various other places 
