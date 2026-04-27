@@ -4,7 +4,7 @@
 [Progression]
 
 ; The number of levels to load
-NumLevels = 3
+NumLevels = 4
 
 ; level id = scene name
 Level0 = Level0
