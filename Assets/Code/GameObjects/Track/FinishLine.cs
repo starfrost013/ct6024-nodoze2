@@ -13,14 +13,15 @@ class FinishLine : MonoBehaviour
         // the collision is the CarBody`
         if (other.gameObject.transform.parent.gameObject.GetComponent<Car>())
         {
-            Debug.Log("You got to the end of the race!");
 
             // tell racemode we are finished
             GameModeRaceMode mode = (GameModeRaceMode)GameManager.mode;
 
             if (mode.raceState == GameModeRaceMode.RaceState.Active)
-             mode.raceState = GameModeRaceMode.RaceState.FinishedNormal;
-        
+            {
+                mode.raceState = GameModeRaceMode.RaceState.FinishedNormal;
+                Debug.Log("You got to the end of the race!");
+            }
         }
     }
 
