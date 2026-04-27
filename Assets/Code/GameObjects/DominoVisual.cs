@@ -7,6 +7,6 @@ using UnityEngine;
 /// </summary>
 class DominoVisual : MonoBehaviour
 {
-
-
+    public int topValue; 
+    public int bottomValue;
 }

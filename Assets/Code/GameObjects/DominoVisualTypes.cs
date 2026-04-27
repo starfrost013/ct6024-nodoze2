@@ -106,5 +106,9 @@ static class DominoVisualTypes
         new(6, 6, DOMINO_COLUMN2, BETWEEN_DOMINO_LINES * 5, DOMINO_WIDTH, DOMINO_HEIGHT),
     };
 
+    internal static void GetDominoByType(int x, int y)
+    {
+
+    }
 
 };
