@@ -21,10 +21,11 @@ internal class Domino
     internal float cost;                // cost of the domino
     internal float expiryTime;          // 0 =none, for temporary powerups
 
-    internal int dominoValueTop;        // "most common" top value
-    internal int dominoValueBottom;     // "most common" bottom value
+    internal int dominoValueTop;        // top value
+    internal int dominoValueBottom;     // bottom value
 
-    internal int maxMultiplier;         // maximum multiplier if the domino is 6 
+    internal int costMulPerDominoValue; // amount to multiply per the domino value
+    internal int maxMultiplier;         // maximum multiplier if the domino is a 12
 
     internal CarModifier modifiers = new();
 
@@ -48,8 +49,7 @@ internal class Domino
         expiryTime = float.Parse(ConfigParser.GetValue("Info", "ExpiryTime"));
         requires = ConfigParser.GetValue("Info", "Requires");
         // for these ones we don't care
-        int.TryParse(ConfigParser.GetValue("Info", "DominoValueTop"), out dominoValueTop);
-        int.TryParse(ConfigParser.GetValue("Info", "DominoValueBottom"), out dominoValueBottom);
+        int.TryParse(ConfigParser.GetValue("Info", "CostMulPerDominoValue"), out costMulPerDominoValue);
         int.TryParse(ConfigParser.GetValue("Info", "MaxMultiplier"), out maxMultiplier);
 
         modifiers.Load();
