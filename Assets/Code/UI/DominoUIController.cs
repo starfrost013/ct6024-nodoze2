@@ -70,6 +70,7 @@ public class DominoUIController : MonoBehaviour
     public void OnDropdownValueChanged(int index)
     {
         AudioManagerGlobalSounds.PlayUIClickSound();
+
         // get the domino with the name
         Domino selectedDomino = DominoManager.GetDominoByName(selectDominoDropdown.options[index].text);
 
