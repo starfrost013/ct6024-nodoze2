@@ -4,9 +4,10 @@
  */
 
 using NUnit.Framework;
-using TMPro;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class DominoUIController : MonoBehaviour
 {
@@ -28,13 +29,13 @@ public class DominoUIController : MonoBehaviour
         playerMoneyText = transform.parent.transform.Find(PLAYER_MONEY_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
 
         if (!selectDominoDropdown)
-            throw new MissingComponentException("PostRace::Start: Couldn't find the SelectDominoDropdown TMP_Dropdown!");
+            throw new MissingComponentException("DominoUIController::Start: Couldn't find the SelectDominoDropdown TMP_Dropdown!");
         if (!descriptionText)
-            throw new MissingComponentException("PostRace::Start: Couldn't find the TextDominoDescription TMP_Text!");
+            throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextDominoDescription TMP_Text!");
         if (!costText)
-            throw new MissingComponentException("PostRace::Start: Couldn't find the TextDominoCost TMP_Text!");
+            throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextDominoCost TMP_Text!");
         if (!playerMoneyText)
-            throw new MissingComponentException("PostRace::Start: Couldn't find the TextPlayerMoney TMP_Text!");
+            throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextPlayerMoney TMP_Text!");
 
         List<string> options = new(); 
 
@@ -68,6 +69,7 @@ public class DominoUIController : MonoBehaviour
 
     public void OnDropdownValueChanged(int index)
     {
+        AudioManagerGlobalSounds.PlayUIClickSound();
         // get the domino with the name
         Domino selectedDomino = DominoManager.GetDominoByName(selectDominoDropdown.options[index].text);
 
@@ -97,7 +99,7 @@ public class DominoUIController : MonoBehaviour
             return;
         }
 
-        AudioManagerGlobalSounds.PlayUIClickSound();
+        AudioManager.PlayAudioAtCameraPosition("UI_Buy", 1.0f);
 
         GameManager.player.stats.money -= domino.cost;
         playerMoneyText.text = "Money: $" + GameManager.player.stats.money;

@@ -8,12 +8,12 @@ KillFloorY = -100					; Kill floor Y
 NumTimeBonus = 5					; number of time bonuses
 
 TimeBonus0 = 35000					; time for first time bonus
-TimeBonus0Money = 2500				; money gained for first time bonus
+TimeBonus0Money = 1500				; money gained for first time bonus
 TimeBonus1 = 50000					; ditto
-TimeBonus1Money = 1250
+TimeBonus1Money = 750
 TimeBonus2 = 60000
-TimeBonus2Money = 1000
+TimeBonus2Money = 350
 TimeBonus3 = 75000
-TimeBonus3Money = 250
+TimeBonus3Money = 100
 TimeBonus4 = 95000
 TimeBonus4Money = 0
