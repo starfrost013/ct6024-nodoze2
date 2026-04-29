@@ -5,6 +5,7 @@ Description = Increases the amount of fuel that you have even more.
 Cost = 2500
 ExpiryTime = 0
 Requires = FuelUpgrade1
+CostMulPerDominoValue = 0.97
 
 [Fuel]
 Max = 1000									; Maximum fuel count

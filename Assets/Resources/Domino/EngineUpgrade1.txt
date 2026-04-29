@@ -4,6 +4,7 @@ Name = Speed Upgrade
 Description = A bit of a boost!!
 Cost = 20
 ExpiryTime = 0
+CostMulPerDominoValue = 0.99
 
 [Handling]
 MaxForwardTorque = 0.3

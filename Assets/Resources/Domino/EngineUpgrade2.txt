@@ -4,7 +4,8 @@ Name = Speed Upgrade 2
 Description = A lot of dominoes!!
 Cost = 40
 ExpiryTime = 0
-Requires = SpeedUpgrade1				; This is a ***FILE NAME***
+Requires = EngineUpgrade1				; This is a ***FILE NAME***
+CostMulPerDominoValue = 0.98
 
 [Handling]
 MaxForwardTorque = 1.0

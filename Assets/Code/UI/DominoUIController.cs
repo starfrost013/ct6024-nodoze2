@@ -14,11 +14,13 @@ public class DominoUIController : MonoBehaviour
     const string DROPDOWN_NAME = "SelectDominoDropdown";
     const string DESCRIPTION_TEXT_NAME = "TextDominoDescription";
     const string COST_TEXT_NAME = "TextDominoCost";
+    const string COST_MULTIPLIER_TEXT_NAME = "TextDominoCostMultiplier";
     const string PLAYER_MONEY_TEXT_NAME = "TextPlayerMoney";
 
     TMP_Dropdown selectDominoDropdown = null;
     TMP_Text descriptionText = null;
     TMP_Text costText = null;
+    TMP_Text costMultiplierText = null;
     TMP_Text playerMoneyText = null;
 
     public void Start()
@@ -26,6 +28,7 @@ public class DominoUIController : MonoBehaviour
         selectDominoDropdown = transform.parent.transform.Find(DROPDOWN_NAME).gameObject.GetComponent<TMP_Dropdown>();
         descriptionText = transform.parent.transform.Find(DESCRIPTION_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
         costText = transform.parent.transform.Find(COST_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
+        costMultiplierText = transform.parent.transform.Find(COST_MULTIPLIER_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
         playerMoneyText = transform.parent.transform.Find(PLAYER_MONEY_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
 
         if (!selectDominoDropdown)
@@ -34,6 +37,8 @@ public class DominoUIController : MonoBehaviour
             throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextDominoDescription TMP_Text!");
         if (!costText)
             throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextDominoCost TMP_Text!");
+        if (!costMultiplierText)
+            throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextDominoCostMultiplier TMP_Text!");
         if (!playerMoneyText)
             throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextPlayerMoney TMP_Text!");
 
@@ -57,7 +62,19 @@ public class DominoUIController : MonoBehaviour
             }
 
             if (!skip)
+            {
+                // generate random numbers
+                domino.dominoValueBottom = Random.Range(1, 6);
+                domino.dominoValueTop = Random.Range(1, 6);
+
+                domino.currentCostMul = domino.costMulPerDominoValue * (domino.dominoValueBottom + domino.dominoValueTop);
+
+                costMultiplierText.text = "Cost Multiplier " + (domino.costMulPerDominoValue * domino.currentCostMul) + "x" 
+                    + "Domino Values: " + domino.dominoValueTop + "/" + domino.dominoValueBottom;
+
                 options.Add(domino.name);
+
+            }
         }
 
         selectDominoDropdown.AddOptions(options);

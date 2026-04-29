@@ -6,6 +6,7 @@ Cost = 100
 ExpiryTime = 0
 DominoValueTop = 5
 DominoValueBottom = 7
+CostMulPerDominoValue = 0.98
 
 [Handling]
 

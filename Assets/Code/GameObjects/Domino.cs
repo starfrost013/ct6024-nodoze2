@@ -25,6 +25,7 @@ internal class Domino
     internal int dominoValueBottom;     // bottom value
 
     internal int costMulPerDominoValue; // amount to multiply per the domino value
+    internal int currentCostMul;        // current cost multiplier
     internal int maxMultiplier;         // maximum multiplier if the domino is a 12
 
     internal CarModifier modifiers = new();

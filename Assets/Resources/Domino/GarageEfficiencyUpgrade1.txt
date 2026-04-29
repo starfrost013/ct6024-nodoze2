@@ -5,6 +5,7 @@ Description = Increases the amount of fuel that you get from a garage.
 Cost = 1750
 ExpiryTime = 0
 Requires = FuelUpgrade1
+CostMulPerDominoValue = 0.975
 
 [Fuel]
 RefuelGaragePercent	= 3.0

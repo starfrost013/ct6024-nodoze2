@@ -5,6 +5,7 @@ Description = Big...er..flipping engine 10000. Also increases fuel efficiency an
 Cost = 6000
 ExpiryTime = 0
 Requires = FuelUpgrade2						; Use the ****FILE NAME****
+CostMulPerDominoValue = 0.96
 
 [Fuel]
 Max = 1700									; Maximum fuel count

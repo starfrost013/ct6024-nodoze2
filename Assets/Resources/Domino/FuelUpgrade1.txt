@@ -4,6 +4,7 @@ Name = Fuel Up
 Description = Increases the amount of fuel that you have.,
 Cost = 1000
 ExpiryTime = 0
+CostMulPerDominoValue = 0.98
 
 [Fuel]
 Max = 400									; Maximum fuel count
