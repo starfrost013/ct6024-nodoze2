@@ -801,7 +801,7 @@ GameObject:
   - component: {fileID: 2211046357712088064}
   - component: {fileID: 3056575614820896000}
   m_Layer: 5
-  m_Name: Arrow
+  m_Name: SelectDominoDropdownArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2120,7 +2120,7 @@ GameObject:
   - component: {fileID: 1665103673470105483}
   - component: {fileID: 7581271516626907757}
   m_Layer: 5
-  m_Name: Label
+  m_Name: SelectDominoDropdownLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

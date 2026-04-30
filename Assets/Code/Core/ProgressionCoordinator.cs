@@ -66,8 +66,6 @@ internal static class ProgressionCoordinator
                 return;
             }
 
-            // special case "no more levels" (we'll probably change the handling for this) 
-
             // If progression was exited, we are assuming that a different scene was loaded since the game state changed. (check the old level for this)
             if ((_currentLevel != null) 
                 && !dontUnloadOldLevel)
@@ -77,6 +75,13 @@ internal static class ProgressionCoordinator
 
             dontUnloadOldLevel = false;
             _currentLevel = value;
+
+            // game is finished
+            if (_currentLevel.scene == NO_MORE_LEVELS)
+            {
+                GameManager.SetGameState(GameManager.GameModeEnum.GameComplete);
+                return;
+            }
 
             Debug.Log("ProgressionCoordinator::CurrentLevel::set: Level is now " + _currentLevel.scene);
             GameManager.AddSceneAdditive(_currentLevel.scene);

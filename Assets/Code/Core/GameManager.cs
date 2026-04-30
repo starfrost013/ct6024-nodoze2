@@ -16,6 +16,7 @@ internal static class GameManager
         MainMenu = 2,
         RaceMode = 3,
         RaceFinished = 4,
+        GameComplete = 5,
     }
 
     // hacks so the gamemanager switches into the right state
@@ -23,6 +24,7 @@ internal static class GameManager
     internal const string SCENE_MENU = "MenuMain";
     internal const string SCENE_RACE_MODE = "Gameplay";
     internal const string SCENE_RACE_FINISHED = "PostRace";
+    internal const string SCENE_GAME_COMPLETE = "GameComplete";
 
     /// <summary>
     /// Maximum time an async operation can block (in ms).
@@ -191,6 +193,8 @@ internal static class GameManager
                 return new GameModeRaceMode();
             case GameModeEnum.RaceFinished:
                 return new GameModeRaceFinished();
+            case GameModeEnum.GameComplete:
+                return new GameModeGameComplete();
             default:
                 Debug.Log("GameManager::GetModeFromState selected invalid game state (Restarting the game...)");
                 return new GameModeInit();
