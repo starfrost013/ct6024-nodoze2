@@ -57,8 +57,6 @@ public class DominoUIController : MonoBehaviour
 
     public void Start()
     {
-        if (DominoManager.dominoes.Count > 0)
-            return;
 
         CarManager.SpawnPlayerCarForStaticUse();
         GameManager.player.carInWorld.transform.position = new Vector3(0, 0, -7); // seems to look good
@@ -82,6 +80,9 @@ public class DominoUIController : MonoBehaviour
             throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextPlayerMoney TMP_Text!");
         if (!imageDominoMask)
             throw new MissingComponentException("DominoUIController::Start: Couldn't find the ImageDominoMask GameObject!");
+
+        if (selectDominoDropdown.options.Count > 0)
+            return;
 
         // get the rect
         imageDominoMaskRect = imageDominoMask.GetComponent<RectMask2D>();
