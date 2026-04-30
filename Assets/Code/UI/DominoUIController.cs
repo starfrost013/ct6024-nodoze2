@@ -46,19 +46,19 @@ public class DominoUIController : MonoBehaviour
         textureExtents.x = (int)(textureExtents.x * ((rectTransform.rect.width / realSizeX)));
         textureExtents.y = (int)(textureExtents.y * ((rectTransform.rect.height / realSizeY)));
         float realDominoSizeX = (float)(DominoVisuals.DOMINO_WIDTH * (rectTransform.rect.width / realSizeX));
-        float realDominoSizeY = (float)(DominoVisuals.DOMINO_HEIGHT * (rectTransform.rect.width / realSizeY));
+        float realDominoSizeY = (float)(DominoVisuals.DOMINO_HEIGHT * (rectTransform.rect.height / realSizeY));
 
-        rectTransform.anchoredPosition = new Vector2((float)textureExtents.x, (float)textureExtents.y);
-        rectTransform.sizeDelta = new Vector2(realDominoSizeX, realDominoSizeY);
+        //rectTransform.anchoredPosition = new Vector2((float)textureExtents.x, (float)textureExtents.y);
+        imageDominoMaskRect.padding = new Vector4(textureExtents.x,
+            rectTransform.rect.height - (textureExtents.y + realDominoSizeY), 
+            rectTransform.rect.width - (textureExtents.x + realDominoSizeX), 
+            textureExtents.y);
     }
 
     public void Start()
     {
-        CarManager.SpawnPlayerCar();
-
-        // Worst hack ever because the due date is tomorrow
-        Rigidbody rb = GameManager.player.car.GetComponent<Rigidbody>() ;
-        Destroy(rb);
+        CarManager.SpawnPlayerCarForStaticUse();
+        GameManager.player.carInWorld.transform.position = new Vector3(0, 0, -7); // seems to look good
 
         selectDominoDropdown = transform.parent.transform.Find(DROPDOWN_NAME).gameObject.GetComponent<TMP_Dropdown>();
         descriptionText = transform.parent.transform.Find(DESCRIPTION_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
@@ -125,6 +125,16 @@ public class DominoUIController : MonoBehaviour
         playerMoneyText.text = "Money: $" + GameManager.player.stats.money;
     }
 
+    private void FixedUpdate()
+    {
+        // rotate a bit
+        GameManager.player.carInWorld.transform.localEulerAngles = new Vector3(
+            GameManager.player.carInWorld.transform.localEulerAngles.x,
+            GameManager.player.carInWorld.transform.localEulerAngles.y + 0.5f,
+            GameManager.player.carInWorld.transform.localEulerAngles.z
+            );
+    }
+
     public void OnDropdownValueChanged(int index)
     {
         AudioManagerGlobalSounds.PlayUIClickSound();
@@ -143,8 +153,6 @@ public class DominoUIController : MonoBehaviour
     /// </summary>
     public void BuyClicked()
     {
-        AudioManagerGlobalSounds.PlayUIClickSound();
-
         Domino domino = DominoManager.GetDominoByName(selectDominoDropdown.options[selectDominoDropdown.value].text);
 
         if (domino == null)

@@ -114,6 +114,19 @@ internal static class CarManager
                 GameManager.player.carInWorld.gameObject.transform.position.z);
         }
     }
+
+    /// <summary>
+    /// Spawn the player car for static use.
+    /// Can't be done in active race mode due ot bad design
+    /// </summary>
+    internal static void SpawnPlayerCarForStaticUse()
+    {
+        SpawnPlayerCar();
+
+        // Worst hack ever because the due date is tomorrow
+        Rigidbody rb = GameManager.player.carInWorld.GetComponent<Rigidbody>();
+        GameObject.Destroy(rb);
+    }
  
     /// <summary>
     /// Apply a modifier set to the player's car

@@ -52,6 +52,20 @@ public class CarSelectUIController : MonoBehaviour
         carSpeedText.text = "Speed: " + carPrefab.metadata.speedText;
         carReliabilityText.text = "Reliability: " + carPrefab.metadata.reliabilityText;
 
+        CarManager.SetPlayerCar(carPrefab.name);
+
+        CarManager.SpawnPlayerCarForStaticUse();
+        GameManager.player.carInWorld.transform.position = new Vector3(0, 0, -7); // seems to look good
+    }
+
+    private void FixedUpdate()
+    {
+        // rotate a bit
+        GameManager.player.carInWorld.transform.localEulerAngles = new Vector3(
+            GameManager.player.carInWorld.transform.localEulerAngles.x,
+            GameManager.player.carInWorld.transform.localEulerAngles.y + 0.5f,
+            GameManager.player.carInWorld.transform.localEulerAngles.z
+            );
     }
 
     public void PrevClicked()
