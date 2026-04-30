@@ -57,6 +57,9 @@ public class DominoUIController : MonoBehaviour
 
     public void Start()
     {
+        if (DominoManager.dominoes.Count > 0)
+            return;
+
         CarManager.SpawnPlayerCarForStaticUse();
         GameManager.player.carInWorld.transform.position = new Vector3(0, 0, -7); // seems to look good
 
@@ -108,10 +111,9 @@ public class DominoUIController : MonoBehaviour
                 domino.dominoValueBottom = Random.Range(1, 6);
                 domino.dominoValueTop = Random.Range(1, 6);
 
-                domino.currentCostMul = domino.costMulPerDominoValue * (domino.dominoValueBottom + domino.dominoValueTop);
+                domino.currentCostMul = domino.costMulPerDominoValue * Mathf.Pow(domino.costMulPerDominoValue, (domino.dominoValueBottom + domino.dominoValueTop));
 
-                costMultiplierText.text = "Cost Multiplier " + domino.currentCostMul + "x\n" 
-                    + "Domino Values: " + domino.dominoValueTop + "/" + domino.dominoValueBottom;
+                costMultiplierText.text = "Cost Multiplier " + domino.currentCostMul + "x\n";
 
                 options.Add(domino.name);
 
