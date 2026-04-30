@@ -55,7 +55,14 @@ public class CarSelectUIController : MonoBehaviour
         CarManager.SetPlayerCar(carPrefab.name);
 
         CarManager.SpawnPlayerCarForStaticUse();
-        GameManager.player.carInWorld.transform.position = new Vector3(0, 0, -7); // seems to look good
+        // uh
+        GameManager.player.carInWorld.transform.position = new Vector3(550, 0, 300); // seems to look good
+        
+        // HORRIBLE HACK: these models are bad 
+        if (GameUtils.GetNonCloneName(GameManager.player.carInWorld.GetComponent<Car>().name) != "CarBasic")
+            GameManager.player.carInWorld.transform.localScale = new Vector3(400, 400, 400);
+        else
+            GameManager.player.carInWorld.transform.localScale = new Vector3(100, 100, 100);
     }
 
     private void FixedUpdate()
