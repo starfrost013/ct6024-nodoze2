@@ -268,7 +268,8 @@ internal class GameModeRaceMode : GameMode
 
         string timerString = string.Empty;
 
-        bool displayOutOfTime = (raceState == RaceState.Failed && raceFailReason == RaceFailReason.OutOfTime);
+        bool displayOutOfTime = (raceState == RaceState.Failed && raceFailReason == RaceFailReason.OutOfTime)
+            || (totalTime < 0);
         
         if (!displayOutOfTime)
         {

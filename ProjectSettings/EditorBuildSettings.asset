@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Gameplay/Level3.unity
     guid: 6c6025548d42a5d47af2169b028e00e1
+  - enabled: 1
+    path: Assets/Scenes/Gameplay/GameComplete.unity
+    guid: 9162597601056264fa0a0608fd736b34
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
