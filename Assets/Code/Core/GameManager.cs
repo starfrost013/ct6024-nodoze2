@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using Unity.VisualScripting;
 
 internal static class GameManager
 {
@@ -57,6 +58,11 @@ internal static class GameManager
         get { return _player; }
         private set { _player = value; }
     }
+
+    /// <summary>
+    /// determines if the agme is pasued
+    /// </summary>
+    private static bool gamePaused = false;
 
     internal static void Start(GameManagerObject newManagerObject)
     {
@@ -167,17 +173,35 @@ internal static class GameManager
             return;
         }
 
+        if (Input.GetKey(KeyCode.Escape)
+            && state > GameModeEnum.MainMenu)
+        {
+            if (!gamePaused)
+            {
+                UIManager.SetCurrentMenu("PauseUI");
+                gamePaused = true;
+            }
+            else
+            {
+                UIManager.DestroyCurrentMenu();
+                gamePaused = false; 
+            }
+        }
+
+
         mode.OnFrame();
     }
 
     internal static void OnFixedUpdate()
     {
-        mode.OnFixedUpdate();   
+        if (!gamePaused)
+            mode.OnFixedUpdate();   
     }
 
     internal static void OnLegacyGUI()
     {
-        mode.OnLegacyGUI();
+        if (!gamePaused)
+            mode.OnLegacyGUI();
     }
 
     // I don't like reflection, it cretaes large and ugly programs in C#

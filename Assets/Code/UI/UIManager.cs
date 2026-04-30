@@ -43,6 +43,15 @@ static class UIManager
         return null;
     }
 
+    internal static void DestroyCurrentMenu()
+    {
+        if (currentMenu != null)
+        {
+            GameObject.Destroy(currentMenu);
+            currentMenu = null;
+        }
+    }
+
     internal static void SetCurrentMenu(string name)
     {
         GameObject menu = GetMenuByName(name);
