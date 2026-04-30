@@ -25,6 +25,8 @@ public class DominoUIController : MonoBehaviour
 
     public void Start()
     {
+        CarManager.SpawnPlayerCar();
+
         selectDominoDropdown = transform.parent.transform.Find(DROPDOWN_NAME).gameObject.GetComponent<TMP_Dropdown>();
         descriptionText = transform.parent.transform.Find(DESCRIPTION_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
         costText = transform.parent.transform.Find(COST_TEXT_NAME).gameObject.GetComponent<TMP_Text>();

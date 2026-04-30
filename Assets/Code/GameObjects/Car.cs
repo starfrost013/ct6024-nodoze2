@@ -518,9 +518,8 @@ internal class Car : BasePhysicsObject
 
         CheckAboveKillFloor();
 
-        // run code to check all our inputs
-
-        if (!disableInputs)
+        if (!disableInputs
+            && raceMode.raceState == RaceState.Active)
         {
             RunInputFlip(); // this is separate so make it its own tihng
             RunInputMove(); // the main input stuff
