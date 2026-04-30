@@ -71,7 +71,7 @@ public class DominoUIController : MonoBehaviour
 
                 domino.currentCostMul = domino.costMulPerDominoValue * (domino.dominoValueBottom + domino.dominoValueTop);
 
-                costMultiplierText.text = "Cost Multiplier " + (domino.costMulPerDominoValue * domino.currentCostMul) + "x" 
+                costMultiplierText.text = "Cost Multiplier " + domino.currentCostMul + "x\n" 
                     + "Domino Values: " + domino.dominoValueTop + "/" + domino.dominoValueBottom;
 
                 options.Add(domino.name);
