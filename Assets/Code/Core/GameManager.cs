@@ -46,11 +46,6 @@ internal static class GameManager
 
     private static bool initialised = false;
 
-    /// <summary>
-    /// hack - used for some debug features
-    /// </summary>
-    internal static bool additiveSceneIsUnloading = false; 
-
     private static Player _player;
 
     internal static Player player
@@ -124,43 +119,6 @@ internal static class GameManager
         SceneManager.LoadScene(name, LoadSceneMode.Additive);
     }
 
-
-    private static void OnRemoveSceneAdditiveDone(AsyncOperation operation)
-    {
-        additiveSceneIsUnloading = false; 
-    }
-
-    /// <summary>
-    /// Unload an additive scene. THIS DOESN'T DO ANY SHIT!
-    /// </summary>
-    /// <param name="name">The additive scene to unload</param>
-    internal static void RemoveSceneAdditive(string name)
-    {
-        // THIS IS A REALLY BAD THING BECAUSE WE DON'T DO ANYTHING TO WAIT FOR THE SCENE TO FINISH LOADING
-
-        Scene sceneWeWant = SceneManager.GetSceneByName(name);  
-
-        if (!sceneWeWant.IsValid())
-        {
-            Debug.LogError("GameManager::RemoveSceneAdditive - Please put the scene " + name + "in the build index!");
-            return;
-        }
-        
-        if (!sceneWeWant.isLoaded)
-        {
-            Debug.LogError("GameManager::RemoveSceneAdditive - the scene " + name + " is not even loaded so we would crash. THIS IS A BUG!");
-            return;
-        }
-
-        // no, you can't unload additive scenes async
-        AsyncOperation async = SceneManager.UnloadSceneAsync(name);
-        async.completed += OnRemoveSceneAdditiveDone;
-        // allow it to block (our code is NOT set up to do anything else)
-        additiveSceneIsUnloading = true; 
-
-        return;
-    }
-
     internal static void OnFrame()
     {
         if (Input.GetKey(KeyCode.R)
@@ -173,7 +131,7 @@ internal static class GameManager
             return;
         }
 
-        if (Input.GetKey(KeyCode.Escape)
+        if (Input.GetKeyUp(KeyCode.Escape)
             && state > GameModeEnum.MainMenu)
         {
             if (!gamePaused)
@@ -188,8 +146,8 @@ internal static class GameManager
             }
         }
 
-
-        mode.OnFrame();
+        if (!gamePaused)
+            mode.OnFrame();
     }
 
     internal static void OnFixedUpdate()

@@ -401,7 +401,6 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnLeave()
     {
-        ProgressionCoordinator.OnExitRaceScene();
     }
 
     // todo: This code is *HORRIBLE* 

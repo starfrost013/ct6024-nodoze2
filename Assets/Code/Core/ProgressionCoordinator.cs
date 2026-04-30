@@ -33,11 +33,6 @@ internal static class ProgressionCoordinator
     private const string NO_MORE_LEVELS = "End";
     internal static List<LevelReference> levels { get; private set; } = new(); 
     static TextAsset progressionInfo;
-
-    /// <summary>
-    /// If we need to re-enter normal progression, do this. Don't unload the old scene, even if it's set
-    /// </summary>
-    private static bool dontUnloadOldLevel;
    
     /// <summary>
     /// backing field for _currentlevel
@@ -66,14 +61,6 @@ internal static class ProgressionCoordinator
                 return;
             }
 
-            // If progression was exited, we are assuming that a different scene was loaded since the game state changed. (check the old level for this)
-            if ((_currentLevel != null) 
-                && !dontUnloadOldLevel)
-            {
-                GameManager.RemoveSceneAdditive(_currentLevel.scene);
-            }
-
-            dontUnloadOldLevel = false;
             _currentLevel = value;
 
             // game is finished
@@ -225,15 +212,5 @@ internal static class ProgressionCoordinator
             currentLevel = GetLevelByScene(currentLevel.sceneOnSpecialCompletion);
         }
 
-    }
-
-    /// <summary>
-    /// "Normal" progresson was exited (e.g. RaceFinished)
-    /// 
-    /// Whatever called this is going to replace the MainScene
-    /// </summary>
-    internal static void OnExitRaceScene()
-    {
-        dontUnloadOldLevel = true;
     }
 };
