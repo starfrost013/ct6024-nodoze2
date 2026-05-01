@@ -114,7 +114,6 @@ public class DominoUIController : MonoBehaviour
 
                 domino.currentCostMul = domino.costMulPerDominoValue * Mathf.Pow(domino.costMulPerDominoValue, (domino.dominoValueBottom + domino.dominoValueTop));
 
-                costMultiplierText.text = "Cost Multiplier " + domino.currentCostMul + "x\n";
 
                 options.Add(domino.name);
 
@@ -143,12 +142,12 @@ public class DominoUIController : MonoBehaviour
         AudioManagerGlobalSounds.PlayUIClickSound();
 
         // get the domino with the name
-        Domino selectedDomino = DominoManager.GetDominoByName(selectDominoDropdown.options[index].text);
+        Domino domino = DominoManager.GetDominoByName(selectDominoDropdown.options[index].text);
 
-        descriptionText.text = selectedDomino.description;
-        costText.text = "Cost: $" + selectedDomino.cost.ToString();
+        descriptionText.text = domino.description;
+        costText.text = "Cost: $" + domino.cost.ToString() + "(Domino Multiplier: " + domino.currentCostMul;
 
-        UpdateDominoVisual(selectedDomino);
+        UpdateDominoVisual(domino);
     }
 
     /// <summary>
@@ -173,7 +172,7 @@ public class DominoUIController : MonoBehaviour
 
         AudioManager.PlayAudioAtCameraPosition("UI_Buy", 1.0f);
 
-        GameManager.player.stats.money -= domino.cost;
+        GameManager.player.stats.money -= (domino.cost * domino.currentCostMul);
         playerMoneyText.text = "Money: $" + GameManager.player.stats.money;
 
         CarManager.ApplyModifierSetToPlayerCar(domino.modifiers);
