@@ -145,7 +145,7 @@ public class DominoUIController : MonoBehaviour
         Domino domino = DominoManager.GetDominoByName(selectDominoDropdown.options[index].text);
 
         descriptionText.text = domino.description;
-        costText.text = "Cost: $" + domino.cost.ToString() + "(Domino Multiplier: " + domino.currentCostMul;
+        costText.text = "Cost: $" + domino.cost.ToString() + " (Domino Multiplier: " + domino.currentCostMul +")";
 
         UpdateDominoVisual(domino);
     }
