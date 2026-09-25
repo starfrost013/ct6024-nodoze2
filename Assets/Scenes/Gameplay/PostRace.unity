@@ -414,6 +414,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: PostRaceUI
       objectReference: {fileID: 0}
+    - target: {fileID: 7004885980649372121, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_Color.b
+      value: 0.33490568
+      objectReference: {fileID: 0}
+    - target: {fileID: 7004885980649372121, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7004885980649372121, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_Color.r
+      value: 0.98833966
+      objectReference: {fileID: 0}
+    - target: {fileID: 7301351732363160373, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_Color.b
+      value: 0.3372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 7301351732363160373, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7301351732363160373, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_Color.r
+      value: 0.99215686
+      objectReference: {fileID: 0}
     - target: {fileID: 7683643572174861152, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
       propertyPath: m_LocalPosition.x
       value: 513.696
