@@ -15,6 +15,10 @@ class Garage : MonoBehaviour
         if (GameManager.GetGameState() != GameManager.GameModeEnum.RaceMode)
             return;
 
+        // this garage is used up, so don't bother a;;pwomg the, tp dp sp 
+        if (used)
+            return; 
+
         // Put *ALL* colliders on CarBody!
         Car car = other.gameObject.transform.parent.gameObject.GetComponent<Car>();
 
@@ -33,7 +37,13 @@ class Garage : MonoBehaviour
             GameModeRaceMode raceMode = GameManager.mode as GameModeRaceMode;
 
             raceMode.raceConfigData.timeLimit += raceMode.raceConfigData.checkpointTimeGain;
+
+            used = true; 
         }
     }
 
+    /// <summary>
+    /// fired on enter so the player can't refuel multiple times
+    /// </summary>
+    private bool used; 
 }

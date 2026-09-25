@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿//
+// NODOZE Game
+// Version 1.0 (CT5010): © 2025-2026 NotDominoes Team 
+// Version 2.0 (CT6024): © 2025-2027 Connor Hyde (starfrost)
+//
+
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using Unity.VisualScripting;

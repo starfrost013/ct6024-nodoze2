@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 438020657005780007}
   - component: {fileID: 3583724984319857538}
   - component: {fileID: 1612013424374654792}
-  - component: {fileID: 1055154220377073068}
   - component: {fileID: 5663061715473649324}
   m_Layer: 0
   m_Name: Garage
@@ -63,6 +62,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -84,22 +85,12 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1055154220377073068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963763564738021021}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93c4d61f33019ca4da0ae3f2ae731ec9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &5663061715473649324
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7278998307731842099}
   - component: {fileID: 1315915809830411198}
   - component: {fileID: 4292081256950629716}
-  - component: {fileID: 2726777171804865245}
   - component: {fileID: 6039574081949267262}
   - component: {fileID: 7408266487915156751}
+  - component: {fileID: 1534193232981603208}
   m_Layer: 0
   m_Name: Garage1_Blue
   m_TagString: Untagged
@@ -101,18 +101,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.8663082, y: 0.19059245, z: 3.9701724}
   m_Center: {x: -0.0568031, y: 1.743756, z: -0.48793596}
---- !u!114 &2726777171804865245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3036055735788495213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93c4d61f33019ca4da0ae3f2ae731ec9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &6039574081949267262
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -155,6 +143,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.20836379, y: 2.368626, z: 3.021156}
   m_Center: {x: -1.5970825, y: 0.68431205, z: -0.5471015}
+--- !u!114 &1534193232981603208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3036055735788495213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c4d61f33019ca4da0ae3f2ae731ec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Garage
 --- !u!1 &6337298826709362350
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,7 +166,6 @@ GameObject:
   - component: {fileID: 7534895321095968611}
   - component: {fileID: 4197791193271679657}
   - component: {fileID: 1608089468539146236}
-  - component: {fileID: 3874199636535141864}
   - component: {fileID: 1942976018760107944}
   m_Layer: 0
   m_Name: Garage
@@ -218,6 +217,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -239,22 +240,12 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3874199636535141864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6337298826709362350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93c4d61f33019ca4da0ae3f2ae731ec9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &1942976018760107944
 BoxCollider:
   m_ObjectHideFlags: 0
