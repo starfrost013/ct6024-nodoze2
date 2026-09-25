@@ -21,11 +21,7 @@ internal class Upgrade
     internal float cost;                // cost of the domino
     internal float expiryTime;          // 0 =none, for temporary powerups
 
-    internal int dominoValueTop;        // top value
-    internal int dominoValueBottom;     // bottom value
-
-    internal float costMulPerDominoValue; // amount to multiply per the domino value
-    internal float currentCostMul;        // current cost multiplier
+    // maybe we could have multipliers for individual cost
 
     internal CarModifier modifiers = new();
 
@@ -49,7 +45,6 @@ internal class Upgrade
         expiryTime = float.Parse(ConfigParser.GetValue("Info", "ExpiryTime"));
         requires = ConfigParser.GetValue("Info", "Requires");
         // for these ones we don't care
-        float.TryParse(ConfigParser.GetValue("Info", "CostMulPerDominoValue"), out costMulPerDominoValue);
 
         modifiers.Load();
 

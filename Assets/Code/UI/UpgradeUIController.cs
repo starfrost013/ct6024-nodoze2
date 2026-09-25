@@ -93,7 +93,7 @@ public class UpgradUIController : MonoBehaviour
         Upgrade upgrade = UpgradeManager.GetUpgradeByName(selectUpgradeDropdown.options[index].text);
 
         descriptionText.text = upgrade.description;
-        costText.text = "Cost: $" + upgrade.cost.ToString() + " (Upgrade Multiplier: " + upgrade.currentCostMul +")";
+        costText.text = "Cost: $" + upgrade.cost.ToString();
     }
 
     /// <summary>
@@ -118,7 +118,7 @@ public class UpgradUIController : MonoBehaviour
 
         AudioManager.PlayAudioAtCameraPosition("UI_Buy", 1.0f);
 
-        GameManager.player.stats.money -= (upgrade.cost * upgrade.currentCostMul);
+        GameManager.player.stats.money -= upgrade.cost;
         playerMoneyText.text = "Money: $" + GameManager.player.stats.money;
 
         CarManager.ApplyModifierSetToPlayerCar(upgrade.modifiers);
