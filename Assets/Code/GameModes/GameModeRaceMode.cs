@@ -272,7 +272,7 @@ internal class GameModeRaceMode : GameMode
                 break;
         }
         
-        int width = 300, height = 100;
+        int width = 330, height = 100;
         raceGuiStyle.fontSize = 48;
         GUI.color = Color.red;
 
