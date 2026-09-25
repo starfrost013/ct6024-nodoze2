@@ -390,13 +390,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 789549370003181708, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_Name
+      value: TextUpgradeCost
+      objectReference: {fileID: 0}
     - target: {fileID: 850773998601009869, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
       propertyPath: m_Name
       value: TextSelectUpgrades
       objectReference: {fileID: 0}
+    - target: {fileID: 2163859380080137237, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_Name
+      value: TextUpgradeDescription
+      objectReference: {fileID: 0}
     - target: {fileID: 4801061907668752131, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
       propertyPath: m_text
       value: Select Upgrades
+      objectReference: {fileID: 0}
+    - target: {fileID: 5114353416446340691, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_Name
+      value: SelectUpgradeDropdown
       objectReference: {fileID: 0}
     - target: {fileID: 5391610304289765008, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
       propertyPath: m_Name
