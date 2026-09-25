@@ -3,9 +3,9 @@ using UnityEngine;
 /// <summary>
 /// Weapon
 /// 
-/// The base weapon loader
+/// The base weapon class
 /// </summary>
-public class Weapon : MonoBehaviour
+public class Weapon : Item
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,4 +18,5 @@ public class Weapon : MonoBehaviour
     {
         
     }
+
 }

@@ -15,7 +15,7 @@ using UnityEngine;
 /// </summary>
 static class UIManager
 {
-    private const string MENU_PATH = "UI/";
+    private const string UI_PATH = "UI/";
 
     internal static GameObject[] menus;
 
@@ -23,7 +23,7 @@ static class UIManager
 
     internal static void Init()
     {
-        menus = AssetManager.LoadAssetsInFolder<GameObject>(MENU_PATH);
+        menus = AssetManager.LoadAssetsInFolder<GameObject>(UI_PATH);
 
         if (menus == null)
         {

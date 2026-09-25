@@ -122,6 +122,22 @@ public class UpgradUIController : MonoBehaviour
         playerMoneyText.text = "Money: $" + GameManager.player.stats.money;
 
         CarManager.ApplyModifierSetToPlayerCar(upgrade.modifiers);
+        
+        // UI stuff: remove the button
+
+        // ...if there is nothing to select, disable it
+        if (selectUpgradeDropdown.options.Count == 0)
+            selectUpgradeDropdown.interactable = false;
+        else
+        {
+            selectUpgradeDropdown.options.RemoveAt(selectUpgradeDropdown.value);
+
+            // assume 0 is ok?
+            selectUpgradeDropdown.value = 0;
+            selectUpgradeDropdown.RefreshShownValue(); // go to ui
+        }
+        
+
     }
 
     /// <summary>

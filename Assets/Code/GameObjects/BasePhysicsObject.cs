@@ -2,9 +2,15 @@
 using UnityEngine;
 
 //
-// !Domino
-// © 2025-2026
+// ND2 (Nodoze-2) UoG
+// Version 1.0 (CT5010): © 2025-2026 NotDominoes Team 
+// Version 2.0 (CT6024): © 2025-2027 Connor Hyde (starfrost)
 //
+// BasePhysicsObject.cs
+
+/// <summary>
+/// THis class just ensures that all basephysicsobjects have rigidbody components
+/// </summary>
 internal class BasePhysicsObject : MonoBehaviour
 {
     /// <summary>
