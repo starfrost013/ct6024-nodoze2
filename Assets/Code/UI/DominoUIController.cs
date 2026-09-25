@@ -15,45 +15,13 @@ public class DominoUIController : MonoBehaviour
     const string DROPDOWN_NAME = "SelectDominoDropdown";
     const string DESCRIPTION_TEXT_NAME = "TextDominoDescription";
     const string COST_TEXT_NAME = "TextDominoCost";
-    const string COST_MULTIPLIER_TEXT_NAME = "TextDominoCostMultiplier";
     const string PLAYER_MONEY_TEXT_NAME = "TextPlayerMoney";
     const string IMAGE_DOMINO_MASK_NAME = "ImageDominoMask";
 
     TMP_Dropdown selectDominoDropdown = null;
     TMP_Text descriptionText = null;
     TMP_Text costText = null;
-    TMP_Text costMultiplierText = null;
     TMP_Text playerMoneyText = null;
-    GameObject imageDominoMask = null; 
-    RectMask2D imageDominoMaskRect = null; 
-
-    private void UpdateDominoVisual(Domino domino)
-    {
-        // I mesed this up so do some stupid math to fix it
-
-        int index = (domino.dominoValueTop * DominoVisuals.DOMINO_NUMCOLUMNS) + domino.dominoValueBottom;
-
-        if (index >= DominoVisuals.DOMINO_TOTAL)
-            return;
-
-        DominoVisuals.TextureExtents textureExtents = DominoVisuals.dominoTextures[index];
-
-        // thanks for making a texture atlas that is terrible guys
-        int realSizeX = DominoVisuals.DOMINO_SHEET_SIZE_X;
-        int realSizeY = DominoVisuals.DOMINO_SHEET_SIZE_Y;
-        RectTransform rectTransform = imageDominoMask.GetComponent<RectTransform>();
-
-        textureExtents.x = (int)(textureExtents.x * ((rectTransform.rect.width / realSizeX)));
-        textureExtents.y = (int)(textureExtents.y * ((rectTransform.rect.height / realSizeY)));
-        float realDominoSizeX = (float)(DominoVisuals.DOMINO_WIDTH * (rectTransform.rect.width / realSizeX));
-        float realDominoSizeY = (float)(DominoVisuals.DOMINO_HEIGHT * (rectTransform.rect.height / realSizeY));
-
-        //rectTransform.anchoredPosition = new Vector2((float)textureExtents.x, (float)textureExtents.y);
-        imageDominoMaskRect.padding = new Vector4(textureExtents.x,
-            rectTransform.rect.height - (textureExtents.y + realDominoSizeY), 
-            rectTransform.rect.width - (textureExtents.x + realDominoSizeX), 
-            textureExtents.y);
-    }
 
     public void Start()
     {
@@ -64,9 +32,7 @@ public class DominoUIController : MonoBehaviour
         selectDominoDropdown = transform.parent.transform.Find(DROPDOWN_NAME).gameObject.GetComponent<TMP_Dropdown>();
         descriptionText = transform.parent.transform.Find(DESCRIPTION_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
         costText = transform.parent.transform.Find(COST_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
-        costMultiplierText = transform.parent.transform.Find(COST_MULTIPLIER_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
         playerMoneyText = transform.parent.transform.Find(PLAYER_MONEY_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
-        imageDominoMask = transform.parent.transform.Find(IMAGE_DOMINO_MASK_NAME).gameObject;
 
         if (!selectDominoDropdown)
             throw new MissingComponentException("DominoUIController::Start: Couldn't find the SelectDominoDropdown TMP_Dropdown!");
@@ -74,18 +40,11 @@ public class DominoUIController : MonoBehaviour
             throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextDominoDescription TMP_Text!");
         if (!costText)
             throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextDominoCost TMP_Text!");
-        if (!costMultiplierText)
-            throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextDominoCostMultiplier TMP_Text!");
         if (!playerMoneyText)
             throw new MissingComponentException("DominoUIController::Start: Couldn't find the TextPlayerMoney TMP_Text!");
-        if (!imageDominoMask)
-            throw new MissingComponentException("DominoUIController::Start: Couldn't find the ImageDominoMask GameObject!");
 
         if (selectDominoDropdown.options.Count > 0)
             return;
-
-        // get the rect
-        imageDominoMaskRect = imageDominoMask.GetComponent<RectMask2D>();
 
         List<string> options = new(); 
 
@@ -146,8 +105,6 @@ public class DominoUIController : MonoBehaviour
 
         descriptionText.text = domino.description;
         costText.text = "Cost: $" + domino.cost.ToString() + " (Domino Multiplier: " + domino.currentCostMul +")";
-
-        UpdateDominoVisual(domino);
     }
 
     /// <summary>
