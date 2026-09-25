@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using UnityEngine;
 using static GameModeRaceMode;
 
@@ -242,9 +241,6 @@ internal class Car : BasePhysicsObject
 
     private void CheckAboveKillFloor()
     {
-        if (GameManager.GetGameState() != GameManager.GameModeEnum.RaceMode)
-            return;
-
         //TODO: Split gamemoderacemode into gamemoderacemode and GameManager.race ?
         //TODO: Failtypes
                 // - Refactor gamestate.afiled to immediately put us in to fail with the known state
@@ -252,6 +248,7 @@ internal class Car : BasePhysicsObject
 
         GameModeRaceMode raceMode = GameManager.mode as GameModeRaceMode;
 
+        Debug.Log("Kill Floor Y: " + raceMode.raceConfigData.killFloorY + " our Y: " + transform.position.y);
         if (transform.position.y < raceMode.raceConfigData.killFloorY)
             raceMode.FailRace(RaceFailReason.OutOfMap, 0);
     }
@@ -467,8 +464,6 @@ internal class Car : BasePhysicsObject
 
         float fuelUseMultiplier = Math.Clamp(physRigidbody.linearVelocity.magnitude / physics.data.maxFuelUseVelocity,
         physics.data.minFuelUseAmount, physics.data.maxFuelUseAmount);
-
-        Debug.Log("Fuel Use Multiplier: " + fuelUseMultiplier);
 
         if (physics.data.decelerationFuelCutoff
             && !anyInput)

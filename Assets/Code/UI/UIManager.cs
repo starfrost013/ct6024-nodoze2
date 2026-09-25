@@ -4,9 +4,9 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Menu Manager
+/// UI Manager
 /// 
-/// It manages the menus. Who could have thought?
+/// It manages the UI. Who could have thought?
 /// 
 /// Each menu is a prefab.
 /// SO you specify the menu prefabs in ehre and it loads it.

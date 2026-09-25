@@ -9,9 +9,9 @@ known issues:								status
 * floating objects
 * easy to get stuck
 * f does not really work very well
-* can buy upgrades multiple times
+* can buy upgrades multiple times                                   FIXED
 * can't drive through garages
-* models in assets/resources						FIXED 
+* models in assets/resources						                FIXED 
 * after restarting game upgrades stay as unlocked.
 * inconsistent size of garages
 

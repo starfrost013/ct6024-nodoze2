@@ -178,8 +178,6 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnFixedUpdate()
     {
-
-
         switch (raceState)
         {
             case RaceState.Starting:
@@ -254,6 +252,33 @@ internal class GameModeRaceMode : GameMode
         GameManager.player.stats.money += raceConfigData.completionReward;
     }
 
+    /// <summary>
+    /// draws the race fail reason if it exists
+    /// </summary>
+    private void DrawFailReason(GUIStyle raceGuiStyle)
+    {
+        string failString = "Generic Failure String";
+
+        switch (raceFailReason)
+        {
+            case RaceFailReason.OutOfFuel:
+                failString = "Out of fuel!";
+                break;
+            case RaceFailReason.OutOfTime:
+                failString = "Out of time!";
+                break;
+            case RaceFailReason.OutOfMap:
+                failString = "Down you go...!";
+                break;
+        }
+        
+        int width = 250, height = 100;
+        raceGuiStyle.fontSize = 48;
+        GUI.color = Color.red;
+
+        GUI.Label(new Rect(Screen.width / 2 - (width / 2), (Screen.height / 2) - (height / 2), width, height), failString, raceGuiStyle);
+    }
+
     private void DrawTimer(GUIStyle raceGuiStyle)
     {
         if (!raceTimer.HasStarted())
@@ -268,35 +293,28 @@ internal class GameModeRaceMode : GameMode
 
         string timerString = string.Empty;
 
-        bool displayOutOfTime = (raceState == RaceState.Failed && raceFailReason == RaceFailReason.OutOfTime)
-            || (totalTime < 0);
-        
-        if (!displayOutOfTime)
-        {
-            // easier to use constants. 60000 seconds 
-            long milliseconds = totalTime % 1000;
-            long seconds = (totalTime / 1000) % 60;
-            long minutes = ((totalTime / 1000) / 60) % 60;
+        // easier to use constants. 60000 seconds 
+        long milliseconds = totalTime % 1000;
+        long seconds = (totalTime / 1000) % 60;
+        long minutes = ((totalTime / 1000) / 60) % 60;
 
-            string millisecondsString = milliseconds.ToString(), secondsString = seconds.ToString(), minutesString = minutes.ToString();
+        string millisecondsString = milliseconds.ToString(), secondsString = seconds.ToString(), minutesString = minutes.ToString();
 
-            // this might be a slow operation
-            if (milliseconds < 10)
-                millisecondsString = "00" + millisecondsString;
-            else if (milliseconds < 100)
-                millisecondsString = "0" + millisecondsString;
+        // this might be a slow operation
+        if (milliseconds < 10)
+            millisecondsString = "00" + millisecondsString;
+        else if (milliseconds < 100)
+            millisecondsString = "0" + millisecondsString;
 
-            if (seconds < 10)
-                secondsString = '0' + secondsString;
+        if (seconds < 10)
+            secondsString = '0' + secondsString;
 
-            if (minutes < 10)
-                minutesString = '0' + minutesString;
+        if (minutes < 10)
+            minutesString = '0' + minutesString;
 
 
-            timerString = minutesString + ":" + secondsString + "." + millisecondsString;
-        }
-        else
-            timerString = "Out of time!";
+        timerString = minutesString + ":" + secondsString + "." + millisecondsString;
+    
 
         Color newColor = new(1.0f, 0.1f, 0.1f, 255);
         GUI.color = newColor;
@@ -338,6 +356,7 @@ internal class GameModeRaceMode : GameMode
 
         bool dispOutOfFuel = (raceState == RaceState.Failed && raceFailReason == RaceFailReason.OutOfFuel);
 
+        // ALSO displayed by Fail screen but whaatever
         if (!dispOutOfFuel)
             GUI.Label(new Rect(x, y, 400, 100), "Fuel: " + fuelPercentage.ToString("F1") + "%");
         else
@@ -421,10 +440,15 @@ internal class GameModeRaceMode : GameMode
             case RaceState.FinishedNormal:
             case RaceState.FinishedSpecial:
                 // draw various uis here
-                DrawTimer(raceGuiStyle);
+
+                if (raceState == RaceState.Failed)
+                    DrawFailReason(raceGuiStyle);
+                else
+                    DrawTimer(raceGuiStyle);
                 DrawFuelGauge(raceGuiStyle);
                 DrawMoneyAmount(raceGuiStyle);
                 break;
+
             // the race is done
         }
     }
