@@ -3,7 +3,7 @@
  * Modifiers that can be applied to cars by dominoes or anything else.
  * 
  * For cars, these are ABSOLUTE values.
- * For dominoes, these are RELATIVE values (i.e. -0.5 to remove 0.5 from it)
+ * For upgrades, these are RELATIVE values (i.e. -0.5 to remove 0.5 from it)
  */
 using System;
 using UnityEngine;

@@ -10,7 +10,7 @@ internal class GameModeInit : GameMode
         ProgressionCoordinator.Init();
         AudioManager.Init();
         CarManager.Init();
-        DominoManager.Init();
+        UpgradeManager.Init();
         UIManager.Init();
 
         GameManager.SetGameState(GameManager.GameModeEnum.MainMenu);

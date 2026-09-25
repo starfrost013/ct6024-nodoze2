@@ -4,7 +4,7 @@ using UnityEngine;
 //
 // Domino base definitions
 //
-internal class Domino
+internal class Upgrade
 {
     // 
     // STRUCTS
@@ -35,7 +35,7 @@ internal class Domino
     // METHODS
     //
 
-    public Domino(TextAsset config)
+    public Upgrade(TextAsset config)
     {
         this.config = config;
 

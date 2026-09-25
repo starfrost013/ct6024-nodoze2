@@ -28,8 +28,6 @@ class Garage : MonoBehaviour
 
             float fuelPercentHealed = modifier.refuelGaragePercent / 100.0f;
            
-            car.physics.fuelCurrent += (modifier.fuelMax * (modifier.refuelGaragePercent / 100.0f));
-        
             if (car.physics.fuelCurrent > modifier.fuelMax)
                 car.physics.fuelCurrent = modifier.fuelMax;
             
