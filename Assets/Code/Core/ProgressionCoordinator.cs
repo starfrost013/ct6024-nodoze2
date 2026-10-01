@@ -98,15 +98,13 @@ internal static class ProgressionCoordinator
             return;
         }
 
-        string currentScene = null, nextSceneNormal = null, nextSceneSpecial = null;
-
         // iterate through each level specified in the ini (sort by id so theo rder doesn't matter)
         for (int i = 0; i < numLevels; i++)
         {
             string levelString = "Level" + i;
-            currentScene = ConfigParser.GetValue("Level" + i);
-            nextSceneNormal = ConfigParser.GetValue("Level" + i + "CompleteNormal");
-            nextSceneSpecial = ConfigParser.GetValue("Level" + i + "CompleteSpecial");
+            string currentScene = ConfigParser.GetValue("Level" + i);
+            string nextSceneNormal = ConfigParser.GetValue("Level" + i + "CompleteNormal");
+            string nextSceneSpecial = ConfigParser.GetValue("Level" + i + "CompleteSpecial");
             
             // special warning is logged in different places since not all levels need multiple exits
             if (currentScene == null)
@@ -137,7 +135,6 @@ internal static class ProgressionCoordinator
 
         currentLevel = null;
 
-
         Debug.Log("Progression coordinator initialised");
     }
 
@@ -148,13 +145,15 @@ internal static class ProgressionCoordinator
     /// <returns>NULL is the level exists in the ProgressionInfo.txt file, otherwise NULL</returns>
     internal static LevelReference GetLevelByScene(string name)
     {
+        LevelReference reference = null;
+
         foreach (LevelReference level in levels)
         {
             if (level.scene == name)
-                return level;
+                reference = level;
         }
-
-        return null;
+        
+        return reference;
     }
 
     /// <summary>

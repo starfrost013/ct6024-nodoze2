@@ -248,7 +248,6 @@ internal class Car : BasePhysicsObject
 
         GameModeRaceMode raceMode = GameManager.mode as GameModeRaceMode;
 
-        Debug.Log("Kill Floor Y: " + raceMode.raceConfigData.killFloorY + " our Y: " + transform.position.y);
         if (transform.position.y < raceMode.raceConfigData.killFloorY)
             raceMode.FailRace(RaceFailReason.OutOfMap, 0);
     }

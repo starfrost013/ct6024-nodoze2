@@ -1,4 +1,4 @@
-known issues:								status
+known issues:								                        status
 
 * upgrades completely unbalanced
 * garage can fuel you twice (multiple collision hulls probably)		FIXED but was multiple garage script instances, added debounce just in case
@@ -14,11 +14,11 @@ known issues:								status
 * models in assets/resources						                FIXED 
 * after restarting game upgrades stay as unlocked.
 * inconsistent size of garages
-
+* camera in random place during countdown
 
 stuff needed:
 
 * weapon system
-* ai system picked based on next lecture of CT6024
+* ai system picked based on reading & CT6024 lecture
 * new ui 
 * move from old to new input system

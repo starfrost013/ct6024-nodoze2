@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 // The main race mode game mode/.
@@ -98,6 +99,12 @@ internal class GameModeRaceMode : GameMode
 
     private bool LoadEventData()
     {
+        if (string.IsNullOrWhiteSpace(ProgressionCoordinator.currentLevel.scene)) // ok becuase this only runs once per level load, otherwise use equality
+        {
+            Debug.LogError("**** Progression data is INVALID **** - NumLevels not high enough...");
+            return false; 
+        }
+
         Debug.Log("Loading event data for level " + ProgressionCoordinator.currentLevel.scene);
         string levelConfigDataPath = RACE_CONFIG_PATH + ProgressionCoordinator.currentLevel.scene;
 

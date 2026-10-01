@@ -22,8 +22,7 @@ public class Item : MonoBehaviour
         
     }
 
-
-    public void LoadConfig()
+    public virtual void LoadConfig()
     {
         
     }

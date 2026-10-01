@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Gameplay/GameComplete.unity
     guid: 9162597601056264fa0a0608fd736b34
+  - enabled: 1
+    path: Assets/Scenes/Gameplay/Boss1.unity
+    guid: 518a2123f8f35eb5483a5cb70e25b967
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
