@@ -19,9 +19,9 @@ internal static class UpgradeManager
 
         foreach (TextAsset configFile in configFiles)
         {
-            Debug.Log("Loading domino at " + configFile.name);
-            Upgrade domino = new(configFile);
-            upgrades.Add(domino);
+            Debug.Log("Loading upgrade at " + configFile.name);
+            Upgrade upgrade = new(configFile);
+            upgrades.Add(upgrade);
         }
     }
 

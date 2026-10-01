@@ -49,10 +49,23 @@ internal class GameModeRaceMode : GameMode
         internal long moneyGranted;
     };
 
+    internal enum RaceEventType
+    {
+        /// <summary>
+        /// a normal race
+        /// </summary>
+        Race = 0,
+
+        /// <summary>
+        /// a boss race
+        /// </summary>
+        Boss = 1,
+    };
+
     /// <summary>
-    /// The configuration data of the race.
+    /// The configuration data of the game event. TODO: Move some stuff into here
     /// </summary>
-    internal class RaceConfigData
+    internal class RaceEvent
     {
         internal const int TIME_LIMIT_NONE = -1;            // no time limit
 
@@ -60,18 +73,18 @@ internal class GameModeRaceMode : GameMode
         internal long checkpointTimeGain;
         internal long completionReward;
         internal float killFloorY;                          // kill floor positon
-
-        internal List<TimeBonusSet> timeBonuses = new(); // is this slow?   
+        internal List<TimeBonusSet> timeBonuses = new();    // is this slow?   
+        internal RaceEventType type; 
     };
 
     
     /// <summary>
-    /// externally accessed property -- the substate of the race
+    /// externally accessed property -- the substate of the race for race events
     /// </summary>
     internal RaceState raceState { get; set; }
 
     private TextAsset raceConfigDataText { get; set; }
-    internal RaceConfigData raceConfigData { get; private set; }
+    internal RaceEvent raceConfigData { get; private set; }
     
     //
     // various timers
@@ -205,7 +218,7 @@ internal class GameModeRaceMode : GameMode
             case RaceState.Active:
                 // check if we are out of time
 
-                if (raceConfigData.timeLimit != RaceConfigData.TIME_LIMIT_NONE)
+                if (raceConfigData.timeLimit != RaceEvent.TIME_LIMIT_NONE)
                 {
                     long totalTime = raceConfigData.timeLimit - raceTimer.GetElapsedTime();
 
@@ -293,7 +306,7 @@ internal class GameModeRaceMode : GameMode
 
         long totalTime = 0;
 
-        if (raceConfigData.timeLimit == RaceConfigData.TIME_LIMIT_NONE)
+        if (raceConfigData.timeLimit == RaceEvent.TIME_LIMIT_NONE)
             totalTime = raceTimer.GetElapsedTime();
         else
             totalTime = raceConfigData.timeLimit - raceTimer.GetElapsedTime();
