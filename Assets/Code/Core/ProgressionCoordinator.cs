@@ -61,6 +61,8 @@ internal static class ProgressionCoordinator
                 return;
             }
 
+            // in case we are coming from the debug menu.
+
             _currentLevel = value;
 
             // game is finished

@@ -15,7 +15,7 @@ public static class GameManagerDebug
     {
         inputBox.onItemClicked += OnItemChanged;
         inputBox.position = new(10, 90);
-        inputBox.size = new(320, 240);
+        inputBox.size = new(240, 240);
         inputBox.labelName = "Level Select";
     }
 
@@ -53,8 +53,10 @@ public static class GameManagerDebug
         }
 
         
-        if (GUI.Button(new Rect(410, 30, 70, 25), "Close", debugGuiStyleButton))
+        if (GUI.Button(new Rect(370, 30, 70, 25), "Close", debugGuiStyleButton))
             GlobalSettings.debugMode = false;
+
+        inputBox.Update();
     }
 
     internal static void DrawDebugUI(string buildDate)
@@ -78,7 +80,7 @@ public static class GameManagerDebug
 
         // we don't need any extra id
         GUI.Window(0, new Rect(10, Screen.height - height - 10, width, height),
-            DrawDebugUIWindow, "Debug System");
+            DrawDebugUIWindow, "\"It's a Bug!\" Debug System");
     }
 
     internal static void OnItemChanged(object sender, ImguiInputBoxEventArgs e)

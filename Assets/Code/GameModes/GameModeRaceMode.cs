@@ -68,7 +68,6 @@ internal class GameModeRaceMode : GameMode
     internal class RaceEvent
     {
         internal const int TIME_LIMIT_NONE = -1;            // no time limit
-
         internal long timeLimit;                            // time limit, adjusted by checkpoints
         internal long checkpointTimeGain;
         internal long completionReward;

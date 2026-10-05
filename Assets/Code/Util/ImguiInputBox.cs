@@ -18,7 +18,7 @@ public class ImguiInputBoxEventArgs
 
 public class ImguiInputBox
 {
-    private List<string> _items;
+    private List<string> _items = new();
     public List<string> items
     {
         get
@@ -50,12 +50,12 @@ public class ImguiInputBox
     /// <summary>
     /// the label the buttonw will use *while open"
     /// </summary>
-    public string labelNameButtonOpen = "Show";
+    public string labelNameButtonOpen = "Hide";
 
     /// <summary>
     /// the label the buttons will use *while closed*
     /// </summary>
-    public string labelNameButtonClosed = "Hide";
+    public string labelNameButtonClosed = "Show";
 
     public Vector2 position; /// position dropdown
     public Vector2 size; /// size of the dropdown
@@ -74,7 +74,10 @@ public class ImguiInputBox
 
     public event OnItemEventHandler onItemClicked;
 
-    void Update()
+    /// <summary>
+    /// this is the main function that runs. put it in your OnGUI function
+    /// </summary>
+    public void Update()
     {
         if (size.x <= 0
         || size.y <= 0)
@@ -95,20 +98,19 @@ public class ImguiInputBox
         if (buttonLabelToUse == null)
             buttonLabelToUse = "buttonLabelToUse is null for some reason";
 
-        if (GUILayout.Button(buttonLabelToUse, GUILayout.Height(25)))
+        if (GUI.Button(new(position.x, position.y, size.x, 25), buttonLabelToUse))
             dropdownOpen = !dropdownOpen;
 
         if (dropdownOpen)
         {
-            scrollPosition = GUI.BeginScrollView(new Rect(position.x, position.y, size.x, size.y), scrollPosition, new Rect(0, 0, size.x, size.y));
+            scrollPosition = GUI.BeginScrollView(new Rect(position.x, position.y + 30, size.x, size.y), scrollPosition, new Rect(0, 0, size.x, size.y));
             selectedIndex = GUILayout.SelectionGrid(-1, items.ToArray(), 1);
 
             onItemClicked(this, new ImguiInputBoxEventArgs
             {
                 selectedIndex = this.selectedIndex,
                 selectedItem = (selectedIndex >= 0) ? items[selectedIndex] : null
-            }
-            );
+            });
 
             GUI.EndScrollView();
         }
