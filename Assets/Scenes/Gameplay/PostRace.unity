@@ -402,9 +402,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: TextUpgradeDescription
       objectReference: {fileID: 0}
+    - target: {fileID: 2836681559793498520, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 800
+      objectReference: {fileID: 0}
     - target: {fileID: 4801061907668752131, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
       propertyPath: m_text
       value: Select Upgrades
+      objectReference: {fileID: 0}
+    - target: {fileID: 4801061907668752131, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4801061907668752131, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4801061907668752131, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4801061907668752131, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4801061907668752131, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5114353416446340691, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
       propertyPath: m_Name
@@ -413,6 +437,14 @@ PrefabInstance:
     - target: {fileID: 5391610304289765008, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
       propertyPath: m_Name
       value: PostRaceUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6578021433433951252, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -27.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6578021433433951252, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7004885980649372121, guid: 77100a5ccd8392748bdbfa4769d20e84, type: 3}
       propertyPath: m_Color.b

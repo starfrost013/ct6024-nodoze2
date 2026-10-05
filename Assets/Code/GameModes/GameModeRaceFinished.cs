@@ -12,7 +12,8 @@ internal class GameModeRaceFinished : GameMode
         {
             // exit immediately
             Debug.Log("Skipping post race (final level)");
-            OnLeave();
+            GameManager.SetGameState(GameManager.GameModeEnum.RaceMode);
+
             return;
         }
 
