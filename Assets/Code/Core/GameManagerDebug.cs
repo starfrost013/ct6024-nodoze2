@@ -13,7 +13,7 @@ public static class GameManagerDebug
 
     internal static void Init()
     {
-        inputBox.onItemClicked += OnItemChanged;
+        inputBox.onItemClicked += LevelSelectButtonPressed;
         inputBox.position = new(10, 90);
         inputBox.size = new(240, 240);
         inputBox.labelName = "Level Select";
@@ -83,7 +83,7 @@ public static class GameManagerDebug
             DrawDebugUIWindow, "\"It's a Bug!\" Debug System");
     }
 
-    internal static void OnItemChanged(object sender, ImguiInputBoxEventArgs e)
+    internal static void LevelSelectButtonPressed(object sender, ImguiInputBoxEventArgs e)
     {
         if (e.selectedItem == null)
             return;

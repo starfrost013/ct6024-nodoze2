@@ -104,7 +104,7 @@ public class ImguiInputBox
         if (dropdownOpen)
         {
             scrollPosition = GUI.BeginScrollView(new Rect(position.x, position.y + 30, size.x, size.y), scrollPosition, new Rect(0, 0, size.x, size.y));
-            selectedIndex = GUILayout.SelectionGrid(-1, items.ToArray(), 1);
+            selectedIndex = GUILayout.SelectionGrid(-1, items.ToArray(), 1, GUILayout.Width(size.x / 2));
 
             onItemClicked(this, new ImguiInputBoxEventArgs
             {
