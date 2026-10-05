@@ -335,8 +335,12 @@ internal class GameModeRaceMode : GameMode
 
         timerString = minutesString + ":" + secondsString + "." + millisecondsString;
     
+        GUI.color = Color.black;
 
-        Color newColor = new(1.0f, 0.1f, 0.1f, 255);
+        // draw a box
+        GUI.Box(new Rect(0, 0, Screen.width, 90), "");
+
+        Color newColor = new(1.0f, 0.9f, 0.9f, 1.0f);
         GUI.color = newColor;
         raceGuiStyle.fontSize = 48;
 
@@ -352,7 +356,7 @@ internal class GameModeRaceMode : GameMode
         raceGuiStyle.alignment = TextAnchor.UpperRight;
 
         float x = Screen.width - 410;
-        float y = Screen.height - 90;
+        float y = 40;
 
         raceGuiStyle.fontSize = 36;
 
@@ -372,13 +376,13 @@ internal class GameModeRaceMode : GameMode
         float fuelPercentage = (car.physics.fuelCurrent / car.GetCarModifiers().fuelMax) * 100;
 
         float x = Screen.width - 410;
-        float y = Screen.height - 50;
+        float y = 0;
 
         bool dispOutOfFuel = (raceState == RaceState.Failed && raceFailReason == RaceFailReason.OutOfFuel);
 
         // ALSO displayed by Fail screen but whaatever
         if (!dispOutOfFuel)
-            GUI.Label(new Rect(x, y, 400, 100), "Fuel: " + fuelPercentage.ToString("F1") + "%");
+            GUI.Label(new Rect(x, y, 400, 100), "█ Fuel: " + fuelPercentage.ToString("F1") + "%");
         else
             GUI.Label(new Rect(x, y, 400, 100), "Out of fuel!");
 
@@ -442,6 +446,8 @@ internal class GameModeRaceMode : GameMode
     internal override void OnLeave()
     {
     }
+
+    // TEMPORARY UI LEFT OVER FROM VERSION 1.X - REPLACE IN 2.0
 
     // todo: This code is *HORRIBLE* 
     internal override void OnLegacyGUI()
