@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
-// The main race mode game mode/.
+/// The main race mode game mode.
 internal class GameModeRaceMode : GameMode
 {
 
@@ -74,7 +74,7 @@ internal class GameModeRaceMode : GameMode
         internal long completionReward;
         internal float killFloorY;                          // kill floor positon
         internal List<TimeBonusSet> timeBonuses = new();    // is this slow?   
-        internal RaceEventType type; 
+        internal RaceEventType eventType; 
     };
 
     
@@ -139,6 +139,7 @@ internal class GameModeRaceMode : GameMode
             | long.TryParse(ConfigParser.GetValue("CheckpointTimeGain"), out raceConfigData.checkpointTimeGain)
             | long.TryParse(ConfigParser.GetValue("CompletionReward"), out raceConfigData.completionReward)
             | float.TryParse(ConfigParser.GetValue("KillFloorY"), out raceConfigData.killFloorY)
+            | Enum.TryParse<RaceEventType>(ConfigParser.GetValue("EventType"), out raceConfigData.eventType);
             ;
 
         // still at least try to load

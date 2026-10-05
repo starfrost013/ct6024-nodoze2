@@ -4,6 +4,18 @@ using UnityEngine;
 // It lets us know when we are done
 class FinishLine : MonoBehaviour
 {
+    /// <summary>
+    /// the exit type
+    /// </summary>
+    enum FinishLineExitType
+    {
+        Normal = 0,
+        Special = 1,
+    }; 
+
+    [SerializeField]
+    FinishLineExitType exitType = FinishLineExitType.Normal; 
+    
     private void OnTriggerEnter(Collider other)
     {
         // don't do anything if it isn't racemode
@@ -19,8 +31,17 @@ class FinishLine : MonoBehaviour
 
             if (mode.raceState == GameModeRaceMode.RaceState.Active)
             {
-                mode.raceState = GameModeRaceMode.RaceState.FinishedNormal;
-                Debug.Log("You got to the end of the race!");
+                switch (exitType)
+                {
+                    case FinishLineExitType.Normal:
+                        mode.raceState = GameModeRaceMode.RaceState.FinishedNormal;
+                        Debug.Log("Finished race normally!");
+                        break;
+                    case FinishLineExitType.Special:
+                        mode.raceState = GameModeRaceMode.RaceState.FinishedSpecial;
+                        Debug.Log("Finished race with special exit!");
+                        break;
+                }
             }
         }
     }

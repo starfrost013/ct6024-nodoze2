@@ -77,6 +77,7 @@ internal static class GameManager
         player = new();
 
         GlobalSettings.Init();
+        GameManagerDebug.Init();
 
         SetGameState(state);
 

@@ -1,5 +1,6 @@
 [Race]
 
+EventType = Race                    ; Event type
 TimeLimit = 90000					; Maximum time limit in milliseconds (-1 to disable)
 CheckpointTimeGain = 20000			; Checkpoint time gain
 CompletionReward = 1000				; Completion reward, awarded regardless of time

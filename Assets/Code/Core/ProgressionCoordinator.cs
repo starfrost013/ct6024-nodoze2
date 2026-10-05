@@ -22,7 +22,7 @@ internal static class ProgressionCoordinator
     { 
         internal string scene;
         internal string sceneOnNormalCompletion;
-        internal string sceneOnSpecialCompletion;
+        internal string sceneOnSpecialCompletion;    
     }
 
     //
@@ -30,7 +30,7 @@ internal static class ProgressionCoordinator
     //
 
     private const string PROGRESSION_INFO_PATH = "Progression/ProgressionInfo";
-    private const string NO_MORE_LEVELS = "End";
+    public const string NO_MORE_LEVELS = "End";
     internal static List<LevelReference> levels { get; private set; } = new(); 
     static TextAsset progressionInfo;
    
@@ -212,4 +212,11 @@ internal static class ProgressionCoordinator
         }
 
     }
+
+    /// <summary>
+    /// Is the next normal level the last level? If so, skip the upgrade screenreturn currentLevel. == NO_MORE_LEVELS;
+    /// </summary>
+    /// <returns></returns>
+    internal static bool NextNormalLevelIsLastLevel() { return (currentLevel.sceneOnNormalCompletion == NO_MORE_LEVELS); }
+    internal static bool NextSpecialLevelIsLastLevel() { return (currentLevel.sceneOnSpecialCompletion == NO_MORE_LEVELS); } 
 };
