@@ -2,9 +2,8 @@
 
 Name = Harsher Acceleration
 Description = Increases brake effectiveness
-Cost = 10
+Cost = 400
 ExpiryTime = 0
-CostMulPerDominoValue = 0.92
 
 [Handling]
 Acceleration = 0.02

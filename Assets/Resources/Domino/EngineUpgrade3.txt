@@ -2,10 +2,9 @@
 
 Name = Speed Upgrade 3
 Description = Hmmm
-Cost = 100
+Cost = 1200
 ExpiryTime = 0
 Requires = EngineUpgrade2
-CostMulPerDominoValue = 0.97
 
 [Handling]
 MaxForwardTorque = 4.0

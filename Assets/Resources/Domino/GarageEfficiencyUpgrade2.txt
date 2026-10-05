@@ -1,11 +1,10 @@
 [Info]
 
-Name = High Octane Gas Purchase
+Name = Fuel E9000
 Description = Increases the amount of fuel that you get from a garage.
-Cost = 1750
+Cost = 2500
 ExpiryTime = 0
 Requires = GarageEfficiencyUpgrade1
-CostMulPerDominoValue = 0.95
 
 [Fuel]
 RefuelGaragePercent	= 7.0

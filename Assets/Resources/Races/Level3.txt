@@ -3,18 +3,18 @@
 EventType = Race                    ; Event type
 TimeLimit = 50000					; Maximum time limit
 CheckpointTimeGain = 15000			; Checkpoint time gain
-CompletionReward = 200				; Completion reward, awarded regardless of time
+CompletionReward = 2000				; Completion reward, awarded regardless of time
 KillFloorY = -100					; Kill floor Y
 
 NumTimeBonus = 5					; number of time bonuses
 
 TimeBonus0 = 15000					; time for first time bonus
-TimeBonus0Money = 10000				; money gained for first time bonus
+TimeBonus0Money = 7500				; money gained for first time bonus
 TimeBonus1 = 24000					; ditto
-TimeBonus1Money = 3400
+TimeBonus1Money = 5000
 TimeBonus2 = 35000
-TimeBonus2Money = 1600
+TimeBonus2Money = 3200
 TimeBonus3 = 41000
-TimeBonus3Money = 800
+TimeBonus3Money = 2800
 TimeBonus4 = 60000
 TimeBonus4Money = 0

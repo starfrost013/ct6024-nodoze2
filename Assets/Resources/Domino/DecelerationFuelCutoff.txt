@@ -2,11 +2,10 @@
 
 Name = Deceleration Fuel Cutoff
 Description = Decreases fuel usage by only draining fuel if the car is accelerating.
-Cost = 100
+Cost = 300
 ExpiryTime = 0
 DominoValueTop = 5
 DominoValueBottom = 7
-CostMulPerDominoValue = 0.98
 
 [Handling]
 

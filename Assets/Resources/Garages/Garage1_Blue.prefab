@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1315915809830411198}
   - component: {fileID: 4292081256950629716}
   - component: {fileID: 6039574081949267262}
-  - component: {fileID: 7408266487915156751}
   - component: {fileID: 1534193232981603208}
   m_Layer: 0
   m_Name: Garage1_Blue
@@ -122,27 +121,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.1351254, y: 1.65252, z: 3.3296664}
   m_Center: {x: -0.03673045, y: 0.67374104, z: -0.66524535}
---- !u!65 &7408266487915156751
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3036055735788495213}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.20836379, y: 2.368626, z: 3.021156}
-  m_Center: {x: -1.5970825, y: 0.68431205, z: -0.5471015}
 --- !u!114 &1534193232981603208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,7 +144,6 @@ GameObject:
   - component: {fileID: 7534895321095968611}
   - component: {fileID: 4197791193271679657}
   - component: {fileID: 1608089468539146236}
-  - component: {fileID: 1942976018760107944}
   m_Layer: 0
   m_Name: Garage
   m_TagString: Untagged
@@ -246,24 +223,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1942976018760107944
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6337298826709362350}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.080433, y: 2.0724204, z: 0.9487847}
-  m_Center: {x: 0.029968925, y: 0.29952613, z: 0.4739321}
