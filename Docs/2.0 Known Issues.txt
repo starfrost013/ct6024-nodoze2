@@ -18,7 +18,8 @@ known issues:								                        status
 * after finishing last level you still have to go through upgrades  FIXED (a bit crappily)
 * fuel not always fully refueled on level change                    
 * car select cars float around in the middle of nowhere  
-
+* falling out does not reset
+* camera movement on turn was broken				    FIXED
 stuff needed:
 
 * car model 2.0

@@ -36,9 +36,10 @@ BoostDepletionPerTick = 10					; Boost depletion per 1/60 of a second
 BoostRegenPerTick = 6						; Boost depletion per 1/60 of a second
 SteeringType = Manual 						; 0 = Automatic, 1 = Manual, you can use numbers or the names 
 
+JumpIntensity = 140000						; the intensity of the jump
+
 [Camera]
 MaxTurnCameraAngle = 19.0					; Maximum camera turn angle
-MaxTurnCameraAmount = 0.1					; Maximum distance the camera can turn
 CameraRelativeX = 0.1						; Relative camera X (maximum, while turning) to car
 CameraRelativeY = 1.4						; Relative camera Y (maximum, while turning) to car
 CameraRelativeZ = 5.0						; Relative camera Z (maximum, while turning) to car

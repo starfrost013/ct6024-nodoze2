@@ -14,7 +14,7 @@ public static class GameManagerDebug
     internal static void Init()
     {
         inputBox.onItemClicked += LevelSelectButtonPressed;
-        inputBox.position = new(10, 90);
+        inputBox.position = new(10, 120);
         inputBox.size = new(240, 240);
         inputBox.labelName = "Level Select";
     }
@@ -47,14 +47,13 @@ public static class GameManagerDebug
                 raceMode.raceState = GameModeRaceMode.RaceState.FinishedNormal;
             }
             else
-            {
                 GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
-            }
         }
-
         
         if (GUI.Button(new Rect(370, 30, 70, 25), "Close", debugGuiStyleButton))
             GlobalSettings.debugMode = false;
+
+        GUI.Label(new Rect(10, 90, 150, 25), "Level Select", debugGuiStyleLabel);
 
         inputBox.Update();
     }

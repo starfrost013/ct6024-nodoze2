@@ -396,7 +396,7 @@ internal class GameModeRaceMode : GameMode
         Int64 remainingTime = ((raceStartTimer.length - raceStartTimer.GetElapsedTime()) / 1000) + 1; // +1 for "3, 2, 1..."
 
         raceGuiStyle.fontSize = 72;
-        GUI.color = Color.yellow;
+        GUI.color = Color.black;
 
         if (remainingTime <= (RACE_START_TIME / 1000))
             GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);

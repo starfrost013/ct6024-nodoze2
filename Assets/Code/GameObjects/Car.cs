@@ -32,14 +32,17 @@ internal class Car : BasePhysicsObject
         internal float forwardTorque;
         internal float rotationTorque;
 
-        internal UInt32 numCollisions;
-
         internal float fuelCurrent;
 
         internal WheelCollider wheelLeftBackCollider;
         internal WheelCollider wheelLeftFrontCollider;
         internal WheelCollider wheelRightBackCollider;
         internal WheelCollider wheelRightFrontCollider;
+        
+        /// <summary>
+        /// curve is currently in editor at the moment :(
+        /// </summary>
+        internal float jumpTimer; 
     };
 
     /// <summary>
@@ -114,6 +117,12 @@ internal class Car : BasePhysicsObject
 
     [SerializeField]
     CarDriveType driveType;
+
+    [SerializeField]
+    AnimationCurve jumpCurve;
+
+    [SerializeField]
+    uint jumpCurveNumTicks;
 
     /// <summary>
     /// Modifier sets that have been applied 
@@ -252,15 +261,32 @@ internal class Car : BasePhysicsObject
             raceMode.FailRace(RaceFailReason.OutOfMap, 0);
     }
 
-    private void RunInputFlip()
+    private void RunInputJump()
     {
-        bool flipInput = Input.GetKey(KeyCode.F);
+        bool jumpInput = Input.GetKey(KeyCode.Space);
 
-        if (!flipInput)
+        if (jumpInput && physics.jumpTimer != 0) // don't allow repeating jumps
             return;
 
-        transform.localEulerAngles = (new(transform.localEulerAngles.x, transform.localEulerAngles.y, 0.0f));
-        transform.position = new(transform.position.x, transform.position.y + 0.2f, transform.position.z);
+        if (!jumpInput && physics.jumpTimer == 0) // don't allow jumping if we aren't holding the button down
+            return;
+
+        // evaluate the curve to get the amount of force to add
+
+        physics.jumpTimer += (1.0f / (float)jumpCurveNumTicks);
+
+        if (physics.jumpTimer < 1)
+        {
+            float force = jumpCurve.Evaluate(physics.jumpTimer) * physics.data.jumpIntensity;
+            Debug.Log("Adding " + force + " force");
+            physRigidbody.AddForce(new Vector3(0, force, 0));
+
+        }
+
+        // 0-1: jumping
+        // 1-2: post jump cooldown
+        if (physics.jumpTimer >= 2)
+            physics.jumpTimer = 0;
     }
 
     private void RunInputMove()
@@ -350,6 +376,7 @@ internal class Car : BasePhysicsObject
 
                 // camera angle handling
                 cameraTurnPercentage -= 0.001f * ((1.0f - 0.001f) * physics.data.cameraTurnFactor);
+                
 
                 if (cameraTurnPercentage < -1.0f)
                     cameraTurnPercentage = -1.0f;
@@ -378,8 +405,11 @@ internal class Car : BasePhysicsObject
                 if (Math.Abs(cameraTurnPercentage) < float.Epsilon)
                     cameraTurnPercentage = 0;
             }
+
         }
-        
+
+        Debug.Log("Camera turn percentage: " + cameraTurnPercentage);
+
         //
         // APPLICATION OF THE MOMENTUM OF THE CAR
         //
@@ -488,7 +518,7 @@ internal class Car : BasePhysicsObject
         /* also move a bit forward depending on our overall speed */
         Camera.main.transform.position = transform.position + (transform.forward * physics.data.cameraRelativeZ);
         /* Dumb ass way of doing it - there's a better way. */
-        Camera.main.transform.position += physics.data.cameraRelativeX * (transform.right * cameraTurnPercentage);
+        Camera.main.transform.position += physics.data.cameraRelativeX * transform.right;
         Camera.main.transform.position += new Vector3(0.0f, physics.data.cameraRelativeY, 0.0f);
     }
 
@@ -515,7 +545,7 @@ internal class Car : BasePhysicsObject
         if (!disableInputs
             && raceMode.raceState == RaceState.Active)
         {
-            RunInputFlip(); // this is separate so make it its own tihng
+            RunInputJump(); // this is separate so make it its own tihng
             RunInputMove(); // the main input stuff
         }
 
@@ -566,7 +596,6 @@ internal class Car : BasePhysicsObject
         physics.data.maxForwardTorqueBoost += info.maxForwardTorqueBoost;
 
         physics.data.maxTurnCameraAngle += info.maxTurnCameraAngle;
-        physics.data.maxTurnCameraAmount += info.maxTurnCameraAmount;
         physics.data.cameraRelativeX += info.cameraRelativeX;
         physics.data.cameraRelativeY += info.cameraRelativeY;
         physics.data.cameraRelativeZ += info.cameraRelativeZ;
@@ -613,16 +642,4 @@ internal class Car : BasePhysicsObject
         return false;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        physics.numCollisions++;    
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        physics.numCollisions--;
-        physics.inAir = (physics.numCollisions == 0);
-        //if (physics.inAir)
-           //Debug.Log("In Air");
-    }
 }

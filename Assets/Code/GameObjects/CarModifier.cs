@@ -27,6 +27,7 @@ internal class CarModifier
     internal float minSteeringAmount;                           // minimum speed steering magnitude at 0 speed while stopped
     internal float maxSteeringAmount;                           // maximum speed steering magnitude at maxSteeringVelocity
     internal float maxSteeringVelocity;                         // maximum velocity magnitude
+    internal float jumpIntensity;                               // jump intensity of the car (curve time is controlled by the jump curve) 
 
     // Boosting characteristics of the car
     internal float boostMax;                                    // total boost amount per 1/60 of a second
@@ -38,8 +39,7 @@ internal class CarModifier
     internal float boostAccelerationSteeringAir;
 
     // Camera characteristics of the car
-    internal float maxTurnCameraAngle;
-    internal float maxTurnCameraAmount;
+    internal float maxTurnCameraAngle;                          // maximum amount the camera can turn when the car is turning (in degrees)
     internal float cameraRelativeX;                             // relative camera X coord to car
     internal float cameraRelativeY;                             // relative camera Y coord to car
     internal float cameraRelativeZ;                             // relative camera Z coord to car
@@ -84,12 +84,12 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteering"), out boostAccelerationSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForwardAir"), out boostAccelerationForwardAir)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"), out boostAccelerationSteeringAir)
+        | float.TryParse(ConfigParser.GetValue("Handling", "JumpIntensity"), out jumpIntensity)
         | float.TryParse(ConfigParser.GetValue("Camera", "MaxTurnCameraAngle"), out maxTurnCameraAngle)
-        | float.TryParse(ConfigParser.GetValue("Camera", "MaxTurnCameraAmount"), out maxTurnCameraAmount)
         | float.TryParse(ConfigParser.GetValue("Camera", "CameraRelativeX"), out cameraRelativeX)
         | float.TryParse(ConfigParser.GetValue("Camera", "CameraRelativeY"), out cameraRelativeY)
         | float.TryParse(ConfigParser.GetValue("Camera", "CameraRelativeZ"), out cameraRelativeZ)
-        | float.TryParse(ConfigParser.GetValue("Camera", "CameraTurnFactor"), out cameraRelativeZ)
+        | float.TryParse(ConfigParser.GetValue("Camera", "CameraTurnFactor"), out cameraTurnFactor)
         | float.TryParse(ConfigParser.GetValue("Fuel", "Max"), out fuelMax)
         | float.TryParse(ConfigParser.GetValue("Fuel", "DepletionPerTick"), out fuelDepletionPerTick)
         | float.TryParse(ConfigParser.GetValue("Fuel", "RefuelGaragePercent"), out refuelGaragePercent)
