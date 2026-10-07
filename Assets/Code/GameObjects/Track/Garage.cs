@@ -27,7 +27,9 @@ class Garage : MonoBehaviour
             CarModifier modifier = car.GetCarModifiers();
 
             float fuelPercentHealed = modifier.refuelGaragePercent / 100.0f;
-           
+
+            car.physics.fuelCurrent += modifier.fuelMax * fuelPercentHealed;    
+
             if (car.physics.fuelCurrent > modifier.fuelMax)
                 car.physics.fuelCurrent = modifier.fuelMax;
             

@@ -352,7 +352,7 @@ internal class GameModeRaceMode : GameMode
     private void DrawMoneyAmount(GUIStyle raceGuiStyle)
     {
         Car car = GameManager.player.carInWorld;
-        GUI.color = Color.green;
+        GUI.color = Color.lawnGreen;
         raceGuiStyle.alignment = TextAnchor.UpperRight;
 
         float x = Screen.width - 410;
@@ -368,21 +368,32 @@ internal class GameModeRaceMode : GameMode
 
     private void DrawFuelGauge(GUIStyle raceGuiStyle)
     {
-        Car car = GameManager.player.carInWorld;  
-        GUI.color = Color.blue;
+        Car car = GameManager.player.carInWorld;
+        GUI.color = Color.cornflowerBlue;
         raceGuiStyle.alignment = TextAnchor.UpperRight;
         raceGuiStyle.fontSize = 36;
 
         float fuelPercentage = (car.physics.fuelCurrent / car.GetCarModifiers().fuelMax) * 100;
 
-        float x = Screen.width - 410;
+        float x = Screen.width - 640;
         float y = 0;
 
         bool dispOutOfFuel = (raceState == RaceState.Failed && raceFailReason == RaceFailReason.OutOfFuel);
 
         // ALSO displayed by Fail screen but whaatever
         if (!dispOutOfFuel)
-            GUI.Label(new Rect(x, y, 400, 100), "█ Fuel: " + fuelPercentage.ToString("F1") + "%");
+        {
+            //GUI.Label(new Rect(x, y, 400, 100), "█ Fuel: " + fuelPercentage.ToString("F1") + "%");
+
+            GUI.Label(new Rect(x, y, 400, 100), "Fuel: ", raceGuiStyle );
+
+            int numToDisplay = (int)(fuelPercentage / 10) + 1;
+            
+            for (int i = 0; i < numToDisplay; i++)
+            {
+                GUI.Label(new Rect(Screen.width - 24 - (i * 24), y, 20, 60), "█", raceGuiStyle);
+            }
+        }
         else
             GUI.Label(new Rect(x, y, 400, 100), "Out of fuel!");
 
@@ -402,7 +413,7 @@ internal class GameModeRaceMode : GameMode
         Int64 remainingTime = ((raceStartTimer.length - raceStartTimer.GetElapsedTime()) / 1000) + 1; // +1 for "3, 2, 1..."
 
         raceGuiStyle.fontSize = 72;
-        GUI.color = Color.black;
+        GUI.color = Color.cornflowerBlue;
 
         if (remainingTime <= (RACE_START_TIME / 1000))
             GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);
