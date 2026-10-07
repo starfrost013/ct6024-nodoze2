@@ -334,8 +334,8 @@ internal class GameModeRaceMode : GameMode
 
 
         timerString = minutesString + ":" + secondsString + "." + millisecondsString;
-    
-        GUI.color = Color.black;
+
+        GUI.color = Color.darkGray;
 
         // draw a box
         GUI.Box(new Rect(0, 0, Screen.width, 90), "");
