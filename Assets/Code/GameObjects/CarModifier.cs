@@ -22,8 +22,10 @@ internal class CarModifier
     internal float decelerationSteering;                        // deceleration while steering
     internal float decelerationAir;                             // deceleration in the air
     internal float decelerationChangeDirection;                 // deceleration when the car changes direction [W/S]
-    internal float decelerationChangeDirectionSteering;         // deceleration when the car changes direction [A/D]
     internal float maxSteeringTorque;                           // maximum torque
+
+    internal float steeringIntensity;                           // steering intensity of the car (curve time is controlled by the steering curve)
+                                                                // 
     internal float minSteeringAmount;                           // minimum speed steering magnitude at 0 speed while stopped
     internal float maxSteeringAmount;                           // maximum speed steering magnitude at maxSteeringVelocity
     internal float maxSteeringVelocity;                         // maximum velocity magnitude
@@ -74,7 +76,7 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationSteering"), out decelerationSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationAir"), out decelerationAir)
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationChangeDirection"), out decelerationChangeDirection)
-        | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationChangeDirectionSteering"), out decelerationChangeDirectionSteering)
+        | float.TryParse(ConfigParser.GetValue("Handling", "SteeringIntensity"), out steeringIntensity)
         | float.TryParse(ConfigParser.GetValue("Handling", "MinimumSteeringAmount"), out minSteeringAmount)
         | float.TryParse(ConfigParser.GetValue("Handling", "MaximumSteeringAmount"), out maxSteeringAmount)
         | float.TryParse(ConfigParser.GetValue("Handling", "MaximumSteeringVelocity"), out maxSteeringVelocity)

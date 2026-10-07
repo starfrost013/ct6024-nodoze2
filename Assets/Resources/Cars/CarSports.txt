@@ -22,7 +22,7 @@ AccelerationSteeringAir = 2.5				; Acceleration to apply in lateral direction wh
 Deceleration = 0.965						; Deceleration while idle (must be below 1) 
 DecelerationSteering = 0.95					; Deceleration while steering (must be below 1)
 DecelerationChangeDirection = 5.0			; Deceleration while changing direction
-DecelerationChangeDirectionSteering = 4.0	; Deceleration while steering and changing direction
+SteeringIntensity = 1.5						; Intensity of steering (how fast it turns)	
 
 DecelerationAir = 0.9985					; Deceleration in the air
 MaxSteeringTorque = 12.0					; Maximum torque

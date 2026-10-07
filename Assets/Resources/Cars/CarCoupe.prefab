@@ -621,6 +621,49 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   jumpCurveNumTicks: 16
+  steeringCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.008333333
+      value: -0.0023809671
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.15602414
+      value: 0.069950804
+      inSlope: 1.3176833
+      outSlope: 1.3176833
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.12243117
+    - serializedVersion: 3
+      time: 0.8044025
+      value: 0.9237184
+      inSlope: 1.2834117
+      outSlope: 1.2834117
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.4659849
+    - serializedVersion: 3
+      time: 0.9916707
+      value: 1.000001
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  steeringCurveNumTicks: 16
 --- !u!54 &8880717086237907726
 Rigidbody:
   m_ObjectHideFlags: 0

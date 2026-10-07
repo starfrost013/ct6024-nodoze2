@@ -14,12 +14,10 @@ internal class Car : BasePhysicsObject
 
     internal struct PhysicsInfo
     {
-        // Actual physics data, shared with dominoes
+        // Actual physics data, shared with upgrades
         internal CarModifier data;
 
-        // Characteristics of the car
-        internal Int32 steeringRampUpTimer;                         // timer for ramping up steering 
-
+        // Characteristics of the *car* 
         internal CarSteeringType steeringType;
 
         // boost state - maybe should become a state enum
@@ -42,7 +40,12 @@ internal class Car : BasePhysicsObject
         /// <summary>
         /// curve is currently in editor at the moment :(
         /// </summary>
-        internal float jumpTimer; 
+        internal float jumpTimer;
+
+        /// <summary>
+        /// curve is currently in editor at the moment :(
+        /// </summary>
+        internal float steerTimer; 
     };
 
     /// <summary>
@@ -97,6 +100,7 @@ internal class Car : BasePhysicsObject
 
     //
     // FIELDS
+    // Many of these should be in physicsdata but can't becuase...unity says no... :(
     //
     /* The wheels */
     [SerializeField]
@@ -113,16 +117,24 @@ internal class Car : BasePhysicsObject
 
     // More configuration data (Serialised fields cannot be located within structs)
     [SerializeField]
-    CarSteeringType steeringType;
+    internal CarSteeringType steeringType;
 
     [SerializeField]
-    CarDriveType driveType;
+    internal CarDriveType driveType;
+
+    // the curves
 
     [SerializeField]
-    AnimationCurve jumpCurve;
+    internal AnimationCurve jumpCurve;
 
     [SerializeField]
-    uint jumpCurveNumTicks;
+    internal uint jumpCurveNumTicks;
+
+    [SerializeField]
+    internal AnimationCurve steeringCurve;
+
+    [SerializeField]
+    internal uint steeringCurveNumTicks;
 
     /// <summary>
     /// Modifier sets that have been applied 
@@ -135,10 +147,7 @@ internal class Car : BasePhysicsObject
         private set { _modifiers = value; }
     }
 
-    internal TextAsset configText
-    {
-        get; private set;
-    }
+    internal TextAsset configText { get; private set; }
 
     /// <summary>
     /// Configuration file path
@@ -173,7 +182,7 @@ internal class Car : BasePhysicsObject
     /// <summary>
     /// The race has ended, disable the inputs
     /// </summary>
-    internal bool disableInputs { get; set; }
+    internal bool disableInputs;
 
     //
     // METHODS
@@ -363,20 +372,29 @@ internal class Car : BasePhysicsObject
                 physics.forwardTorque += forwardAccelerationForThisTick;
             }
 
+            if (steerLeftInput || steerRightInput)
+            {
+                physics.steerTimer += (1.0f / (float)steeringCurveNumTicks);
+
+                if (physics.steerTimer < 1)
+                {
+                    float steerFactor = steeringCurve.Evaluate(physics.steerTimer) * physics.data.steeringIntensity;
+                    steeringAccelerationForThisTick *= steerFactor;
+                }
+                else
+                    physics.steerTimer = 0;
+            }
+
             // multiply so the car can have a smaller turning circle as it gets faster
             float steeringChangeFactor = steeringAccelerationForThisTick;
 
             if (steerLeftInput
                 && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
             {
-                if (physics.rotationTorque > 0)
-                    physics.rotationTorque -= physics.data.decelerationChangeDirectionSteering;
-                else if (Math.Abs(physics.rotationTorque) < physics.data.maxSteeringTorque)
-                    physics.rotationTorque -= steeringChangeFactor; // normalised?
+                physics.rotationTorque -= steeringChangeFactor; // normalised?
 
                 // camera angle handling
                 cameraTurnPercentage -= 0.001f * ((1.0f - 0.001f) * physics.data.cameraTurnFactor);
-                
 
                 if (cameraTurnPercentage < -1.0f)
                     cameraTurnPercentage = -1.0f;
@@ -385,10 +403,8 @@ internal class Car : BasePhysicsObject
             if (steerRightInput
                 && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
             {
-                if (physics.rotationTorque < 0)
-                    physics.rotationTorque += physics.data.decelerationChangeDirectionSteering;
-                else if (Math.Abs(physics.rotationTorque) < physics.data.maxSteeringTorque)
-                    physics.rotationTorque += steeringChangeFactor; // normalised?
+                physics.rotationTorque += steeringChangeFactor; // normalised?
+
 
                 // camera angle handling
                 cameraTurnPercentage += 0.001f * ((1.0f - 0.001f) * physics.data.cameraTurnFactor);
@@ -427,7 +443,7 @@ internal class Car : BasePhysicsObject
         }
 
         if (!steerInput)
-            physics.rotationTorque *= physics.data.decelerationSteering;
+            physics.rotationTorque *= physics.data.decelerationSteering; // should be a curve too ?!
 
         float topSpeed = physics.data.maxForwardTorque;
 
@@ -586,8 +602,8 @@ internal class Car : BasePhysicsObject
         physics.data.deceleration += info.deceleration;
         physics.data.decelerationAir += info.decelerationAir;
         physics.data.decelerationChangeDirection += info.decelerationChangeDirection;
-        physics.data.decelerationChangeDirectionSteering += info.decelerationChangeDirectionSteering;
         physics.data.decelerationSteering += info.decelerationSteering;
+        physics.data.steeringIntensity += info.steeringIntensity;
         physics.data.maxSteeringTorque += info.maxSteeringTorque;
         physics.data.minSteeringAmount += info.minSteeringAmount;
         physics.data.maxSteeringAmount += info.maxSteeringAmount;   
