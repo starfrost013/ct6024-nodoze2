@@ -395,7 +395,7 @@ internal class GameModeRaceMode : GameMode
         //todo: don't need to find the car start twice.
         GameObject start = GameObject.Find(CarManager.OBJECT_NAME_CAR_START);
 
-        Camera.main.transform.position = start.transform.position;
+        Camera.main.transform.position = start.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
         Camera.main.transform.localEulerAngles = new Vector3(start.transform.rotation.eulerAngles.x, start.transform.rotation.eulerAngles.y + 180.0f, start.transform.rotation.eulerAngles.z); // stupi car model nonsense !!!
 
         // remaining time in seconds
