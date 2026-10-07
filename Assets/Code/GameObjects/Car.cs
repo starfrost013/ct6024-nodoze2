@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 using static GameModeRaceMode;
 
 /// <summary>
@@ -24,10 +25,12 @@ internal class Car : BasePhysicsObject
         internal bool boosting;                                     // are we boosting?
         internal float boostCurrent;                                // current amount of boost
         internal bool boostEnding;                                  // lets us slowly ramp down
+        internal int numCollisions;                                 // number of collisions with the ground (used to determine if we are in the air) put this code back for now
         internal bool inAir;                                        // are we in the air?
 
         // movement information - now a torque since we use WheelColliders
         internal float forwardTorque;
+        internal float brakeTorque;
         internal float rotationTorque;
 
         internal float fuelCurrent;
@@ -45,7 +48,11 @@ internal class Car : BasePhysicsObject
         /// <summary>
         /// curve is currently in editor at the moment :(
         /// </summary>
-        internal float steerTimer; 
+        internal float steerTimer;
+        
+        internal float accelTimer;
+
+        internal float brakeNormalTimer;
     };
 
     /// <summary>
@@ -135,6 +142,18 @@ internal class Car : BasePhysicsObject
 
     [SerializeField]
     internal uint steeringCurveNumTicks;
+
+    [SerializeField]
+    internal AnimationCurve accelerationCurve;
+
+    [SerializeField]
+    internal uint accelerationCurveNumTicks;
+
+    [SerializeField]
+    internal AnimationCurve brakeNormalCurve;
+
+    [SerializeField]
+    internal uint brakeNormalCurveNumTicks;
 
     /// <summary>
     /// Modifier sets that have been applied 
@@ -301,18 +320,28 @@ internal class Car : BasePhysicsObject
     private void RunInputMove()
     {
         bool accelerateInput = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
-        bool decelerateInput = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
+        bool brakeNormalInput = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
         bool steerLeftInput = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
         bool steerRightInput = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
 
-        bool moveInput = (accelerateInput || decelerateInput);
+        bool moveInput = (accelerateInput || brakeNormalInput);
         bool steerInput = (steerLeftInput || steerRightInput);
 
         // use for fuel checks
         bool anyInput = (moveInput || steerInput);
 
+        if (!brakeNormalInput)
+            physics.brakeTorque = 0;
+
         if (anyInput)
         {
+            // we don't want to reset these timers until the player actually stops holding down the button 
+            if (!accelerateInput && physics.accelTimer > 0)
+                physics.accelTimer = 0;
+
+            if (!brakeNormalInput && physics.brakeNormalTimer > 0)
+                physics.brakeNormalTimer = 0;
+                
             // check if we stopped boosting
             bool didWeStopBoosting = physics.boosting;
             physics.boosting = Input.GetKey(KeyCode.LeftShift);
@@ -335,6 +364,7 @@ internal class Car : BasePhysicsObject
             }
 
             float forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.data.accelerationForwardAir : physics.data.accelerationForward;
+            float brakeNormalAccelHandlingForThisFrame = (physics.inAir) ? physics.data.brakeForwardAir : physics.data.brakeForward;
             float steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.data.accelerationSteeringAir : physics.data.accelerationSteering;
 
             // if we ARE boosting, apply boost accel.
@@ -343,14 +373,18 @@ internal class Car : BasePhysicsObject
             if (physics.boosting)
             {
                 forwardAccelHandlingForThisFrame = (physics.inAir) ? physics.data.boostAccelerationForwardAir : physics.data.boostAccelerationForward;
+                brakeNormalAccelHandlingForThisFrame = (physics.inAir) ? physics.data.boostBrakeForward : physics.data.boostBrakeForwardAir;    
                 steeringAccelHandlingForThisFrame = (physics.inAir) ? physics.data.boostAccelerationSteeringAir : physics.data.boostAccelerationSteering;
             }
             else if (physics.boostEnding)
-                forwardAccelHandlingForThisFrame = steeringAccelHandlingForThisFrame = 0.0f;  // only apply natural deceleration of boost is ending
+                forwardAccelHandlingForThisFrame = steeringAccelHandlingForThisFrame = brakeNormalAccelHandlingForThisFrame = 0.0f;  // only apply natural deceleration of boost is ending
 
             // New code does this calculation automatically - Jan 28, 2025 
+            // determine amount to apply
+            
 
             float forwardAccelerationForThisTick = forwardAccelHandlingForThisFrame * Time.fixedDeltaTime;
+            float brakeNormalAccelerationForThisTick = brakeNormalAccelHandlingForThisFrame * Time.fixedDeltaTime;  
             float steeringAccelerationForThisTick = steeringAccelHandlingForThisFrame * Time.fixedDeltaTime;
 
             // if the boost is ending - we want to decelerate
@@ -358,19 +392,28 @@ internal class Car : BasePhysicsObject
 
             if (accelerateInput)
             {
-                if (physics.forwardTorque > 0)
-                    physics.forwardTorque -= physics.data.decelerationChangeDirection * Time.fixedDeltaTime;
+                if (physics.accelTimer < 1)
+                    physics.accelTimer += (1.0f / (float)accelerationCurveNumTicks);
+               
+                if (physics.accelTimer > 1)
+                    physics.accelTimer = 1;
 
-                physics.forwardTorque += -forwardAccelerationForThisTick;
+                forwardAccelerationForThisTick *= accelerationCurve.Evaluate(physics.accelTimer);
+                physics.forwardTorque -= forwardAccelerationForThisTick;
             }
 
-            if (decelerateInput)
+            if (brakeNormalInput)
             {
-                if (physics.forwardTorque < 0)
-                    physics.forwardTorque += physics.data.decelerationChangeDirection * Time.fixedDeltaTime;
+                if (physics.brakeNormalTimer < 1)
+                    physics.brakeNormalTimer += (1.0f / (float)brakeNormalCurveNumTicks);
 
-                physics.forwardTorque += forwardAccelerationForThisTick;
+                if (physics.brakeNormalTimer > 1)
+                    physics.brakeNormalTimer = 1;
+
+                brakeNormalAccelerationForThisTick *= brakeNormalCurve.Evaluate(physics.brakeNormalTimer);
+                physics.brakeTorque += (brakeNormalAccelerationForThisTick * physics.data.brakeNormalIntensity);
             }
+    
 
             if (steerLeftInput || steerRightInput)
             {
@@ -384,6 +427,7 @@ internal class Car : BasePhysicsObject
                 else
                     physics.steerTimer = 0;
             }
+
 
             // multiply so the car can have a smaller turning circle as it gets faster
             float steeringChangeFactor = steeringAccelerationForThisTick;
@@ -422,9 +466,10 @@ internal class Car : BasePhysicsObject
                     cameraTurnPercentage = 0;
             }
 
-        }
 
-        Debug.Log("Camera turn percentage: " + cameraTurnPercentage);
+        }
+       
+        Debug.Log("Brake Torque on Rigidbody " + physics.brakeTorque + " Forward Torque on Rigidbody " + physics.forwardTorque);
 
         //
         // APPLICATION OF THE MOMENTUM OF THE CAR
@@ -445,18 +490,31 @@ internal class Car : BasePhysicsObject
         if (!steerInput)
             physics.rotationTorque *= physics.data.decelerationSteering; // should be a curve too ?!
 
-        float topSpeed = physics.data.maxForwardTorque;
+        float maxForwardTorque = physics.data.maxForwardTorque;
 
         // test
         // if the player is boosting we don't want them 
         if (physics.boosting || physics.boostEnding)
-            topSpeed = physics.data.maxForwardTorqueBoost;
+            maxForwardTorque = physics.data.maxForwardTorqueBoost;
 
         // anti-big rigs (apply this one at a time)
-        if (physics.forwardTorque > topSpeed)
-            physics.forwardTorque = topSpeed;
-        else if (physics.forwardTorque < -topSpeed)
-            physics.forwardTorque = -topSpeed;
+        if (physics.forwardTorque > maxForwardTorque)
+            physics.forwardTorque = maxForwardTorque;
+        else if (physics.forwardTorque < -maxForwardTorque)
+            physics.forwardTorque = -maxForwardTorque;
+
+        float maxBrakeTorque = physics.data.maxBrakeTorque;
+
+        // test
+        // if the player is boosting we don't want them 
+        if (physics.boosting || physics.boostEnding)
+            maxBrakeTorque = physics.data.maxBrakeTorqueBoost;
+
+        // anti-big rigs (apply this one at a time)
+        if (physics.brakeTorque > maxBrakeTorque)
+            physics.brakeTorque = maxBrakeTorque;
+        else if (physics.brakeTorque < -maxBrakeTorque)
+            physics.brakeTorque = -maxBrakeTorque;
 
         //
         // APPLY MOTION
@@ -467,22 +525,26 @@ internal class Car : BasePhysicsObject
             bool needFrontWheelDrive = (driveType == (CarDriveType.FrontWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
             bool needRearWheelDrive = (driveType == (CarDriveType.RearWheelDrive) || (driveType == (CarDriveType.FourWheelDrive)));
 
+            // unity uses absolute values lol
+            float currentMotorValue = (moveInput) ? physics.forwardTorque : 0;
+            float currentBrakeValue = (brakeNormalInput) ? physics.brakeTorque : 0; 
+
             if (needFrontWheelDrive)
             {
-                physics.wheelLeftFrontCollider.motorTorque = (moveInput) ? (physics.wheelLeftFrontCollider.motorTorque + physics.forwardTorque) : 0;
-                physics.wheelRightFrontCollider.motorTorque = (moveInput) ? (physics.wheelRightFrontCollider.motorTorque + physics.forwardTorque) : 0;
+                physics.wheelLeftFrontCollider.motorTorque = physics.wheelRightFrontCollider.motorTorque = currentMotorValue;
+                physics.wheelLeftFrontCollider.brakeTorque = physics.wheelRightFrontCollider.brakeTorque = currentBrakeValue;
             }
 
             if (needRearWheelDrive)
             {
-                physics.wheelLeftBackCollider.motorTorque = (moveInput) ? (physics.wheelLeftBackCollider.motorTorque + physics.forwardTorque) : 0;
-                physics.wheelRightBackCollider.motorTorque = (moveInput) ? (physics.wheelRightBackCollider.motorTorque + physics.forwardTorque) : 0;
+                physics.wheelLeftBackCollider.motorTorque = physics.wheelRightBackCollider.motorTorque = currentMotorValue;
+                physics.wheelLeftBackCollider.brakeTorque = physics.wheelRightBackCollider.brakeTorque = currentBrakeValue;
             }
         }
 
         // car rotation 
 
-        // apply a final factor baseed on the linear velocity
+        // apply a final factor to the steering to ensure the steering feels roughly the same at different velocity
         float steeringRampFactor = Math.Clamp(physRigidbody.linearVelocity.magnitude / physics.data.maxSteeringVelocity, 
             physics.data.minSteeringAmount, physics.data.maxSteeringAmount);
 
@@ -598,6 +660,10 @@ internal class Car : BasePhysicsObject
         physics.data.boostAccelerationForwardAir += info.boostAccelerationForwardAir;
         physics.data.boostAccelerationSteering += info.boostAccelerationSteering;
         physics.data.boostAccelerationSteeringAir += info.boostAccelerationSteeringAir;
+        physics.data.brakeForward += info.brakeForward;
+        physics.data.brakeForwardAir += info.brakeForwardAir;
+        physics.data.boostBrakeForward += info.boostBrakeForward;
+        physics.data.boostBrakeForwardAir += info.boostBrakeForwardAir; 
         physics.data.boostMax += info.boostMax;
         physics.data.deceleration += info.deceleration;
         physics.data.decelerationAir += info.decelerationAir;
@@ -610,7 +676,9 @@ internal class Car : BasePhysicsObject
         physics.data.maxSteeringVelocity += info.maxSteeringVelocity;
         physics.data.maxForwardTorque += info.maxForwardTorque;
         physics.data.maxForwardTorqueBoost += info.maxForwardTorqueBoost;
-
+        physics.data.maxBrakeTorque += info.maxBrakeTorque;
+        physics.data.maxBrakeTorqueBoost += info.maxBrakeTorqueBoost;
+        physics.data.brakeNormalIntensity += info.brakeNormalIntensity; //e-brake should be different intensity w/different curve but same max
         physics.data.maxTurnCameraAngle += info.maxTurnCameraAngle;
         physics.data.cameraRelativeX += info.cameraRelativeX;
         physics.data.cameraRelativeY += info.cameraRelativeY;
@@ -658,4 +726,15 @@ internal class Car : BasePhysicsObject
         return false;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        physics.numCollisions++;
+        physics.inAir = (physics.numCollisions == 0);   
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        physics.numCollisions--;
+        physics.inAir = (physics.numCollisions == 0);
+    }
 }

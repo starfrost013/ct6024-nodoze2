@@ -10,8 +10,9 @@ ReliabilityText = Can cross Mount Everest
 [Handling]
 
 MaxVelocity = 9.0							; Top speed
-MaxForwardTorque = 2.2						; Max forward torque
-MaxForwardTorqueBoost =	7.0					; Top speed during boost
+MaxForwardTorque = 700.0					; Max forward torque
+MaxForwardTorqueBoost =	900.0				; Top speed during boost
+
 AccelerationForward = 7.0					; Acceleration of car (needs to ramp up in accordance with a curve)
 AccelerationSteering = 6.0					; Acceleration to apply in lateral direction
 MinimumSteeringAmount = 0.25				; Magnitude of the minimum steering
@@ -23,6 +24,14 @@ Deceleration = 0.935						; Deceleration while idle (must be below 1)
 DecelerationSteering = 0.945				; Deceleration while steering (must be below 1)
 DecelerationChangeDirection = 8.0			; Deceleration while changing direction
 SteeringIntensity = 1.5						; Intensity of steering (how fast it turns)	
+
+BrakeNormalIntensity = 400					; Intensity of braking (how fast it stops)
+BrakeForward = 10.0							; Forward braking intensity
+BrakeForwardAir = 2.0						; Forward braking intensity in the air
+BoostBrakeForward = 10.0					; Forward braking intensity while boosting
+BoostBrakeForwardAir = 2.0					; Forward braking intensity in the air while boosting
+MaxBrakeTorque = 500.0						; Max brake torque	
+MaxBrakeTorqueBoost = 700.0					; Max brake torque during boost
 
 DecelerationAir = 0.999						; Deceleration in the air
 MaxSteeringTorque = 9.0						; Maximum torque

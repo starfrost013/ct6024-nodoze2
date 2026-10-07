@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class UpgradUIController : MonoBehaviour
+public class UpgradeUIController : MonoBehaviour
 {
     const string DROPDOWN_NAME = "SelectUpgradeDropdown";
     const string DESCRIPTION_TEXT_NAME = "TextUpgradeDescription";

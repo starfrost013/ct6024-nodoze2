@@ -10,35 +10,46 @@ using UnityEngine;
 
 internal class CarModifier
 {
-    // Characteristics of the car
+    // GENERAL of the car
     internal float maxVelocity;                                 // maximum velocity
-    internal float maxForwardTorque;
-    internal float maxForwardTorqueBoost;
-    internal float accelerationForward;                         // acceleration while moving forward
+    internal float maxForwardTorque;                            // maximum forward torque
+    internal float maxForwardTorqueBoost;                       // maximum forward torque while boosting
+    internal float maxBrakeTorque;                              // maximum brake torque
+    internal float maxBrakeTorqueBoost;                         // maximum brake torque while boosting
+    internal float accelerationForward;                         // acceleration while moving forward (note: the acceleration curve is used to control the overall flow of acceleration)
     internal float accelerationSteering;
     internal float accelerationForwardAir;
     internal float accelerationSteeringAir;
+
+    // braking characteristics of the car todo: do we need brake steering
+    internal float brakeForward;                                // brake while moving forward
+    internal float brakeForwardAir;                             // brake while moving forward in the air
+    
+    // natural deceleration
     internal float deceleration;
     internal float decelerationSteering;                        // deceleration while steering
     internal float decelerationAir;                             // deceleration in the air
     internal float decelerationChangeDirection;                 // deceleration when the car changes direction [W/S]
     internal float maxSteeringTorque;                           // maximum torque
 
+    // steering
     internal float steeringIntensity;                           // steering intensity of the car (curve time is controlled by the steering curve)
-                                                                // 
     internal float minSteeringAmount;                           // minimum speed steering magnitude at 0 speed while stopped
     internal float maxSteeringAmount;                           // maximum speed steering magnitude at maxSteeringVelocity
     internal float maxSteeringVelocity;                         // maximum velocity magnitude
     internal float jumpIntensity;                               // jump intensity of the car (curve time is controlled by the jump curve) 
+    internal float brakeNormalIntensity;                        // brake intensity of the car (curve time is controlled by the brake curve) 
 
     // Boosting characteristics of the car
     internal float boostMax;                                    // total boost amount per 1/60 of a second
     internal float boostDepletionPerTick;                       // total boost depletion per 1/60 of a second
     internal float boostRegenPerTick;                           // total boost regen per 1/60 of a second
-    internal float boostAccelerationForward;
-    internal float boostAccelerationSteering;
-    internal float boostAccelerationForwardAir;
-    internal float boostAccelerationSteeringAir;
+    internal float boostAccelerationForward;                    // acceleration while moving forward while boosting
+    internal float boostAccelerationSteering;                   // acceleration while steering while boosting
+    internal float boostAccelerationForwardAir;                 // acceleration while moving forward in the air while boosting
+    internal float boostAccelerationSteeringAir;                // acceleration while steering in the air while boosting
+    internal float boostBrakeForward;                           // brake while moving forward while boosting
+    internal float boostBrakeForwardAir;                        // brake while moving forward in the air while boosting
 
     // Camera characteristics of the car
     internal float maxTurnCameraAngle;                          // maximum amount the camera can turn when the car is turning (in degrees)
@@ -65,13 +76,17 @@ internal class CarModifier
     {
         // this is horrible but seemed to be the best way to determine if at least one parse failed
         bool success = float.TryParse(ConfigParser.GetValue("Handling", "MaxForwardTorque"), out maxForwardTorque)
-        | float.TryParse(ConfigParser.GetValue("Handling", "MaxVelocity"), out maxVelocity)
         | float.TryParse(ConfigParser.GetValue("Handling", "MaxForwardTorqueBoost"), out maxForwardTorqueBoost)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaxBrakeTorque"), out maxBrakeTorque)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaxBrakeTorqueBoost"), out maxBrakeTorqueBoost)
         | float.TryParse(ConfigParser.GetValue("Handling", "MaxSteeringTorque"), out maxSteeringTorque)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaxVelocity"), out maxVelocity)
         | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationForward"), out accelerationForward)
         | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationSteering"), out accelerationSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationForwardAir"), out accelerationForwardAir)
         | float.TryParse(ConfigParser.GetValue("Handling", "AccelerationSteeringAir"), out accelerationSteeringAir)
+        | float.TryParse(ConfigParser.GetValue("Handling", "BrakeForward"), out brakeForward)
+        | float.TryParse(ConfigParser.GetValue("Handling", "BrakeForwardAir"), out brakeForwardAir)
         | float.TryParse(ConfigParser.GetValue("Handling", "Deceleration"), out deceleration)
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationSteering"), out decelerationSteering)
         | float.TryParse(ConfigParser.GetValue("Handling", "DecelerationAir"), out decelerationAir)
@@ -87,6 +102,7 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationForwardAir"), out boostAccelerationForwardAir)
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"), out boostAccelerationSteeringAir)
         | float.TryParse(ConfigParser.GetValue("Handling", "JumpIntensity"), out jumpIntensity)
+        | float.TryParse(ConfigParser.GetValue("Handling", "BrakeNormalIntensity"), out brakeNormalIntensity)
         | float.TryParse(ConfigParser.GetValue("Camera", "MaxTurnCameraAngle"), out maxTurnCameraAngle)
         | float.TryParse(ConfigParser.GetValue("Camera", "CameraRelativeX"), out cameraRelativeX)
         | float.TryParse(ConfigParser.GetValue("Camera", "CameraRelativeY"), out cameraRelativeY)
