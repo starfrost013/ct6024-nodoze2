@@ -2454,7 +2454,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3647366441898962712, guid: 2b4893d5c46e079498811e9e227ac61a, type: 3}
       propertyPath: m_Name
-      value: FinishLine (1)
+      value: FinishLine
       objectReference: {fileID: 0}
     - target: {fileID: 4167479854056420770, guid: 2b4893d5c46e079498811e9e227ac61a, type: 3}
       propertyPath: m_LocalScale.x
@@ -3368,6 +3368,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 575768940094875606, guid: afc7d5fa54c481540b8554d93defd310, type: 3}
   m_PrefabInstance: {fileID: 800668678}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &809217401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 809217402}
+  m_Layer: 0
+  m_Name: CarStart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &809217402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809217401}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.86602545, z: 0, w: 0.49999994}
+  m_LocalPosition: {x: -88.8, y: -0, z: -88.32}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -120, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -7470,7 +7501,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1493344817371165637, guid: 243ac55ba3ddce94cb608991a283abc4, type: 3}
       propertyPath: m_Name
-      value: CarStart
+      value: StartLine
       objectReference: {fileID: 0}
     - target: {fileID: 2302110852756826495, guid: 243ac55ba3ddce94cb608991a283abc4, type: 3}
       propertyPath: m_LocalScale.x
@@ -8188,3 +8219,4 @@ SceneRoots:
   - {fileID: 1088869102}
   - {fileID: 1995191572}
   - {fileID: 889945850}
+  - {fileID: 809217402}

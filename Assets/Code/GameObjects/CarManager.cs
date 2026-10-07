@@ -10,6 +10,7 @@ internal static class CarManager
 {
     // change this when we have assetbundles
     internal const string CAR_PATH = "Cars/";
+    internal const string OBJECT_NAME_CAR_START = "CarStart";
 
     /* these basically get spawned into the world based on prototype objects stored here */
     internal static GameObject[] carObjects;
@@ -100,10 +101,13 @@ internal static class CarManager
         }
 
         // move the car to the start location
-        GameObject start = GameObject.Find("CarStart");
+        GameObject start = GameObject.Find(OBJECT_NAME_CAR_START);
 
         if (start != null)
+        {
             GameManager.player.carInWorld.gameObject.transform.position = start.transform.position + new Vector3(0.0f, 0.1f, 0.0f);
+            GameManager.player.carInWorld.gameObject.transform.rotation = start.transform.rotation; 
+        }
         else
         {
             Debug.LogWarning("Please insert a start point!");

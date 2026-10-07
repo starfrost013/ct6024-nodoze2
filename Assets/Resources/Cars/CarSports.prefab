@@ -698,6 +698,49 @@ MonoBehaviour:
   wheelRightFront: {fileID: 572049513030126618}
   steeringType: 0
   driveType: 0
+  jumpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0636814
+      value: 0.99398196
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.3877284
+      value: 0.2313464
+      inSlope: -0.38360056
+      outSlope: -0.38360056
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.30496794
+    - serializedVersion: 3
+      time: 0.7980155
+      value: -0.012104601
+      inSlope: -0.033536263
+      outSlope: -0.033536263
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0303344
+      value: 0.14902842
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  jumpCurveNumTicks: 16
 --- !u!54 &8880717086237907726
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -705,10 +748,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3724530064648706856}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1000
-  m_Drag: 0
-  m_AngularDrag: 22.5
+  m_LinearDamping: 0
+  m_AngularDamping: 22.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}

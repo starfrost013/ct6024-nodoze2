@@ -20,6 +20,8 @@ known issues:								                        status
 * car select cars float around in the middle of nowhere  
 * falling out does not reset
 * camera movement on turn was broken				    FIXED
+* car rotation not transferred from spawn object		    FIXED
+
 stuff needed:
 
 * car model 2.0
