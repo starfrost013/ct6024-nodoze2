@@ -20,8 +20,8 @@ MaximumSteeringAmount = 1.0					; Magnitude of the minimum steering
 MaximumSteeringVelocity = 8.0				; Magnitude at which the maximum steering velocity is applied
 AccelerationForwardAir = 3.0				; Acceleration to apply in forward direction while in the air
 AccelerationSteeringAir = 2.5				; Acceleration to apply in lateral direction while in the air
-Deceleration = 0.935						; Deceleration while idle (must be below 1) 
-DecelerationSteering = 0.945				; Deceleration while steering (must be below 1)
+Deceleration = 0.925						; Deceleration while idle (must be below 1) 
+DecelerationSteering = 0.935				; Deceleration while steering (must be below 1)
 DecelerationChangeDirection = 8.0			; Deceleration while changing direction
 SteeringIntensity = 1.5						; Intensity of steering (how fast it turns)	
 

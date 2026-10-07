@@ -12,15 +12,15 @@ ReliabilityText = As long as you don't T-Bone a school bus...
 MaxVelocity = 10.0							; Max speed
 MaxForwardTorque = 650.0					; Max forward torque
 MaxForwardTorqueBoost =	900.0				; Max forward torque during boost
-AccelerationForward = 60.0					; Acceleration of car (needs to ramp up in accordance with a curve)
+AccelerationForward = 70.0					; Acceleration of car (needs to ramp up in accordance with a curve)
 AccelerationSteering = 3.5					; Acceleration to apply in lateral direction
 MinimumSteeringAmount = 0.15				; Magnitude of the minimum steering
 MaximumSteeringAmount = 1.0					; Magnitude of the minimum steering
 MaximumSteeringVelocity = 10.0				; Magnitude at which the maximum steering velocity is applied
 AccelerationForwardAir = 30.0				; Acceleration to apply in forward direction while in the air
 AccelerationSteeringAir = 5.0				; Acceleration to apply in lateral direction while in the air
-Deceleration = 0.965						; Deceleration while idle (must be below 1) 
-DecelerationSteering = 0.95					; Deceleration while steering (must be below 1)
+Deceleration = 0.95							; Deceleration while idle (must be below 1) 
+DecelerationSteering = 0.94					; Deceleration while steering (must be below 1)
 DecelerationChangeDirection = 6.0			; Deceleration while changing direction
 SteeringIntensity = 1.5						; Intensity of steering (how fast it turns)	
 
@@ -45,7 +45,7 @@ BoostDepletionPerTick = 10					; Boost depletion per 1/60 of a second
 BoostRegenPerTick = 6						; Boost depletion per 1/60 of a second
 SteeringType = Manual 						; 0 = Automatic, 1 = Manual, you can use numbers or the names 
 
-JumpIntensity = 160000						; the intensity of the jump
+JumpIntensity = 180000						; the intensity of the jump
 
 [Camera]
 MaxTurnCameraAngle = 19.0					; Maximum camera turn angle
