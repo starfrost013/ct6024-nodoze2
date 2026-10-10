@@ -19,10 +19,12 @@ known issues:								                        status
 * fuel not always fully refueled on level change                    
 * car select cars float around in the middle of nowhere  
 * falling out does not reset
-* camera movement on turn was broken				    FIXED
-* car rotation not transferred from spawn object		    FIXED
-* countdown at 0,0,0						    FIXED
+* camera movement on turn was broken				                FIXED
+* car rotation not transferred from spawn object		            FIXED
+* countdown at 0,0,0						                        FIXED
 * pause doesn't pause
+* level select does not work
+* scrolling only cycles in one direction                            FIXED
 
 stuff needed:
 

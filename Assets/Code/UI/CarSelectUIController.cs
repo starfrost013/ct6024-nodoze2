@@ -83,7 +83,7 @@ public class CarSelectUIController : MonoBehaviour
         selectedCarId--;
 
         if (selectedCarId < 0)
-            selectedCarId = 0;
+            selectedCarId = CarManager.carObjects.Length - 1;
 
         SetupSelectedCar();
     }
