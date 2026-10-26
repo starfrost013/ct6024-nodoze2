@@ -202,23 +202,18 @@ internal class GameModeRaceMode : GameMode
         {
             case RaceState.Starting:
 
-                switch (raceConfigData.eventType)
+                if (raceConfigData.eventType == RaceEventType.Race)
                 {
-                    case RaceEventType.Race:
-                        if (raceTimer.HasStarted())
-                            raceTimer.Restart();
+                    if (raceTimer.HasStarted())
+                        raceTimer.Restart();
+                }   
 
-                        if (raceStartTimer.HasStarted())
-                            raceStartTimer.Restart();
-                        else
-                            raceStartTimer.Start(RACE_START_TIME);
+                if (raceStartTimer.HasStarted())
+                    raceStartTimer.Restart();
+                else
+                    raceStartTimer.Start(RACE_START_TIME);
 
-                        raceState = RaceState.Countdown;
-                        break;
-                    case RaceEventType.Boss: // boss events don't have a time limit
-                        raceState = RaceState.Active;
-                        break;
-                }
+                raceState = RaceState.Countdown;
 
                 break;
             // the countdown state
