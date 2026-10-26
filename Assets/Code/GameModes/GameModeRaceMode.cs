@@ -201,15 +201,25 @@ internal class GameModeRaceMode : GameMode
         switch (raceState)
         {
             case RaceState.Starting:
-                if (raceTimer.HasStarted())
-                    raceTimer.Restart();
 
-                if (raceStartTimer.HasStarted())
-                    raceStartTimer.Restart();
-                else
-                    raceStartTimer.Start(RACE_START_TIME);
+                switch (raceConfigData.eventType)
+                {
+                    case RaceEventType.Race:
+                        if (raceTimer.HasStarted())
+                            raceTimer.Restart();
 
-                raceState = RaceState.Countdown;
+                        if (raceStartTimer.HasStarted())
+                            raceStartTimer.Restart();
+                        else
+                            raceStartTimer.Start(RACE_START_TIME);
+
+                        raceState = RaceState.Countdown;
+                        break;
+                    case RaceEventType.Boss: // boss events don't have a time limit
+                        raceState = RaceState.Active;
+                        break;
+                }
+
                 break;
             // the countdown state
             case RaceState.Countdown:
@@ -218,7 +228,8 @@ internal class GameModeRaceMode : GameMode
             case RaceState.Active:
                 // check if we are out of time
 
-                if (raceConfigData.timeLimit != RaceEvent.TIME_LIMIT_NONE)
+                if (raceConfigData.timeLimit != RaceEvent.TIME_LIMIT_NONE
+                && raceConfigData.eventType == RaceEventType.Race)
                 {
                     long totalTime = raceConfigData.timeLimit - raceTimer.GetElapsedTime();
 
@@ -260,7 +271,7 @@ internal class GameModeRaceMode : GameMode
             && elapsedTime < nextTimeBonus.timerMax);
 
             if (i == 0)
-                awardBonus = (elapsedTime < thisTimeBonus.timerMax);
+                awardBonus = elapsedTime < thisTimeBonus.timerMax;
 
             if (awardBonus)
             {
@@ -487,7 +498,11 @@ internal class GameModeRaceMode : GameMode
                 if (raceState == RaceState.Failed)
                     DrawFailReason(raceGuiStyle);
                 else
-                    DrawTimer(raceGuiStyle);
+                {
+                    // boss events don't have timer
+                    if (raceConfigData.eventType == RaceEventType.Race)
+                        DrawTimer(raceGuiStyle);
+                }
                 DrawFuelGauge(raceGuiStyle);
                 DrawMoneyAmount(raceGuiStyle);
                 break;
