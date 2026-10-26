@@ -2,7 +2,7 @@
 using UnityEngine;
 
 //
-// Domino base definitions
+// Upgrade base definitions
 //
 internal class Upgrade
 {

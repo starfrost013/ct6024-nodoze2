@@ -18,12 +18,13 @@ internal static class GameManager
     // The game state enum. Tells us what to do
     internal enum GameModeEnum
     {
-        Init = 0,
-        Shutdown = 1,
-        MainMenu = 2,
-        RaceMode = 3,
-        RaceFinished = 4,
-        GameComplete = 5,
+        Init,
+        Shutdown,
+        MainMenu,
+        CarSelectMenu,
+        RaceMode,
+        RaceFinished,
+        GameComplete,
     }
 
     // hacks so the gamemanager switches into the right state
@@ -178,6 +179,8 @@ internal static class GameManager
                 return new GameModeInit();
             case GameModeEnum.MainMenu:
                 return new GameModeMainMenu();  
+            case GameModeEnum.CarSelectMenu:
+                return new GameModeCarSelect();
             case GameModeEnum.RaceMode:
                 return new GameModeRaceMode();
             case GameModeEnum.RaceFinished:

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4126615381534713110}
   - component: {fileID: 528962593263435018}
   - component: {fileID: 1351563888727363049}
+  - component: {fileID: 4741077745740954558}
   m_Layer: 5
   m_Name: ButtonRaceMode
   m_TagString: Untagged
@@ -120,7 +121,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 528962593263435018}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4741077745740954558}
+        m_TargetAssemblyTypeName: MainMenuUIController, Assembly-CSharp
+        m_MethodName: MainClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4741077745740954558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153998720984221299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8b39ee461dacd2cf9d7bb488f2f8554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenuUIController
 --- !u!1 &1190965767912181106
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,6 +158,7 @@ GameObject:
   - component: {fileID: 7580686285945419658}
   - component: {fileID: 837061498075978670}
   - component: {fileID: 1591088193704137959}
+  - component: {fileID: 3549303486729848003}
   m_Layer: 5
   m_Name: ButtonExit
   m_TagString: Untagged
@@ -241,7 +267,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 837061498075978670}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3549303486729848003}
+        m_TargetAssemblyTypeName: MainMenuUIController, Assembly-CSharp
+        m_MethodName: ExitClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3549303486729848003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190965767912181106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8b39ee461dacd2cf9d7bb488f2f8554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenuUIController
 --- !u!1 &1280660544357807180
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,7 +736,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: E
+  m_text: Exit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -849,6 +899,7 @@ GameObject:
   - component: {fileID: 5333603888677570681}
   - component: {fileID: 1438746952965417969}
   - component: {fileID: 8171459616906072687}
+  - component: {fileID: 7285852861900676841}
   m_Layer: 5
   m_Name: ButtonBossRush
   m_TagString: Untagged
@@ -957,7 +1008,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1438746952965417969}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7285852861900676841}
+        m_TargetAssemblyTypeName: MainMenuUIController, Assembly-CSharp
+        m_MethodName: BossRushClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7285852861900676841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8136088515415777833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8b39ee461dacd2cf9d7bb488f2f8554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenuUIController
 --- !u!1 &9167154652056306055
 GameObject:
   m_ObjectHideFlags: 0

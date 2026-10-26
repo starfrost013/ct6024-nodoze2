@@ -22,6 +22,7 @@ public class CarSelectUIController : MonoBehaviour
 
     public void Start()
     {
+
         carNameText = transform.parent.transform.Find(NAME_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
         carDescriptionText = transform.parent.transform.Find(DESCRIPTION_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
         carHandlingText = transform.parent.transform.Find(HANDLING_TEXT_NAME).gameObject.GetComponent<TMP_Text>();
