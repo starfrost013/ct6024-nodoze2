@@ -1,9 +1,8 @@
 using UnityEngine;
 
-class SensorResult
-{
-    Vector3 location;  
-};
+abstract class SensorResult { }; // abstratc class for result 
+abstract class SensorData { }; // abstract class for input
+
 /// <summary>
 /// Sensor (October 1, 2026)
 /// 
@@ -13,14 +12,24 @@ class SensorResult
 /// </summary>
 class Sensor : MonoBehaviour
 {
+    /// <summary>
+    /// attached agent
+    /// </summary>
+    private Agent agent;
+
+    public Sensor(ref Agent agent)
+    {
+        this.agent = agent; // reference
+    } 
+
     public virtual void Init()
     {
         
     }
 
-    public virtual void Sense()
-    {
-        
-    }
-
+    public virtual SensorResult Sense(SensorData data) 
+    { 
+        Debug.LogAssertion("Sensor::Sense must be overloaded or overridden!");
+        return null; 
+    } 
 }
