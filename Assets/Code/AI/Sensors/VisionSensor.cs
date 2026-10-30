@@ -27,7 +27,14 @@ class VisionSensorData : SensorData // separation of concerns
     /// <summary>
     /// A list of wanted raycast positions for the player to set
     /// </summary>
-    private List<Vector3> raycastPositions = new();
+    private List<Vector3> _raycastPositions = new();
+    
+    public List<Vector3> raycastPositions
+    {
+        get { return _raycastPositions; }
+        private set { _raycastPositions = value; }
+    }
+
     public float basicVisionRadius;
 
     /// <summary>
@@ -38,6 +45,7 @@ class VisionSensorData : SensorData // separation of concerns
     public void AddRaycastPosition(Vector3 pos) { raycastPositions.Add(pos); }
     public void RemoveRaycastPosition(Vector3 pos) {raycastPositions.Remove(pos); } 
 
+
 };
 
 class VisionSensor : Sensor
@@ -45,11 +53,25 @@ class VisionSensor : Sensor
 
     public VisionSensor(ref Agent agent) : base(ref agent) { }
     
+    private bool DoRaycast(Vector3 start, Vector3 end, float radius)
+    {
+        RaycastHit hit = new();
+             
+        // I wonder how slow this is
+        if (Physics.Raycast(start, end, out hit, radius))
+        {
+            // use the target position, which is filled in from the position of the agnet that it is targeting
+            if (hit.transform.root.position != end) 
+                return false; 
+        }
+
+        return true;
+    }
+
     // this method is hidden
     public VisionSensorResult Sense(VisionSensorData data) 
     { 
         VisionSensorResult result = new();
-        RaycastHit hit = new();
 
         Vector3 deltaPosition = data.targetPosition - data.currentPosition;
 
@@ -60,12 +82,20 @@ class VisionSensor : Sensor
         if (Vector3.Angle(transform.forward, deltaPosition) > data.viewAngle)
             goto done;
 
-        // I wonder how slow this is
-        if (Physics.Raycast(transform.position, deltaPosition, out hit, data.basicVisionRadius))
+        if (data.raycastPositions.Count == 0)
         {
-            // use the target position, which is filled in from the position of the agnet that it is targeting
-            if (hit.transform.root.position != data.targetPosition) 
+            if (!DoRaycast(data.currentPosition, data.targetPosition, data.basicVisionRadius))
                 goto done;
+        }
+        else // each specified position
+        {
+            foreach (Vector3 position in data.raycastPositions)
+            {
+                Vector3 realFinalPosition = data.currentPosition + position;
+
+                if (!DoRaycast(realFinalPosition, data.targetPosition, data.basicVisionRadius))
+                    goto done;
+            }
         }
 
         // succesfully completed

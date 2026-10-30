@@ -10,7 +10,7 @@ class Agent : MonoBehaviour
 {
     private List<Sensor> sensors = new(); 
 
-    void Start()
+    internal virtual void Start()
     {
         AIManager.Add(this);
     }
