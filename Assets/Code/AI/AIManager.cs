@@ -16,7 +16,10 @@ static class AIManager
     /// </summary>
     private static List<Agent> agents = new(); 
 
-    public static Blackboard blackboard; 
+    /// <summary>
+    /// The blackboard which enables agents to see part sof each other
+    /// </summary>
+    public static Blackboard blackboard = new(); 
     
     //
     // METHODS
@@ -58,5 +61,8 @@ static class AIManager
         return false;        
     }
 
-    
+    public static void FireEvent(AIEventType evt)
+    {
+        
+    }
 };
