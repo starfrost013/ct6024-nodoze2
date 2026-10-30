@@ -1,5 +1,9 @@
 using UnityEngine;
 
+class SensorResult
+{
+    Vector3 location;  
+};
 /// <summary>
 /// Sensor (October 1, 2026)
 /// 

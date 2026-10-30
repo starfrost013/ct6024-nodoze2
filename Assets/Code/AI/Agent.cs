@@ -8,5 +8,10 @@ using UnityEngine;
 /// </summary>
 class Agent : MonoBehaviour
 {
-    private List<Sensor> sensors; 
+    private List<Sensor> sensors = new(); 
+
+    void Start()
+    {
+        AIManager.Add(this);
+    }
 }
