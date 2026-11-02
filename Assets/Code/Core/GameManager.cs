@@ -27,6 +27,16 @@ internal static class GameManager
         GameComplete,
     }
 
+    /// <summary>
+    /// legacy gui window ids
+    /// set up as a bitflag so globalsettings cna load it
+    /// </summary>
+    internal enum DebugFlags
+    {
+        DebugMain = 1,
+        DebugAI = 1 << 1,
+    };
+
     // hacks so the gamemanager switches into the right state
     // i think in the future everything will have to be done in one scene
     internal const string SCENE_MENU = "MenuMain";
@@ -45,7 +55,6 @@ internal static class GameManager
 
     // links the engine and gamemanager
     internal static GameManagerObject managerObject { get; private set; }
-
     private static Scene mainScene
     {
         get { return SceneManager.GetActiveScene(); }
@@ -131,7 +140,7 @@ internal static class GameManager
     {
         if (Input.GetKey(KeyCode.R)
             && state == GameModeEnum.RaceMode
-            && GlobalSettings.debugMode)
+            && GlobalSettings.debugFlags != 0)
         {
             initialised = false; // make everything get reinit'ed
             SetGameState(GameModeEnum.Init);

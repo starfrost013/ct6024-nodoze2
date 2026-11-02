@@ -33,7 +33,11 @@ public class GameManagerObject : MonoBehaviour
     {
         GameManager.OnLegacyGUI();
 
-        if (GlobalSettings.debugMode)
-            GameManagerDebug.DrawDebugUI(buildDate.text);
+        if (GlobalSettings.debugFlags.HasFlag(GameManager.DebugFlags.DebugMain))
+            GameManagerDebug.OnGUI(buildDate.text);
+
+        if (GlobalSettings.debugFlags.HasFlag(GameManager.DebugFlags.DebugAI))
+            AIDebug.OnGUI();
+
     }
 }

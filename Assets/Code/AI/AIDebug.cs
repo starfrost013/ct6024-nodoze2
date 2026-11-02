@@ -6,10 +6,21 @@ using UnityEngine;
 // Insert into primary scene...
 //
 
-class AIDebug : MonoBehaviour
+
+static class AIDebug
 {
-    public void OnGUI()
+    public static void DrawDebugUIWindow(int windowId)
     {
-        GUI.Label(new Rect(100, 100, 60, 60), "AI Debug System");
+        
+    }
+
+    public static void OnGUI()
+    {
+        //maybe we need to update less...
+        float width = 450, height = 300;
+
+        // we don't need any extra id
+        GUI.Window((int)GameManager.DebugFlags.DebugAI, new Rect(10, Screen.height - height - 10, width, height),
+            DrawDebugUIWindow, "AI Debugging System");
     }
 }; 

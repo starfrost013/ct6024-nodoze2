@@ -14,7 +14,7 @@ internal static class GlobalSettings
     /// <summary>
     /// Enables Connor's Super Debug Screen if enabled.
     /// </summary>
-    internal static bool debugMode = false; 
+    internal static GameManager.DebugFlags debugFlags;
 
     /// <summary>
     /// this is a big klutz so that i don't have to rewrite ConfigParser with 5 days before the demo
@@ -41,6 +41,6 @@ internal static class GlobalSettings
         ConfigParser.Parse(settingsFileText);
 
         // we don't really care if these exist
-        bool.TryParse(ConfigParser.GetValue("DebugMode"), out debugMode);
+        Enum.TryParse<GameManager.DebugFlags>(ConfigParser.GetValue("DebugMode"), out debugFlags);
     }
 };
