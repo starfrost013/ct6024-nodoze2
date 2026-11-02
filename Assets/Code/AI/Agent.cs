@@ -13,5 +13,11 @@ class Agent : MonoBehaviour
     internal virtual void Start()
     {
         AIManager.Add(this);
+        
+    }
+
+    internal virtual void FixedUpdate()
+    {
+        
     }
 }
