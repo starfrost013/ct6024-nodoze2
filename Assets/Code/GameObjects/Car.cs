@@ -469,7 +469,7 @@ internal class Car : BasePhysicsObject
 
         }
        
-        Debug.Log("Brake Torque on Rigidbody " + physics.brakeTorque + " Forward Torque on Rigidbody " + physics.forwardTorque);
+        // Debug.Log("Brake Torque on Rigidbody " + physics.brakeTorque + " Forward Torque on Rigidbody " + physics.forwardTorque);
 
         //
         // APPLICATION OF THE MOMENTUM OF THE CAR

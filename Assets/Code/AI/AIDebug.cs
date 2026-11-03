@@ -20,7 +20,7 @@ static class AIDebug
         float width = 450, height = 300;
 
         // we don't need any extra id
-        GUI.Window((int)GameManager.DebugFlags.DebugAI, new Rect(10, Screen.height - height - 10, width, height),
+        GUI.Window((int)GameManager.DebugFlags.DebugAI, new Rect(Screen.width - width - 10, Screen.height - height - 10, width, height),
             DrawDebugUIWindow, "AI Debugging System");
     }
 }; 
