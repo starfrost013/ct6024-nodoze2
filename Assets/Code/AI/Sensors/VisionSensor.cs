@@ -43,8 +43,6 @@ class VisionSensorData : SensorData // separation of concerns
 
     public void AddRaycastPosition(Vector3 pos) { raycastPositions.Add(pos); }
     public void RemoveRaycastPosition(Vector3 pos) {raycastPositions.Remove(pos); } 
-
-
 };
 
 class VisionSensor : Sensor

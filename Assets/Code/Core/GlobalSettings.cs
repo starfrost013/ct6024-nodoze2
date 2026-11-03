@@ -41,6 +41,6 @@ internal static class GlobalSettings
         ConfigParser.Parse(settingsFileText);
 
         // we don't really care if these exist
-        Enum.TryParse<GameManager.DebugFlags>(ConfigParser.GetValue("DebugMode"), out debugFlags);
+        Enum.TryParse<GameManager.DebugFlags>(ConfigParser.GetValue("DebugFlags"), out debugFlags);
     }
 };
