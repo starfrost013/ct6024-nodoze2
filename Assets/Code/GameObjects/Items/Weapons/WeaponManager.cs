@@ -10,7 +10,7 @@ using UnityEngine;
 /// </summary>
 static class WeaponManager
 {
-    private const string WEAPON_PATH = "Weapons/";
+    public const string WEAPON_PATH = "Weapons/";
 
     internal static GameObject[] weapons;
 

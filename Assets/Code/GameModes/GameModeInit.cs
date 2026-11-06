@@ -12,6 +12,7 @@ internal class GameModeInit : GameMode
         CarManager.Init();
         UpgradeManager.Init();
         UIManager.Init();
+        WeaponManager.Init();
 
         GameManager.SetGameState(GameManager.GameModeEnum.MainMenu);
     }
