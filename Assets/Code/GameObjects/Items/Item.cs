@@ -10,6 +10,11 @@ using UnityEngine;
 /// </summary>
 public class Item : MonoBehaviour
 {
+    /// <summary>
+    /// don't allow this item to be duplicated in the inventroy
+    /// </summary>
+    internal bool preventDuplication;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

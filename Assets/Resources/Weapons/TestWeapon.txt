@@ -1,0 +1,7 @@
+[Weapon]
+
+Name = Test Weapon
+Cost = 4000
+NumAttacks = 1
+
+Attack0 = TestAttack
