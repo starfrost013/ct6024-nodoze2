@@ -32,7 +32,7 @@ static class UIManager
         }
     }
 
-    internal static GameObject GetMenuByName(string name)
+    internal static GameObject GetUIByName(string name)
     {
         foreach (GameObject menu in menus)
         {
@@ -43,7 +43,7 @@ static class UIManager
         return null;
     }
 
-    internal static void DestroyCurrentMenu()
+    internal static void DestroyCurrentUI()
     {
         if (currentMenu != null)
         {
@@ -52,9 +52,9 @@ static class UIManager
         }
     }
 
-    internal static void SetCurrentMenu(string name)
+    internal static void SetCurrentUI(string name)
     {
-        GameObject menu = GetMenuByName(name);
+        GameObject menu = GetUIByName(name);
 
         if (menu == null)
         {

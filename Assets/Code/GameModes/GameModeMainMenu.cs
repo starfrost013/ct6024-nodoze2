@@ -10,7 +10,7 @@ internal class GameModeMainMenu : GameMode
     {
         Debug.Log("Entering the main menu...");
 
-        UIManager.SetCurrentMenu(MENU_NAME_START_SCREEN);
+        UIManager.SetCurrentUI(MENU_NAME_START_SCREEN);
     }
 
     internal override void OnFrame() { }

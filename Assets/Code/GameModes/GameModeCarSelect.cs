@@ -25,7 +25,7 @@ class GameModeCarSelect : GameMode
     { 
         if (!setUi)
         {
-            UIManager.SetCurrentMenu(MENU_NAME_SELECT_CAR);
+            UIManager.SetCurrentUI(MENU_NAME_SELECT_CAR);
             setUi = true; 
         }
 
