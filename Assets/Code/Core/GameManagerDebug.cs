@@ -60,7 +60,7 @@ public static class GameManagerDebug
 
     internal static void OnGUI(string buildDate)
     {
-        if ((int)GlobalSettings.debugFlags != 0)
+        if (!GlobalSettings.debugFlags.HasFlag(GameManager.DebugFlags.DebugMain))
             return;
 
         // first draw the version information
@@ -78,7 +78,7 @@ public static class GameManagerDebug
         float width = 450, height = 300;
 
         // we don't need any extra id
-        GUI.Window((int)GameManager.DebugFlags.DebugMain, new Rect(10, Screen.height - height - 10, width, height),
+        GUI.Window(0, new Rect(10, Screen.height - height - 10, width, height),
             DrawDebugUIWindow, "\"It's a Bug!\" Debug System");
     }
 
