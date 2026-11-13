@@ -22,6 +22,8 @@ public class Weapon : Item
 
     protected List<Attack> attacks = new();
 
+    public WeaponState state; 
+
     /// <summary>
     /// "general" weapon state enum shared between all weapons
     /// TODO: may get grid of this
@@ -30,7 +32,6 @@ public class Weapon : Item
     {
         Inactive = 0,
         Active = 1,
-
         Fired = 2,
     };
     
