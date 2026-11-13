@@ -153,12 +153,12 @@ internal static class GameManager
         {
             if (!gamePaused)
             {
-                UIManager.SetCurrentUI("PauseUI");
+                UIManager.AddUI("PauseUI");
                 gamePaused = true;
             }
             else
             {
-                UIManager.DestroyCurrentUI();
+                UIManager.DestroyUI("PauseUI");
                 gamePaused = false; 
             }
         }

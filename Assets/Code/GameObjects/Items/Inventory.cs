@@ -18,7 +18,7 @@ class Inventory
             return; 
         }
 
-        items.Add(item);
+        items.Add(item);    
     }
 
     public void RemoveItem(Item item)

@@ -19,7 +19,12 @@ static class UIManager
 
     internal static GameObject[] menus;
 
-    internal static GameObject currentMenu { get; private set; }
+    private static List<GameObject> _currentMenus = new(); // compile time initialisation
+    internal static List<GameObject> currentMenus
+    {
+        get { return _currentMenus; }
+        private set { value = currentMenus; }
+    }
 
     internal static void Init()
     {
@@ -30,6 +35,7 @@ static class UIManager
             Debug.LogError("Failed to load menus!");
             return;
         }
+        
     }
 
     internal static GameObject GetUIByName(string name)
@@ -43,29 +49,54 @@ static class UIManager
         return null;
     }
 
-    internal static void DestroyCurrentUI()
-    {
-        if (currentMenu != null)
-        {
-            GameObject.Destroy(currentMenu);
-            currentMenu = null;
-        }
-    }
-
-    internal static void SetCurrentUI(string name)
+    internal static void AddUI(string name)
     {
         GameObject menu = GetUIByName(name);
 
         if (menu == null)
         {
-            Debug.LogError("Tried to get INVALID menu " + name);
+            Debug.LogError("UIManager::AddUI - Tried to get INVALID menu " + name);
             return;
         }
 
-        // remove the current menu if it exists
-        if (currentMenu)
-            GameObject.Destroy(currentMenu);
-
-        currentMenu = GameObject.Instantiate(menu);
+        // instantiate and add 
+        GameObject clone = GameObject.Instantiate(menu); 
+        
+        currentMenus.Add(clone); 
     }
+
+    internal static void DestroyUI(string name)
+    {
+        GameObject ui = GetUIByName(name);
+
+        if (ui != null)
+        {
+            GameObject.Destroy(ui);
+            currentMenus.Remove(ui);
+        }
+        else
+            Debug.LogError("UIManager::DestroyUI - UI was not in UI list");
+
+    }
+    
+    internal static void EnableUI(string name)
+    {
+        GameObject ui = GetUIByName(name);
+
+        if (ui != null)
+            ui.SetActive(true);
+        else
+            Debug.LogError("UIManager::EnableUI - UI was not in UI list");        
+    }
+
+    internal static void DisableUI(string name)
+    {
+        GameObject ui = GetUIByName(name);
+
+        if (ui != null)
+            ui.SetActive(false);
+        else
+            Debug.LogError("UIManager::EnableUI - UI was not in UI list");         
+    }
+
 }
