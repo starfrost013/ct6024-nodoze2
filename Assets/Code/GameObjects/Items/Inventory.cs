@@ -31,7 +31,7 @@ class Inventory
         if (id < 0 
         || id >= items.Count)
         {
-            Debug.LogWarning("Inventory::IsIndexActivated - Item ID " + id + "does not exist!");   
+            Debug.LogWarning("Inventory::IsIndexActivated - Item ID " + id + " does not exist!");   
             return false;
         }
 
@@ -49,7 +49,7 @@ class Inventory
         if (id < 0 
         || id >= items.Count)
         {
-            Debug.LogWarning("Inventory::SetActivatedIndex - Item ID " + id + "does not exist");   
+            Debug.LogWarning("Inventory::SetActivatedIndex - Item ID " + id + " does not exist");   
             return;
         }
 
