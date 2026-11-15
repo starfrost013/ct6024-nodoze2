@@ -200,5 +200,11 @@ internal static class GameManager
                 Debug.Log("GameManager::GetModeFromState selected invalid game state (Restarting the game...)");
                 return new GameModeInit();
         }
-     }
+    }
+
+    internal static void Shutdown()
+    {
+        // TODO: actually shut down
+        Application.Quit();
+    }
 }

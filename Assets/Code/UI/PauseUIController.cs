@@ -5,6 +5,6 @@ internal class PauseUIController : MonoBehaviour
 {
     public void OnExitClicked()
     {
-        Application.Quit();
+        GameManager.Shutdown();
     }
 }

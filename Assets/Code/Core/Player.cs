@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 internal class Player
 {
-    internal struct PlayerStats
+    internal class PlayerStats
     {
         /// <summary>
         /// coolness used to buy things
@@ -18,7 +18,12 @@ internal class Player
         /// <summary>
         /// the style points that you have
         /// </summary>
-        internal UInt64 stylePoints;
+        internal ulong stylePoints;
+
+        /// <summary>   
+        /// the items that you hold
+        /// </summary>
+        internal Inventory inventory = new();
     };
 
     /// <summary>

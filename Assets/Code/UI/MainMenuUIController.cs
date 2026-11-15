@@ -23,6 +23,6 @@ class MainMenuUIController : MonoBehaviour
 
     public void ExitClicked()
     {
-        
+        GameManager.Shutdown();
     }
 }

@@ -407,6 +407,7 @@ internal class GameModeRaceMode : GameMode
         raceGuiStyle.alignment = TextAnchor.UpperLeft;
     }
 
+
     private void DrawCountdownUI(GUIStyle raceGuiStyle)
     {
         //todo: don't need to find the car start twice.
@@ -448,9 +449,20 @@ internal class GameModeRaceMode : GameMode
         {
             AudioManager.PlayAudioAtCameraPosition("Announcer_CountdownGO", 1.0f);
             // since there is no car selection menu
-            CarManager.SpawnPlayerCar();
-            raceState = RaceState.Active;
+            StartRace();
+
         }
+    }
+
+    /// <summary>
+    /// Called when the race is started, so we can start decoupling this frrom the UI code
+    /// </summary>
+    private void StartRace()
+    {
+        CarManager.SpawnPlayerCar();
+        raceState = RaceState.Active;
+        // enable race ui
+        UIManager.AddUI("InventoryUI");
     }
 
     internal void FailRace(RaceFailReason failReason, long time = RESTART_TIME_FAIL)
@@ -468,6 +480,7 @@ internal class GameModeRaceMode : GameMode
 
     internal override void OnLeave()
     {
+        UIManager.DestroyUI("InventoryUI"); // no need to disable it
     }
 
     // TEMPORARY UI LEFT OVER FROM VERSION 1.X - REPLACE IN 2.0

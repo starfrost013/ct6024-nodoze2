@@ -15,6 +15,11 @@ public class Item : MonoBehaviour
     /// </summary>
     internal bool preventDuplication;
 
+    /// <summary>
+    /// this item is currently selectred
+    /// </summary>
+    internal bool isActive = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

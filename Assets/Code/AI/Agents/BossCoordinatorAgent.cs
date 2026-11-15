@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 
 
 /// <summary>
@@ -5,6 +6,8 @@
 /// </summary>
 class BossCoordinatorAgent : Agent
 {
+    private List<EnemyCarAgent> enemyCars = new();
+
     internal override void Start()
     {
         base.Start();

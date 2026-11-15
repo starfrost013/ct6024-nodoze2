@@ -9,11 +9,20 @@ using UnityEngine;
 
 static class AIDebug
 {
+    private static ImguiInputBox inputBox = new();
+
     public static void DrawDebugUIWindow(int windowId)
     {
-        
-    }
+        GUI.Label(new(0, 20, 100, 20), "Select Agent"); 
 
+        inputBox.position = new(0, 40);
+        inputBox.size = new(200, 400);
+        inputBox.Update();
+    }
+    // actually dogshit code
+
+    public static void Add(string name) => inputBox.items.Add(name);
+    public static void Remove(string name) => inputBox.items.Remove(name);
     public static void OnGUI()
     {
         //maybe we need to update less...

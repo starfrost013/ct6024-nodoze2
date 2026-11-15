@@ -155,16 +155,7 @@ internal class Car : BasePhysicsObject
     [SerializeField]
     internal uint brakeNormalCurveNumTicks;
 
-    /// <summary>
-    /// Modifier sets that have been applied 
-    /// </summary>
-    List<CarModifier> _modifiers = new();
-
-    internal List<CarModifier> modifiers
-    {
-        get { return _modifiers; }
-        private set { _modifiers = value; }
-    }
+    internal List<CarModifier> modifiers { get; private set; } = new();
 
     internal TextAsset configText { get; private set; }
 

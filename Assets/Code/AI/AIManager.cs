@@ -13,7 +13,9 @@ static class AIManager
     /// registered by the agent when it is created.
     /// This list is always accessed *by reference*, as c# uses reference types by default: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/reference-types
     /// </summary>
-    private static List<Agent> agents = new(); 
+    
+    public static List<Agent> agents { get; private set; } = new();
+
 
     /// <summary>
     /// The blackboard which enables agents to see part sof each other
@@ -33,6 +35,7 @@ static class AIManager
         }
 
         agents.Add(agent);
+        AIDebug.Add(agent.name);
 
         Debug.Log("AI Manager registered a new agent " + agent.name);
         return true; 
@@ -54,7 +57,10 @@ static class AIManager
             goto error; 
         }
 
+        AIDebug.Remove(agent.name);
+
         Debug.Log("AI Manager removed the agent " + agent.name);
+    
         return true; 
     error:
         return false;        
