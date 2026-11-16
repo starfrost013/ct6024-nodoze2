@@ -7,6 +7,8 @@ using UnityEngine;
 /// 
 /// Each item class has a manager that handles how it gets loaded and a class that actually defines the class.
 /// This is intended to give maximum flexibility while still allowing shared behaviour like the inventory.
+/// 
+/// The item container is implemented as the inventory
 /// </summary>
 public class Item : MonoBehaviour
 {
@@ -20,20 +22,8 @@ public class Item : MonoBehaviour
     /// </summary>
     internal bool isActive = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public virtual void LoadConfig()
-    {
-        
-    }
+    /// <summary>
+    /// the name of the item
+    /// </summary>
+    public string itemName;
 }

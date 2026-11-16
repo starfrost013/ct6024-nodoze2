@@ -11,7 +11,6 @@ public class Weapon : Item
 {
     private TextAsset weaponTextAsset;
 
-    public string weaponName;
 
     /// <summary>
     /// cost of the weapon in the store
@@ -42,16 +41,16 @@ public class Weapon : Item
         
     }
 
-    public override void LoadConfig()
+    public void LoadConfig()
     {
         string configFilePath = WeaponManager.WEAPON_PATH + GameUtils.GetNonCloneName(name);
         weaponTextAsset = AssetManager.LoadAsset<TextAsset>(configFilePath);
         
         ConfigParser.Parse(weaponTextAsset.text);
 
-        weaponName = ConfigParser.GetValue("Weapon", "Name");
+        itemName = ConfigParser.GetValue("Weapon", "Name");
 
-        if (!string.IsNullOrWhiteSpace(weaponName))
+        if (!string.IsNullOrWhiteSpace(itemName))
             Debug.LogWarning("Weapon::LoadConfig - no weapon name specified, you won't be able to see it");
 
         // all non strings

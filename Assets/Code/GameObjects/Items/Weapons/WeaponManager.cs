@@ -24,4 +24,17 @@ static class WeaponManager
             return;
         }
     }
+
+    internal static Weapon GetWeaponByName(string name)
+    {
+        foreach (GameObject weaponObject in weapons)
+        {
+            Weapon weapon = weaponObject.GetComponentInChildren<Weapon>(false);
+
+            if (weapon.itemName.Equals(name))
+                return weapon; 
+        }
+
+        return null;
+    }
 }

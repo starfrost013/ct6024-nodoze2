@@ -56,6 +56,10 @@ class Inventory
         items[id].isActive = active; 
     }
 
+    /// <summary>
+    /// Remove an item from the inventory list
+    /// </summary>
+    /// <param name="item">The item to remove</param>
     public void RemoveItem(Item item)
     {
         if (!items.Remove(item))
