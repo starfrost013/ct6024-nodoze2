@@ -5,6 +5,8 @@ TimeLimit = 25000					; Maximum time limit in milliseconds (-1 to disable)
 CheckpointTimeGain = 10000			; Checkpoint time gain
 CompletionReward = 800				; Completion reward, awarded regardless of time
 KillFloorY = -100					; Kill floor Y
+RaceStartTimer = 5000               ; Time of race timer start
+RestartTimeFail = 3000              ; Restart time unitl failure
 
 NumTimeBonus = 5					; number of time bonuses
 

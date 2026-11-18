@@ -276,8 +276,8 @@ internal class Car : BasePhysicsObject
 
         GameModeRaceMode raceMode = GameManager.mode as GameModeRaceMode;
 
-        if (transform.position.y < raceMode.raceConfigData.killFloorY)
-            raceMode.FailRace(RaceFailReason.OutOfMap, 0);
+        if (transform.position.y < raceMode.race.killFloorY)
+            raceMode.race.Fail(RaceFailReason.OutOfMap, 0);
     }
 
     private void RunInputJump()
@@ -605,14 +605,14 @@ internal class Car : BasePhysicsObject
         if (physics.fuelCurrent <= 0)
         {
             physics.fuelCurrent = 0;
-            raceMode.FailRace(RaceFailReason.OutOfFuel); // we still need to split this out
+            raceMode.race.Fail(RaceFailReason.OutOfFuel); // we still need to split this out
             disableInputs = true; 
         }
 
         CheckAboveKillFloor();
 
         if (!disableInputs
-            && raceMode.raceState == RaceState.Active)
+            && raceMode.race.state == RaceState.Active)
         {
             RunInputJump(); // this is separate so make it its own tihng
             RunInputMove(); // the main input stuff

@@ -36,7 +36,7 @@ class Garage : MonoBehaviour
             // le sigh
             GameModeRaceMode raceMode = GameManager.mode as GameModeRaceMode;
 
-            raceMode.raceConfigData.timeLimit += raceMode.raceConfigData.checkpointTimeGain;
+            raceMode.race.timeLimit += raceMode.race.checkpointTimeGain;
 
             used = true; 
         }

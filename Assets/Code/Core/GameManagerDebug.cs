@@ -44,7 +44,7 @@ public static class GameManagerDebug
             if (GameManager.GetGameState() == GameManager.GameModeEnum.RaceMode)
             {
                 GameModeRaceMode raceMode = (GameModeRaceMode)GameManager.mode;
-                raceMode.raceState = GameModeRaceMode.RaceState.FinishedNormal;
+                raceMode.race.state = RaceState.FinishedNormal;
             }
             else
                 GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);

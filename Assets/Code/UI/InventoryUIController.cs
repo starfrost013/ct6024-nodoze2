@@ -12,7 +12,7 @@ class InventoryUIController : MonoBehaviour
 {
     [SerializeField]
     private int inventoryIndex = 0; 
-
+    
     public void OnClick()
     {
         GameManager.player.stats.inventory.SetActivatedIndex(inventoryIndex, GameManager.player.stats.inventory.IsIndexActivated(inventoryIndex));

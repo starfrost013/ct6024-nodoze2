@@ -29,16 +29,16 @@ class FinishLine : MonoBehaviour
             // tell racemode we are finished
             GameModeRaceMode mode = (GameModeRaceMode)GameManager.mode;
 
-            if (mode.raceState == GameModeRaceMode.RaceState.Active)
+            if (mode.race.state == RaceState.Active)
             {
                 switch (exitType)
                 {
                     case FinishLineExitType.Normal:
-                        mode.raceState = GameModeRaceMode.RaceState.FinishedNormal;
+                        mode.race.state = RaceState.FinishedNormal;
                         Debug.Log("Finished race normally!");
                         break;
                     case FinishLineExitType.Special:
-                        mode.raceState = GameModeRaceMode.RaceState.FinishedSpecial;
+                        mode.race.state = RaceState.FinishedSpecial;
                         Debug.Log("Finished race with special exit!");
                         break;
                 }
