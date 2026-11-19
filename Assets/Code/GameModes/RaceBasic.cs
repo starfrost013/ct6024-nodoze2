@@ -7,17 +7,6 @@ using UnityEngine;
 class RaceBasic : Race
 {
     
-    internal override void Start()
-    {
-        base.Start();
-
-        state = RaceState.Starting;
-
-        // wrost hack ever
-        if (raceStartTimer.HasStarted())
-            raceStartTimer.Start(Timer.TIMER_CONTINUE_FOREVER);
-    }
-
     internal override void End()
     {
         OnFinishCalculateTimeBonus();                                        // calculate time bonus based on race configuration
@@ -202,9 +191,7 @@ class RaceBasic : Race
                 awardBonus = elapsedTime < thisTimeBonus.timerMax;
 
             if (awardBonus)
-            {
                 GameManager.player.stats.money += thisTimeBonus.moneyGranted;
-            }
         }
 
         //grant them the completion reward
@@ -216,7 +203,6 @@ class RaceBasic : Race
         switch (state)
         {
             case RaceState.Starting:
-
                 if (eventType == RaceEventType.Race)
                 {
                     if (raceTimer.HasStarted())

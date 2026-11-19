@@ -110,8 +110,9 @@ internal class GameModeRaceMode : GameMode
         // ensure we are in the scene known as race mode
         GameManager.SetCurrentScene(GameManager.SCENE_RACE_MODE);   
 
+        ProgressionCoordinator.AdvanceNormal();
+
         LoadEventData();
-        race.Start();
     }
 
     internal override void OnFrame()

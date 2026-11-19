@@ -72,9 +72,9 @@ abstract class Race
     public float killFloorY;                            // kill floor positon
     internal List<TimeBonusSet> timeBonuses = new();    // is this slow?   
     internal RaceEventType eventType; 
-    internal Timer raceStartTimer;                      // the race countdown timer
-    internal Timer raceTimer;                           // race timer
-    internal Timer raceFailTimer;                       // the race fail timer
+    internal Timer raceStartTimer = new();               // the race countdown timer
+    internal Timer raceTimer = new();                    // race timer
+    internal Timer raceFailTimer = new();                // the race fail timer
     protected bool countdown3Done = false, countdown2Done = false, countdown1Done = false;
 
     internal virtual void Start()
@@ -85,8 +85,48 @@ abstract class Race
         UIManager.AddUI("InventoryUI");
     }
 
+    private void UpdateCountdown()
+    {
+        // remaining time in seconds
+        long remainingTime = ((raceStartTimer.length - raceStartTimer.GetElapsedTime()) / 1000) + 1; // +1 for "3, 2, 1..."
+
+            // just hardcode this for now
+        if (remainingTime < 4
+            && !countdown3Done)
+        {
+            countdown3Done = true;
+            AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown3", 1.0f);
+        }
+        else if (remainingTime < 3
+            && !countdown2Done)
+        {
+            countdown2Done = true;
+            AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown2", 1.0f);
+        }
+        else if (remainingTime < 2
+            && !countdown1Done)
+        {
+            countdown1Done = true;
+            AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown1", 1.0f);
+        }
+
+        if (raceStartTimer.IsDone())
+        {
+            AudioManager.PlayAudioAtCameraPosition("Announcer_CountdownGO", 1.0f);
+            // since there is no car selection menu
+            Start();
+        }    
+    }
     
-    internal abstract void FixedUpdate();
+    internal virtual void FixedUpdate()
+    {
+        switch (state)
+        {
+            case RaceState.Countdown:
+                UpdateCountdown();
+                break;
+        }
+    }
 
     internal virtual void End()
     {
@@ -131,32 +171,6 @@ abstract class Race
         if (remainingTime <= (raceStartTime / 1000))
             GUI.Label(new((Screen.width / 2) - 20, (Screen.height / 2 - 50), 40, 100), remainingTime.ToString(), raceGuiStyle);
 
-        // just hardcode this for now
-        if (remainingTime < 4
-            && !countdown3Done)
-        {
-            countdown3Done = true;
-            AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown3", 1.0f);
-        }
-        else if (remainingTime < 3
-            && !countdown2Done)
-        {
-            countdown2Done = true;
-            AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown2", 1.0f);
-        }
-        else if (remainingTime < 2
-            && !countdown1Done)
-        {
-            countdown1Done = true;
-            AudioManager.PlayAudioAtCameraPosition("Announcer_Countdown1", 1.0f);
-        }
-
-        if (raceStartTimer.IsDone())
-        {
-            AudioManager.PlayAudioAtCameraPosition("Announcer_CountdownGO", 1.0f);
-            // since there is no car selection menu
-            Start();
-        }
     }
 
 }
