@@ -39,7 +39,7 @@ class Boss1CoordinatorAgent : Agent
     private List<EnemyCarAgent> enemyCars = new();
     private int nextCarToSpawn = 0;
     private Timer spawnPhaseTimer;
-    private const string BOSS_COORDINATOR_CONFIG_PATH = "Races/Boss1Coordinator.txt";
+    private const string BOSS_COORDINATOR_CONFIG_PATH = "Races/Boss1Coordinator";
 
     private TextAsset bossCoordinatorText;
 

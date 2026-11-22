@@ -24,6 +24,7 @@ class RaceBoss1 : RaceBasic
     private void DrawBossUI(GUIStyle style)
     {
         style.fontSize = 22;
+        GUI.color = Color.white;
         GUI.Label(new Rect(0, 100, 250, 50), "Remaining Enemies: " + AIManager.GetNumAgentsOfType<EnemyCarAgent>());
     }
 
