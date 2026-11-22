@@ -167,9 +167,6 @@ internal class Car : BasePhysicsObject
 
     //todo: move to "BaseObject" class
 
-    // generic epsilon
-    const float EPSILON_MIN = 0.003f;
-
     /// <summary>
     /// Holds the physics information.
     /// </summary>
@@ -424,8 +421,7 @@ internal class Car : BasePhysicsObject
             // multiply so the car can have a smaller turning circle as it gets faster
             float steeringChangeFactor = steeringAccelerationForThisTick;
 
-            if (steerLeftInput
-                && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
+            if (steerLeftInput)
             {
                 physics.rotationTorque -= steeringChangeFactor; // normalised?
 
@@ -436,8 +432,7 @@ internal class Car : BasePhysicsObject
                     cameraTurnPercentage = -1.0f;
             }
 
-            if (steerRightInput
-                && (Math.Abs(physics.forwardTorque) > EPSILON_MIN))
+            if (steerRightInput)
             {
                 physics.rotationTorque += steeringChangeFactor; // normalised?
 
