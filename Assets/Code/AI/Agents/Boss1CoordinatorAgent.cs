@@ -34,14 +34,13 @@ class Boss1CoordinatorAgent : Agent
         Beaten, 
     };
     
-    private BossPhase phase; 
-    private BossCoordinator coordinator;
+    private BossPhase phase = BossPhase.Spawn; 
+    private BossCoordinator coordinator = new();
     private List<EnemyCarAgent> enemyCars = new();
     private int nextCarToSpawn = 0;
-    private Timer spawnPhaseTimer;
+    private Timer spawnPhaseTimer = new();
     private const string BOSS_COORDINATOR_CONFIG_PATH = "Races/Boss1Coordinator";
-
-    private TextAsset bossCoordinatorText;
+    private TextAsset bossCoordinatorText = null;
 
     internal override void Start()
     {
