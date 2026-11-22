@@ -76,13 +76,20 @@ abstract class Race
     internal Timer raceTimer = new();                    // race timer
     internal Timer raceFailTimer = new();                // the race fail timer
     protected bool countdown3Done = false, countdown2Done = false, countdown1Done = false;
+    
+    protected const string INVENTORY_UI_NAME = "InventoryUI";
 
     internal virtual void Start()
     {
         CarManager.SpawnPlayerCar();
         state = RaceState.Active;
-        // enable race ui
-        UIManager.AddUI("InventoryUI");
+
+        // enable race and inventory ui. if it is disabled add it
+
+        if (UIManager.GetUIByName(INVENTORY_UI_NAME) != null)
+            UIManager.EnableUI(INVENTORY_UI_NAME);
+        else
+            UIManager.AddUI(INVENTORY_UI_NAME);
     }
 
     private void UpdateCountdown()
@@ -131,7 +138,7 @@ abstract class Race
     internal virtual void End()
     {
         GameManager.player.carInWorld.disableInputs = false;                 //just in case
-        UIManager.DestroyUI("InventoryUI");                                 // no need to disable it we can put it back
+        UIManager.DisableUI(INVENTORY_UI_NAME);                                 // no need to disable it we can put it back
         GameManager.SetGameState(GameManager.GameModeEnum.RaceFinished);
     }
 

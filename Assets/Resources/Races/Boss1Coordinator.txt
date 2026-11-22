@@ -1,0 +1,4 @@
+[Spawn]
+
+NumOfCars = 8
+CarSpawnTime = 5000

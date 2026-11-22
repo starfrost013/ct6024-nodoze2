@@ -66,6 +66,35 @@ static class AIManager
         return false;        
     }
 
+    
+    public static List<Agent> GetAgentsOfType<T>() where T : Agent
+    {
+        List<Agent> agents = new();
+
+        foreach (Agent agent in agents)
+        {
+            if (agent is T)
+                agents.Add(agent);
+
+        }
+
+        return agents; 
+    }
+
+    public static int GetNumAgentsOfType<T>() where T : Agent
+    {
+        int numAgentsOfType = 0;
+
+        foreach (Agent agent in agents)
+        {
+            if (agent is T)
+                numAgentsOfType++;
+        }   
+
+        return numAgentsOfType;
+    }
+
+
     public static void FireEvent(AIEventType evt)
     {
         

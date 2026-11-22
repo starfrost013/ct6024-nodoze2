@@ -13,9 +13,21 @@ enum GoalState
     /// this goal is being performed
     /// </summary>
     Active =2, 
+
+    Completed = 3,
 }
 
 class Goal
 {
-    
+    protected GoalState state; 
+
+    virtual protected bool CheckPrerequisites()
+    {
+        return false;
+    }
+
+    virtual protected bool Perform()
+    {
+        return false;
+    }
 }
