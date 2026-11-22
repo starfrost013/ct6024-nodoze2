@@ -16,7 +16,7 @@ class RaceBasic : Race
     /// <summary>
     /// draws the race fail reason if it exists
     /// </summary>
-    private void DrawFailReason(GUIStyle raceGuiStyle)
+    protected void DrawFailReason(GUIStyle raceGuiStyle)
     {
         string failString = "Generic Failure String";
 
@@ -40,7 +40,7 @@ class RaceBasic : Race
         GUI.Label(new Rect(Screen.width / 2 - (width / 2), (Screen.height / 2) - (height / 2), width, height), failString, raceGuiStyle);
     }
 
-    private void DrawTimer(GUIStyle raceGuiStyle)
+    protected void DrawTimer(GUIStyle raceGuiStyle)
     {
         if (!raceTimer.HasStarted())
             raceTimer.Start(Timer.TIMER_CONTINUE_FOREVER);
@@ -90,7 +90,7 @@ class RaceBasic : Race
         GUI.Label(new Rect(Screen.width / 2 - (width / 2), 0, width, height), timerString, raceGuiStyle);
     }
 
-    private void DrawMoneyAmount(GUIStyle raceGuiStyle)
+    protected void DrawMoneyAmount(GUIStyle raceGuiStyle)
     {
         Car car = GameManager.player.carInWorld;
         GUI.color = Color.lawnGreen;
@@ -107,7 +107,7 @@ class RaceBasic : Race
 
     }
 
-    private void DrawFuelGauge(GUIStyle raceGuiStyle)
+    protected void DrawFuelGauge(GUIStyle raceGuiStyle)
     {
         Car car = GameManager.player.carInWorld;
         GUI.color = Color.cornflowerBlue;
@@ -139,7 +139,6 @@ class RaceBasic : Race
             //restore alignment (hack - but this code is going away soon anyway)
         raceGuiStyle.alignment = TextAnchor.UpperLeft;
     }
-
 
 
     internal override void OnGUI(GUIStyle style)
@@ -219,6 +218,7 @@ class RaceBasic : Race
                 break;
             // the countdown state
             case RaceState.Countdown:
+                base.FixedUpdate();
                 break;
             // the race is active
             case RaceState.Active:

@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Basic race type used for most levels
 /// </summary>
-class RaceBoss1 : Race
+class RaceBoss1 : RaceBasic
 {
     enum BossPhase
     {
@@ -31,7 +31,13 @@ class RaceBoss1 : Race
 
     internal override void OnGUI(GUIStyle style)
     {
-         
+        switch (state)
+        {
+            case RaceState.Starting:
+            case RaceState.Countdown:
+                base.OnGUI(style);
+                break;
+        }
     }
 
     internal override void FixedUpdate()
