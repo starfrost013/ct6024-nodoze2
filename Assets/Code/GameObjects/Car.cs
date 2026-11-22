@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.LowLevelPhysics2D;
 using static GameModeRaceMode;
 
@@ -282,7 +283,7 @@ internal class Car : BasePhysicsObject
 
     private void RunInputJump()
     {
-        bool jumpInput = Input.GetKey(KeyCode.Space);
+        bool jumpInput = Keyboard.current.spaceKey.isPressed;
 
         if (jumpInput && physics.jumpTimer != 0) // don't allow repeating jumps
             return;
@@ -310,10 +311,10 @@ internal class Car : BasePhysicsObject
 
     private void RunInputMove()
     {
-        bool accelerateInput = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
-        bool brakeNormalInput = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
-        bool steerLeftInput = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
-        bool steerRightInput = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
+        bool accelerateInput = Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed;
+        bool brakeNormalInput = Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed;
+        bool steerLeftInput = Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed;
+        bool steerRightInput = Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed;
 
         bool moveInput = (accelerateInput || brakeNormalInput);
         bool steerInput = (steerLeftInput || steerRightInput);
@@ -335,7 +336,7 @@ internal class Car : BasePhysicsObject
                 
             // check if we stopped boosting
             bool didWeStopBoosting = physics.boosting;
-            physics.boosting = Input.GetKey(KeyCode.LeftShift);
+            physics.boosting = Keyboard.current.shiftKey.isPressed;
             physics.boostEnding = (didWeStopBoosting && !physics.boosting); // keyup is only true for a single frame and isn't reliable in fixedupdate
 
             // handle boost shutdown

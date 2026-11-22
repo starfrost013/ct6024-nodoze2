@@ -5,6 +5,7 @@
 //
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System;
 using Unity.VisualScripting;
@@ -138,7 +139,7 @@ internal static class GameManager
 
     internal static void OnFrame()
     {
-        if (Input.GetKey(KeyCode.R)
+        if (Keyboard.current.rKey.isPressed
             && state == GameModeEnum.RaceMode
             && GlobalSettings.debugFlags != 0)
         {
@@ -148,7 +149,7 @@ internal static class GameManager
             return;
         }
 
-        if (Input.GetKeyUp(KeyCode.Escape)
+        if (Keyboard.current.escapeKey.isPressed
             && state > GameModeEnum.MainMenu)
         {
             if (!gamePaused)

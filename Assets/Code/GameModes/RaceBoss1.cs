@@ -15,7 +15,14 @@ class RaceBoss1 : Race
         Phase4,
         Beaten, 
     };
+    
+    private BossPhase phase; 
 
+    internal override void Start()
+    {
+        base.Start();
+        phase = BossPhase.Spawn;
+    }
 
     internal override void End()
     {
@@ -24,7 +31,7 @@ class RaceBoss1 : Race
 
     internal override void OnGUI(GUIStyle style)
     {
-        
+         
     }
 
     internal override void FixedUpdate()
