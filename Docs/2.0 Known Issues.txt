@@ -25,6 +25,7 @@ known issues:								                        status
 * pause doesn't pause
 * level select does not work
 * scrolling only cycles in one direction                            FIXED
+* wheel turning code meaningful and does nothing                    FIXED
 
 stuff needed:
 

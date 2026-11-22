@@ -60,13 +60,14 @@ internal class CarModifier
     
     // Fueling characteristics of the car
     internal float fuelMax;                                     // maximum fuel amount
-    internal float fuelDepletionPerTick;
+    internal float fuelDepletionPerTick;                        // how much fuel goes down per tck
     internal float refuelGaragePercent;                         // % a garage refuels the car
     internal float minFuelUseAmount;                            // fuel use amount at 0 velcity
     internal float maxFuelUseAmount;                            // maximum fuel use amount
     internal float maxFuelUseVelocity;                          // magnitude of the velocity where fuel use reaches its maximum value
-
-    internal bool decelerationFuelCutoff;
+    internal bool decelerationFuelCutoff;                       // if fuel is used by decelerating or not
+    internal float maxWheelTurnAngle;                           // maximum wheel turn angle (y coordinate)
+    internal float wheelTurnIntensity;                          // wheel turn intensity
 
     // renamed to avoid confusion with car names e.g. car select screen
     internal string modifierName;
@@ -103,6 +104,8 @@ internal class CarModifier
         | float.TryParse(ConfigParser.GetValue("Handling", "BoostAccelerationSteeringAir"), out boostAccelerationSteeringAir)
         | float.TryParse(ConfigParser.GetValue("Handling", "JumpIntensity"), out jumpIntensity)
         | float.TryParse(ConfigParser.GetValue("Handling", "BrakeNormalIntensity"), out brakeNormalIntensity)
+        | float.TryParse(ConfigParser.GetValue("Handling", "MaxWheelTurnAngle"), out maxWheelTurnAngle)
+        | float.TryParse(ConfigParser.GetValue("Handling", "WheelTurnIntensity"), out wheelTurnIntensity)
         | float.TryParse(ConfigParser.GetValue("Camera", "MaxTurnCameraAngle"), out maxTurnCameraAngle)
         | float.TryParse(ConfigParser.GetValue("Camera", "CameraRelativeX"), out cameraRelativeX)
         | float.TryParse(ConfigParser.GetValue("Camera", "CameraRelativeY"), out cameraRelativeY)

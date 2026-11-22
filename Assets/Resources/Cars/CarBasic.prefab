@@ -356,6 +356,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: WheelLeftFront
       objectReference: {fileID: 0}
+    - target: {fileID: 882947266816744252, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 882947266816744252, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 882947266816744252, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 882947266816744252, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 882947266816744252, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 882947266816744252, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d02f8023e6acbe041806116e02f6d516, type: 3}
       propertyPath: m_Name
       value: CarBasic

@@ -16,7 +16,7 @@ MaxForwardTorqueBoost =	900.0				; Top speed during boost
 AccelerationForward = 7.0					; Acceleration of car (needs to ramp up in accordance with a curve)
 AccelerationSteering = 6.0					; Acceleration to apply in lateral direction
 MinimumSteeringAmount = 0.25				; Magnitude of the minimum steering
-MaximumSteeringAmount = 1.0					; Magnitude of the minimum steering
+MaximumSteeringAmount = 1.0					; Magnitude of the maximum steering
 MaximumSteeringVelocity = 8.0				; Magnitude at which the maximum steering velocity is applied
 AccelerationForwardAir = 3.0				; Acceleration to apply in forward direction while in the air
 AccelerationSteeringAir = 2.5				; Acceleration to apply in lateral direction while in the air
@@ -46,6 +46,9 @@ BoostRegenPerTick = 6						; Boost depletion per 1/60 of a second
 SteeringType = Manual 						; 0 = Automatic, 1 = Manual, you can use numbers or the names 
 
 JumpIntensity = 140000						; the intensity of the jump
+
+MaxWheelTurnAngle = 5                       ; maximum wheel turn angles in degrees
+WheelTurnIntensity = 0.001                  ; how fast the wheel turns
 
 [Camera]
 MaxTurnCameraAngle = 19.0					; Maximum camera turn angle

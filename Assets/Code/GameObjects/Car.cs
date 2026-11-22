@@ -441,7 +441,6 @@ internal class Car : BasePhysicsObject
             {
                 physics.rotationTorque += steeringChangeFactor; // normalised?
 
-
                 // camera angle handling
                 cameraTurnPercentage += 0.001f * ((1.0f - 0.001f) * physics.data.cameraTurnFactor);
 
@@ -548,14 +547,19 @@ internal class Car : BasePhysicsObject
 
         // rotate the wheels (todo: move3 everything into an array)
         // setting position has some unfortunate consequences
-        physics.wheelLeftBackCollider.GetWorldPose(out Vector3 _, out Quaternion wheelRotation);
-        wheelLeftBack.transform.rotation = wheelRotation;
-        physics.wheelLeftFrontCollider.GetWorldPose(out Vector3 _, out wheelRotation);
-        wheelLeftFront.transform.rotation = wheelRotation;
-        physics.wheelRightBackCollider.GetWorldPose(out Vector3 _, out wheelRotation);
-        wheelRightBack.transform.rotation = wheelRotation;
-        physics.wheelRightFrontCollider.GetWorldPose(out Vector3 _, out wheelRotation);
-        wheelRightFront.transform.rotation = wheelRotation;
+        // due to how this code works the resting position must be 0 rotation
+
+        float wheelRotation = physics.rotationTorque * physics.data.wheelTurnIntensity;
+
+        if (wheelLeftBack.transform.localEulerAngles.y  < -physics.data.maxWheelTurnAngle)
+            wheelRotation = -physics.data.maxWheelTurnAngle;
+        else if (wheelLeftBack.transform.localEulerAngles.y  > physics.data.maxWheelTurnAngle)
+            wheelRotation = physics.data.maxWheelTurnAngle;
+
+        wheelLeftBack.transform.localEulerAngles = new Vector3(wheelLeftBack.transform.localEulerAngles.x, wheelRotation, wheelLeftBack.transform.localEulerAngles.z);
+        wheelLeftFront.transform.localEulerAngles = new Vector3(wheelLeftFront.transform.localEulerAngles.x, wheelRotation, wheelLeftFront.transform.localEulerAngles.z);
+        wheelRightBack.transform.localEulerAngles = new Vector3(wheelRightBack.transform.localEulerAngles.x, wheelRotation, wheelRightBack.transform.localEulerAngles.z);
+        wheelRightFront.transform.localEulerAngles = new Vector3(wheelRightFront.transform.localEulerAngles.x, wheelRotation, wheelRightFront.transform.localEulerAngles.z);
 
         //
         // Fuel handling 
@@ -684,6 +688,9 @@ internal class Car : BasePhysicsObject
         physics.data.minFuelUseAmount += info.minFuelUseAmount;
         physics.data.maxFuelUseAmount += info.maxFuelUseAmount;
         physics.data.maxFuelUseVelocity += info.maxFuelUseVelocity;
+
+        physics.data.maxWheelTurnAngle += info.maxWheelTurnAngle;
+        physics.data.wheelTurnIntensity += info.wheelTurnIntensity;
     }
 
     /// <summary>
