@@ -72,7 +72,7 @@ class Boss1CoordinatorAgent : Agent
             if (spawnPhaseTimer.GetElapsedTime() > coordinator.carSpawnTime * ((float)nextCarToSpawn) / (float)coordinator.maxNumOfCars)
             {
                 EnemyCarAgent carAgent = new();
-                carAgent.Spawn(GameManager.player.carInWorld);
+                carAgent.Spawn(CarDead.GetUndeadCloneOfCar(GameManager.player.carInWorld));
                 enemyCars.Add(carAgent);
                 nextCarToSpawn++;
             }

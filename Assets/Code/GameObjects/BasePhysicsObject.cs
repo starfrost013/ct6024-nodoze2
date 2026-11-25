@@ -9,7 +9,7 @@ using UnityEngine;
 // BasePhysicsObject.cs
 
 /// <summary>
-/// THis class just ensures that all basephysicsobjects have rigidbody components
+/// THis class just ensures that all physics objects have rigidbody components
 /// </summary>
 internal class BasePhysicsObject : MonoBehaviour
 {
@@ -18,7 +18,7 @@ internal class BasePhysicsObject : MonoBehaviour
     /// </summary>
     protected Rigidbody physRigidbody;
 
-    protected void Start()
+    protected virtual void Start()
     {
         physRigidbody = GetComponent<Rigidbody>();
 

@@ -158,7 +158,7 @@ internal class Car : BasePhysicsObject
 
     internal List<CarModifier> modifiers { get; private set; } = new();
 
-    internal TextAsset configText { get; private set; }
+    public TextAsset configText { get; protected set; } // SKETCH. Why is internal considered the same protection level as protected?
 
     /// <summary>
     /// Configuration file path
@@ -244,7 +244,7 @@ internal class Car : BasePhysicsObject
         LoadConfigInternal(); 
     }
 
-    protected new void Start()
+    protected override void Start()
     {
         // prevent crash
         if (!configText)
@@ -592,8 +592,7 @@ internal class Car : BasePhysicsObject
     }
 
     // FixedUpdate contains our controls so they feel decent regardless of fraemrate
-    // I don't have time to use ISP sorry!
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (GameManager.GetGameState() != GameManager.GameModeEnum.RaceMode)
             return;
