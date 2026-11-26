@@ -260,6 +260,15 @@ internal class Car : BasePhysicsObject
             return;
 
         base.Start();
+        FindComponents();
+        
+    }
+
+    /// <summary>
+    /// this method exists in order to avoid callin unity messages from dead car cloning
+    /// </summary>
+    internal void FindComponents()
+    {
         physRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         // find the wheels

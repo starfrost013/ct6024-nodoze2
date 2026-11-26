@@ -64,8 +64,8 @@ public static class GameManagerDebug
             return;
 
         // first draw the version information
-        string dateTime = Application.version + " (Unity " + Application.unityVersion + ")\n" + 
-            "Build Date:\t" + buildDate + "\nTest Date:\t" + DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss");
+        string dateTime = Application.version + " (Unity " + Application.unityVersion + ")\n" +
+            "Build Date:\t" + buildDate; 
 
         // make the font a bit larger
         GUIStyle style = GUI.skin.label;

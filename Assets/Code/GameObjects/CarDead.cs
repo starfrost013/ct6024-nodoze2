@@ -61,7 +61,9 @@ class CarDead : Car
         deadCar.LoadConfigFromString(GameManager.player.car.configText.text);
 
         // update the internal stuff
-        deadCar.physRigidbody = deadCar.GetComponent<Rigidbody>();
+        deadCar.physRigidbody = deadCar.GetComponent<Rigidbody>(); // remove this if we decide to remove basephysicsobject
+
+
         deadCar.physRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         // find the wheels
