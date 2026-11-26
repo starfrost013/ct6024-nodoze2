@@ -16,6 +16,11 @@ class Agent : MonoBehaviour
         
     }
 
+    internal virtual void OnEvent(AIEventType evt)
+    {
+
+    }
+
     internal virtual void FixedUpdate()
     {
         

@@ -97,6 +97,9 @@ static class AIManager
 
     public static void FireEvent(AIEventType evt)
     {
-        
+        foreach (Agent agent in agents)
+        {
+            agent.OnEvent(evt);
+        }
     }
 };

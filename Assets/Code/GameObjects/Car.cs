@@ -192,6 +192,13 @@ internal class Car : BasePhysicsObject
     /// </summary>
     internal bool disableInputs;
 
+    // damage stuff
+
+    /// <summary>
+    /// the car's health. applies to both enemy and player cars
+    /// </summary>
+    internal float health; 
+
     //
     // METHODS
     //
@@ -222,6 +229,8 @@ internal class Car : BasePhysicsObject
         // setup stuff not dependent on gameobjects here
         physics.boostCurrent = physics.data.boostMax;
         physics.fuelCurrent = physics.data.fuelMax;
+
+        health = 100;
     }
 
     /// <summary>

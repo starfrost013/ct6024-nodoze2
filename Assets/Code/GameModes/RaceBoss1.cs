@@ -26,6 +26,7 @@ class RaceBoss1 : RaceBasic
         style.fontSize = 22;
         GUI.color = Color.white;
         GUI.Label(new Rect(0, 100, 250, 50), "Remaining Enemies: " + AIManager.GetNumAgentsOfType<EnemyCarAgent>());
+        GUI.Label(new Rect(0, 125, 250, 50), "Health: " + GameManager.player.car.health);
     }
 
     internal override void OnGUI(GUIStyle style)

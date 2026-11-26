@@ -212,7 +212,6 @@ internal static class ProgressionCoordinator
 
             currentLevel = GetLevelByScene(currentLevel.sceneOnSpecialCompletion);
         }
-
     }
 
     /// <summary>
