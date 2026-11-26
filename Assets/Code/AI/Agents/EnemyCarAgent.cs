@@ -15,9 +15,9 @@ class EnemyCarAgent : Agent
     /// <summary>
     /// spawn this agent's car and go
     /// </summary>
-    public void Spawn(CarDead carToInstantiate)
+    public void Spawn(GameObject carToInstantiate)
     {
-        car = GameObject.Instantiate(carToInstantiate);
+        car = CarDead.GetUndeadCloneOfCar(carToInstantiate);
     }
 
     internal override void FixedUpdate()

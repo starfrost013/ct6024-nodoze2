@@ -65,18 +65,41 @@ class Boss1CoordinatorAgent : Agent
     /// </summary>
     private void HandleSpawnPhase()
     {
+        Debug.Log("SPAWN PHASE");
+        
+        /*
         if (!spawnPhaseTimer.HasStarted())
             spawnPhaseTimer.Start(coordinator.carSpawnTime);
         else
         {
-            if (spawnPhaseTimer.GetElapsedTime() > coordinator.carSpawnTime * ((float)nextCarToSpawn) / (float)coordinator.maxNumOfCars)
+
+     
+           if ((spawnPhaseTimer.GetElapsedTime() > coordinator.carSpawnTime * ((float)nextCarToSpawn) / (float)coordinator.maxNumOfCars)
+            && nextCarToSpawn < coordinator.maxNumOfCars)
             {
-                EnemyCarAgent carAgent = new();
-                carAgent.Spawn(CarDead.GetUndeadCloneOfCar(GameManager.player.carInWorld));
+                GameObject go = new("AgentContainer");
+                EnemyCarAgent carAgent = go.AddComponent<EnemyCarAgent>();
+                carAgent.Spawn(GameManager.player.carInWorld.transform.gameObject);
                 enemyCars.Add(carAgent);
+
+                Debug.Log("Spawned enemy car #" + nextCarToSpawn);
                 nextCarToSpawn++;
             }
+            
+        }*/
+
+        for (nextCarToSpawn = 0; nextCarToSpawn < coordinator.maxNumOfCars; nextCarToSpawn++)
+        {
+            GameObject go = new("AgentContainer");
+            EnemyCarAgent carAgent = go.AddComponent<EnemyCarAgent>();
+            carAgent.Spawn(GameManager.player.carInWorld.transform.gameObject);
+            enemyCars.Add(carAgent);
+
+            Debug.Log("Spawned enemy car #" + nextCarToSpawn);
         }
+
+        //if (spawnPhaseTimer.IsDone())
+        phase = BossPhase.Phase1;
     }
 
     internal override void FixedUpdate()
