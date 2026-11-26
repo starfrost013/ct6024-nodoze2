@@ -76,11 +76,12 @@ class Boss1CoordinatorAgent : Agent
             {
                 GameObject go = new("AgentContainer");
                 EnemyCarAgent carAgent = go.AddComponent<EnemyCarAgent>();
-                carAgent.Spawn(GameManager.player.carInWorld.transform.gameObject);
                 enemyCars.Add(carAgent);
+                carAgent.Spawn(GameManager.player.carInWorld.transform.gameObject);
 
                 Debug.Log("Spawned enemy car #" + nextCarToSpawn);
-                nextCarToSpawn++;
+
+                nextCarToSpawn++; // insane hack
             }
             
         }

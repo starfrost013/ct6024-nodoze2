@@ -16,7 +16,7 @@ internal class BasePhysicsObject : MonoBehaviour
     /// <summary>
     /// Unity Rigidbody componen for car physics
     /// </summary>
-    protected Rigidbody physRigidbody;
+    internal Rigidbody physRigidbody;
 
     protected virtual void Start()
     {

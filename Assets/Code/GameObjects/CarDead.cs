@@ -9,7 +9,6 @@ class CarDead : Car
 {    
     protected override void Start()
     {
-        //physRigidbody = this.AddComponent<Rigidbody>();
 
     }
 
@@ -39,6 +38,14 @@ class CarDead : Car
 
         deadCar.configText = car.configText;
         deadCar.configFilePath = car.configFilePath;
+        deadCar.accelerationCurve = car.accelerationCurve;
+        deadCar.accelerationCurveNumTicks = car.accelerationCurveNumTicks;
+        deadCar.brakeNormalCurve = car.brakeNormalCurve;
+        deadCar.brakeNormalCurveNumTicks = car.brakeNormalCurveNumTicks;
+        deadCar.jumpCurve = car.jumpCurve;
+        deadCar.jumpCurveNumTicks = car.jumpCurveNumTicks;
+        deadCar.steeringCurve = car.steeringCurve;
+        deadCar.steeringCurveNumTicks = car.steeringCurveNumTicks;
 
         // TEMP test code
         // move it to a point randomly within a cone for now
@@ -50,7 +57,26 @@ class CarDead : Car
 
         deadCar.transform.position = car.transform.position + positionDisplacement;
 
-        //deadCar.LoadConfigFromString(car.configText.text);
+        // TODO: select all cars to load frm. but jsut clone the player for now. Select from the car manager.
+        deadCar.LoadConfigFromString(GameManager.player.car.configText.text);
+
+        // update the internal stuff
+        deadCar.physRigidbody = deadCar.GetComponent<Rigidbody>();
+        deadCar.physRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+        // find the wheels
+
+        // check the wheels actually have colliders
+        deadCar.wheelLeftBack = car.wheelLeftBack;
+        deadCar.wheelLeftFront = car.wheelLeftFront;
+        deadCar.wheelRightBack = car.wheelRightBack;
+        deadCar.wheelRightFront = car.wheelRightFront;
+        
+        deadCar.physics.wheelLeftBackCollider = car.wheelLeftBack.GetComponent<WheelCollider>();
+        deadCar.physics.wheelLeftFrontCollider = car.wheelLeftFront.GetComponent<WheelCollider>();
+        deadCar.physics.wheelRightBackCollider = car.wheelRightBack.GetComponent<WheelCollider>();
+        deadCar.physics.wheelRightFrontCollider = car.wheelRightFront.GetComponent<WheelCollider>();
+
         GameObject.Destroy(car);
         return deadCar;
     }

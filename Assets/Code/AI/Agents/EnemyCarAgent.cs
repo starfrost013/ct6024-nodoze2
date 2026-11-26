@@ -12,6 +12,8 @@ class EnemyCarAgent : Agent
     /// </summary>
     private CarDead car;
 
+    private int tickCtr = 0;
+
     /// <summary>
     /// spawn this agent's car and go
     /// </summary>
@@ -22,6 +24,13 @@ class EnemyCarAgent : Agent
 
     internal override void FixedUpdate()
     {
-        base.FixedUpdate();        
+        base.FixedUpdate();
+
+        if ((tickCtr / 20) % 2 == 0)
+            car.ApplyInputMove(true, false, false, false);
+        else
+            car.ApplyInputMove(false, true, false, false);
+
+        tickCtr++;
     }
 }
