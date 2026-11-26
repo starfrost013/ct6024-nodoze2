@@ -67,13 +67,10 @@ class Boss1CoordinatorAgent : Agent
     {
         Debug.Log("SPAWN PHASE");
         
-        /*
         if (!spawnPhaseTimer.HasStarted())
             spawnPhaseTimer.Start(coordinator.carSpawnTime);
         else
         {
-
-     
            if ((spawnPhaseTimer.GetElapsedTime() > coordinator.carSpawnTime * ((float)nextCarToSpawn) / (float)coordinator.maxNumOfCars)
             && nextCarToSpawn < coordinator.maxNumOfCars)
             {
@@ -86,20 +83,10 @@ class Boss1CoordinatorAgent : Agent
                 nextCarToSpawn++;
             }
             
-        }*/
-
-        for (nextCarToSpawn = 0; nextCarToSpawn < coordinator.maxNumOfCars; nextCarToSpawn++)
-        {
-            GameObject go = new("AgentContainer");
-            EnemyCarAgent carAgent = go.AddComponent<EnemyCarAgent>();
-            carAgent.Spawn(GameManager.player.carInWorld.transform.gameObject);
-            enemyCars.Add(carAgent);
-
-            Debug.Log("Spawned enemy car #" + nextCarToSpawn);
         }
 
-        //if (spawnPhaseTimer.IsDone())
-        phase = BossPhase.Phase1;
+        if (spawnPhaseTimer.IsDone())
+            phase = BossPhase.Phase1;
     }
 
     internal override void FixedUpdate()
