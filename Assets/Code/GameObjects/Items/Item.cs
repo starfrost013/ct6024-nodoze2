@@ -26,4 +26,9 @@ public class Item : MonoBehaviour
     /// the name of the item
     /// </summary>
     public string itemName;
+
+    /// <summary>
+    /// the description of the item
+    /// </summary>
+    internal string description;
 }

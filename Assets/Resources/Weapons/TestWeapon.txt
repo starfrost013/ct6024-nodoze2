@@ -1,7 +1,10 @@
 [Weapon]
 
 Name = Test Weapon
+Description = big 
 Cost = 4000
 NumAttacks = 1
+AmmoMax = 100
+AmmoMag = 30
 
-Attack0 = TestAttack
+Attack0 = AttackTest

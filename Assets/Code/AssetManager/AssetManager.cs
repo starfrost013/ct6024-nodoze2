@@ -30,7 +30,6 @@ internal static class AssetManager
     {
         Debug.Log("Game Asset Loader: Loading assets of type " + typeof(T).Name + " from the folder " + path);
 
-        //TODO: Assetbundles
         T[] assets = Resources.LoadAll<T>(path);
         
         foreach (T asset in assets)

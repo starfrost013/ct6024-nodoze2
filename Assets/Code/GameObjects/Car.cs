@@ -285,7 +285,6 @@ internal class Car : BasePhysicsObject
 
     private void CheckAboveKillFloor()
     {
-        //TODO: Split gamemoderacemode into gamemoderacemode and GameManager.race ?
         //TODO: Failtypes
                 // - Refactor gamestate.afiled to immediately put us in to fail with the known state
                 // - Refactor onlegacygui

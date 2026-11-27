@@ -24,16 +24,20 @@ class WeaponPickup : MonoBehaviour
         GameObject.Instantiate(weapon, transform.position, Quaternion.identity); // we don't care about this
     }
 
+    void FixedUpdate()
+    {
+        // todo: make configurable?
+        transform.localEulerAngles = transform.localEulerAngles + new Vector3(0, 5, 0); // spin around
+    }
+
     private void OnTriggerEnter()
     {
 
         if (weapon == null)
-        {
             Debug.LogWarning("WeaponPickup::OnTriggerEnter - weapon " + itemName + " doesn't exist...Add it to the Weapons folder...");
-        }
+
         else
-        {
             GameManager.player.stats.inventory.AddItem(weapon);
-        }
+
     }
 }
