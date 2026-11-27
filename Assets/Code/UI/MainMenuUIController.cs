@@ -18,7 +18,8 @@ class MainMenuUIController : MonoBehaviour
     
     public void BossRushClicked()
     {
-        
+        ProgressionCoordinator.SetLevel("Level3");
+        GameManager.SetGameState(GameManager.GameModeEnum.CarSelectMenu);
     }
 
     public void ExitClicked()
