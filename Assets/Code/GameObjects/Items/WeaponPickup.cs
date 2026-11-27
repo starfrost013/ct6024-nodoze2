@@ -13,9 +13,19 @@ class WeaponPickup : MonoBehaviour
     [SerializeField, Tooltip("Resources/Weapons file to use")]
     string itemName; 
 
+    private Weapon weapon;
+
+    void Start()
+    {
+        // Spawn an instance of the weapon prefab so we can pick up the weapon
+
+        weapon = WeaponManager.GetWeaponByName(itemName);
+
+        GameObject.Instantiate(weapon, transform.position, Quaternion.identity); // we don't care about this
+    }
+
     private void OnTriggerEnter()
     {
-        Weapon weapon = WeaponManager.GetWeaponByName(itemName);
 
         if (weapon == null)
         {

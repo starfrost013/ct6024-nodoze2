@@ -15,9 +15,13 @@ public class Weapon : Item
     /// <summary>
     /// cost of the weapon in the store
     /// </summary>
-    public int cost;
+    internal int cost;
 
-    public int numAttacks;
+    internal int numAttacks;
+
+    internal int ammoMax;
+
+    internal int ammoMag;
 
     protected List<Attack> attacks = new();
 
@@ -55,7 +59,9 @@ public class Weapon : Item
 
         // all non strings
         bool success = int.TryParse(ConfigParser.GetValue("Weapon", "Cost"), out cost)
-        | int.TryParse(ConfigParser.GetValue("Weapon", "NumAttacks"), out numAttacks);
+        | int.TryParse(ConfigParser.GetValue("Weapon", "NumAttacks"), out numAttacks)
+        | int.TryParse(ConfigParser.GetValue("Weapon", "AmmoMax"), out ammoMax)
+        ;
 
         if (!success)
             Debug.LogWarning("Weapon::LoadConfig - some weapon parameters failed to load - this may be a problem");
