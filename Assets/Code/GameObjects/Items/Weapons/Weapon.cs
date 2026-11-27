@@ -56,15 +56,19 @@ public class Weapon : Item
         // all non strings
         bool success = int.TryParse(ConfigParser.GetValue("Weapon", "Cost"), out cost)
         | int.TryParse(ConfigParser.GetValue("Weapon", "NumAttacks"), out numAttacks);
-        ;
 
         if (!success)
-            Debug.LogWarning("Weapon::LoadConfig - ome weapon parameters failed to load - this may be a problem");
+            Debug.LogWarning("Weapon::LoadConfig - some weapon parameters failed to load - this may be a problem");
 
     }
      
     // Update is called once per frame
     void Update()
+    {
+        
+    }
+
+    internal virtual void Fire()
     {
         
     }
